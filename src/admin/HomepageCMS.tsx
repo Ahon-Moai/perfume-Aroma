@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Save, Sparkles, Image as ImageIcon, Plus, Trash2 } from 'lucide-react';
+import { getErrorMessage } from '../services/api';
 
 interface HomepageSection {
   id: number;
@@ -78,7 +79,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         alert('Hero Section saved successfully!');
         fetchHomepageData();
       } else {
-        alert('Failed to save Hero section');
+        alert(getErrorMessage(data?.error || data, 'Failed to save Hero section'));
       }
     } catch (e) {
       alert('Error saving Hero section');

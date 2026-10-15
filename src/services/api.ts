@@ -2,6 +2,29 @@ import { FragranceProduct, ReviewItem, JournalArticle, SocialCard } from '../typ
 
 export const API_BASE_URL = '/api';
 
+/**
+ * Safely extracts a string error message from string, object, or nested API error responses.
+ * Prevents React Error #31 (rendering objects directly as React children).
+ */
+export function getErrorMessage(err: any, fallbackMessage: string = 'An error occurred'): string {
+  if (!err) return fallbackMessage;
+  if (typeof err === 'string') return err;
+  if (typeof err === 'object') {
+    if (typeof err.error === 'string') return err.error;
+    if (typeof err.error === 'object' && err.error) {
+      if (typeof err.error.message === 'string') return err.error.message;
+      if (typeof err.error.code === 'string') return `${err.error.code}${err.error.message ? `: ${err.error.message}` : ''}`;
+    }
+    if (typeof err.message === 'string') return err.message;
+    if (typeof err.code === 'string') return `${err.code}${err.message ? `: ${err.message}` : ''}`;
+    try {
+      const json = JSON.stringify(err);
+      if (json && json !== '{}') return json;
+    } catch (_) {}
+  }
+  return fallbackMessage;
+}
+
 export async function fetchPublicProducts(): Promise<FragranceProduct[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/products.php`);
