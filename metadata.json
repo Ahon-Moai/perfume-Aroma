@@ -1,0 +1,6 @@
+{
+  "name": "AROMATICA | Curated Authentic Fragrance Decants",
+  "description": "Discover luxury perfume by the ml. Curated authentic decants from timeless classics to niche standouts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

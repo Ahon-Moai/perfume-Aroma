@@ -1,0 +1,169 @@
+import React, { useState } from 'react';
+import { Menu, Search, User, Heart, ShoppingBag, X, ChevronLeft, ChevronRight } from 'lucide-react';
+
+interface HeaderProps {
+  cartCount: number;
+  onOpenCart: () => void;
+  onOpenSearch: () => void;
+  onOpenWishlist: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({
+  cartCount,
+  onOpenCart,
+  onOpenSearch,
+  onOpenWishlist
+}) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [announcementIndex, setAnnouncementIndex] = useState(0);
+
+  const announcements = [
+    'Upto 1500BDT Cashback On bKash Payments',
+    'Free Shipping on Decant Orders Over BDT 3,000',
+    'Guaranteed 100% Authentic & Unaltered Decants'
+  ];
+
+  const nextAnnouncement = () => {
+    setAnnouncementIndex((prev) => (prev + 1) % announcements.length);
+  };
+
+  const prevAnnouncement = () => {
+    setAnnouncementIndex((prev) => (prev - 1 + announcements.length) % announcements.length);
+  };
+
+  return (
+    <header className="sticky top-0 z-40 w-full bg-white transition-all duration-200">
+      {/* Top Black Announcement Strip */}
+      <div className="bg-black text-white text-[11px] font-medium tracking-wider uppercase py-2 px-4 flex items-center justify-between border-b border-zinc-900">
+        <button
+          onClick={prevAnnouncement}
+          aria-label="Previous announcement"
+          className="text-zinc-400 hover:text-white transition-colors p-1"
+        >
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <div className="flex-1 text-center font-sans tracking-widest px-2 truncate">
+          {announcements[announcementIndex]}
+        </div>
+        <button
+          onClick={nextAnnouncement}
+          aria-label="Next announcement"
+          className="text-zinc-400 hover:text-white transition-colors p-1"
+        >
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+
+      {/* Main Navbar */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between border-b border-zinc-100">
+        {/* Left: Mobile & Desktop Menu Trigger */}
+        <div className="flex items-center">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-zinc-900 hover:text-zinc-600 transition-colors focus:outline-none"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
+        {/* Center: Brand Wordmark */}
+        <div className="absolute left-1/2 -translate-x-1/2 text-center">
+          <a
+            href="/"
+            className="font-serif text-2xl sm:text-3xl tracking-[0.25em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity"
+          >
+            AROMATICA
+          </a>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-1 sm:gap-2 text-zinc-900">
+          <button
+            onClick={onOpenSearch}
+            className="p-2 hover:text-zinc-600 transition-colors"
+            aria-label="Search fragrances"
+          >
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
+          </button>
+          
+          <button
+            onClick={() => {
+              const el = document.getElementById('account-section');
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="p-2 hover:text-zinc-600 transition-colors hidden xs:block"
+            aria-label="Account"
+          >
+            <User className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
+          </button>
+
+          <button
+            onClick={onOpenWishlist}
+            className="p-2 hover:text-zinc-600 transition-colors relative"
+            aria-label="Wishlist"
+          >
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
+          </button>
+
+          <button
+            onClick={onOpenCart}
+            className="p-2 hover:text-zinc-600 transition-colors relative"
+            aria-label="Shopping bag"
+          >
+            <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
+            {cartCount > 0 && (
+              <span className="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Slide-out Mobile Navigation Drawer */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 top-[96px] z-50 bg-black/40 backdrop-blur-sm md:hidden animate-fade-in">
+          <div className="bg-white w-4/5 max-w-sm h-full p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
+            <div className="space-y-6">
+              <div className="border-b border-zinc-100 pb-4">
+                <p className="text-[10px] tracking-widest uppercase text-zinc-400 font-medium">Explore Decants</p>
+                <div className="mt-4 flex flex-col space-y-3 font-serif text-lg text-zinc-900">
+                  <a href="#new-arrivals" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                    New Arrivals
+                  </a>
+                  <a href="#for-him-her" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                    For Him / For Her
+                  </a>
+                  <a href="#seasons" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                    Seasons Campaign
+                  </a>
+                  <a href="#brands" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                    Brands Directory
+                  </a>
+                  <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                    Frequently Asked Questions
+                  </a>
+                  <a href="#journal" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                    Editorial Diary
+                  </a>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs text-zinc-600 font-sans">
+                <p className="text-zinc-400 tracking-wider uppercase text-[10px]">Concierge Service</p>
+                <p>WhatsApp: +880 1700-AROMA</p>
+                <p>18 Hours Daily Support</p>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-zinc-100 text-xs text-zinc-400">
+              <p className="font-serif italic text-zinc-600">Luxury, By The ML.</p>
+              <p className="mt-1">AROMATICA Dhaka, Bangladesh</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
