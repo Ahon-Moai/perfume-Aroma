@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Save, ShieldCheck } from 'lucide-react';
+import { getErrorMessage } from '../services/api';
 
 interface SettingsCMSProps {
   csrfToken: string;
@@ -60,7 +61,7 @@ export const SettingsCMS: React.FC<SettingsCMSProps> = ({ csrfToken }) => {
       if (data.success) {
         alert('Global Store Settings saved successfully!');
       } else {
-        alert('Failed to save settings');
+        alert(getErrorMessage(data?.error || data, 'Failed to save settings'));
       }
     } catch (e) {
       alert('Error saving settings');

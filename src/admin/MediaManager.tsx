@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Trash2, Copy, Check, Image as ImageIcon } from 'lucide-react';
+import { getErrorMessage } from '../services/api';
 
 interface MediaFile {
   id: number;
@@ -63,7 +64,7 @@ export const MediaManager: React.FC<MediaManagerProps> = ({ csrfToken }) => {
       if (data.success) {
         fetchMedia();
       } else {
-        alert(data.error || 'Failed to upload image');
+        alert(getErrorMessage(data?.error || data, 'Failed to upload image'));
       }
     } catch (err) {
       alert('Upload error');

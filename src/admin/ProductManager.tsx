@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Search, Image as ImageIcon, Check, X, Tag } from 'lucide-react';
+import { getErrorMessage } from '../services/api';
 
 interface ProductVariant {
   id?: string;
@@ -118,7 +119,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
         setEditingProduct(null);
         fetchProducts();
       } else {
-        alert(data.error || 'Failed to save product');
+        alert(getErrorMessage(data?.error || data, 'Failed to save product'));
       }
     } catch (err) {
       alert('Error saving product');

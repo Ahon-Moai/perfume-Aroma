@@ -24,7 +24,7 @@ import { AdminLogin } from './admin/AdminLogin';
 import { AdminLayout } from './admin/AdminLayout';
 import { NEW_ARRIVALS } from './data/fragranceData';
 import { FragranceProduct, CartItem, JournalArticle } from './types';
-import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings } from './services/api';
+import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMessage } from './services/api';
 import { Shield, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -80,8 +80,8 @@ export default function App() {
     checkSession();
   }, []);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
+  const showToast = (msg: any) => {
+    setToastMessage(typeof msg === 'string' ? msg : getErrorMessage(msg, 'Notification'));
     setTimeout(() => {
       setToastMessage(null);
     }, 3200);

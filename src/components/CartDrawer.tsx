@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Trash2, ShieldCheck, ArrowRight, CheckCircle2, PackageCheck } from 'lucide-react';
 import { CartItem } from '../types';
-import { submitOrder } from '../services/api';
+import { submitOrder, getErrorMessage } from '../services/api';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -65,7 +65,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         setCompletedOrder(result.data);
         if (onClearCart) onClearCart();
       } else {
-        setErrorMsg(result.error || 'Failed to place order. Please try again.');
+        setErrorMsg(getErrorMessage(result?.error || result, 'Failed to place order. Please try again.'));
       }
     } catch (err: any) {
       setErrorMsg('Connection error during checkout. Please check server connection.');

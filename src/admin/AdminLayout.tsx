@@ -64,7 +64,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
             <div className="hidden sm:flex items-center gap-2 text-xs">
               <span className="text-zinc-400">Logged in as</span>
-              <span className="font-semibold text-white">{user.username}</span>
+              <span className="font-semibold text-white">
+                {typeof user?.username === 'string' ? user.username : 'Admin'}
+              </span>
             </div>
 
             <button

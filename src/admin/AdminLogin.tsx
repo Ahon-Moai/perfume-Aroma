@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, User, AlertCircle, Sparkles } from 'lucide-react';
+import { getErrorMessage } from '../services/api';
 
 interface AdminLoginProps {
   onLoginSuccess: (user: any, csrfToken: string) => void;
@@ -30,7 +31,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
       if (data.success && data.data) {
         onLoginSuccess(data.data.user, data.data.csrf_token);
       } else {
-        setError(data.error || 'Invalid credentials. Please try again.');
+        setError(getErrorMessage(data?.error || data, 'Invalid credentials. Please try again.'));
       }
     } catch (err: any) {
       setError('Connection error. Please ensure the API backend is running.');
