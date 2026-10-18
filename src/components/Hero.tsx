@@ -89,20 +89,20 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
         </div>
 
         {/* Hero Central Content & Scattered Floating Bottles Area (Payway Style) */}
-        <div className="relative my-2 sm:my-6 min-h-[460px] sm:min-h-[540px] flex flex-col items-center justify-center text-center">
+        <div className="relative my-1 sm:my-6 min-h-[440px] sm:min-h-[540px] flex flex-col items-center justify-center text-center">
 
           {/* Floating Bottle 1: JPG Le Male Elixir (Top Left, Tilted Left) */}
           <div
             onClick={() => setActiveElement(elements.jpg)}
-            className="hidden lg:flex absolute left-2 xl:left-8 top-0 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
+            className="flex absolute -left-1 sm:left-2 xl:left-8 -top-2 sm:top-0 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
           >
-            <div className="relative w-44 xl:w-52 h-56 xl:h-64 -rotate-[14deg] group-hover:-rotate-[6deg] transition-transform duration-500 ease-out filter drop-shadow-[0_22px_30px_rgba(0,0,0,0.18)]">
+            <div className="relative w-16 sm:w-36 lg:w-44 xl:w-52 h-24 sm:h-48 lg:h-56 xl:h-64 -rotate-[14deg] group-hover:-rotate-[6deg] transition-transform duration-500 ease-out filter drop-shadow-[0_10px_16px_rgba(0,0,0,0.18)] sm:drop-shadow-[0_22px_30px_rgba(0,0,0,0.18)]">
               <img
                 src={BOTTLE_IMAGES.jpgElixir}
                 alt="JPG Le Male Elixir"
                 className="w-full h-full object-contain"
               />
-              <div className="absolute -bottom-1 -right-1 bg-amber-500 text-black text-[10px] font-sans font-bold tracking-wider px-2.5 py-1 rounded-full border border-amber-300 shadow-md uppercase">
+              <div className="absolute -bottom-1 -right-2 bg-amber-500 text-black text-[7px] sm:text-[10px] font-sans font-bold tracking-wider px-1 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-amber-300 shadow-md uppercase whitespace-nowrap">
                 JPG Elixir
               </div>
             </div>
@@ -111,17 +111,17 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
           {/* Floating Bottle 2: Lattafa Khamrah (Bottom Left, Tilted Right) */}
           <div
             onClick={() => setActiveElement(elements.khamrah)}
-            className="hidden md:flex absolute left-4 lg:left-32 xl:left-40 bottom-2 sm:bottom-6 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
+            className="flex absolute -left-1 sm:left-4 lg:left-32 xl:left-40 bottom-12 sm:bottom-6 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
           >
-            <div className="relative w-36 sm:w-44 xl:w-48 h-48 sm:h-56 xl:h-60 rotate-[12deg] group-hover:rotate-[6deg] transition-transform duration-500 ease-out filter drop-shadow-[0_24px_32px_rgba(0,0,0,0.22)]">
+            <div className="relative w-14 sm:w-36 lg:w-44 xl:w-48 h-20 sm:h-48 lg:h-56 xl:h-60 rotate-[12deg] group-hover:rotate-[6deg] transition-transform duration-500 ease-out filter drop-shadow-[0_10px_16px_rgba(0,0,0,0.22)] sm:drop-shadow-[0_24px_32px_rgba(0,0,0,0.22)]">
               <img
                 src={BOTTLE_IMAGES.lattafaKhamrah}
                 alt="Lattafa Khamrah EDP"
                 className="w-full h-full object-contain"
               />
-              <div className="absolute -top-2 -left-2 bg-zinc-950 text-white text-[10px] font-sans font-semibold tracking-wider px-2.5 py-1 rounded-full border border-zinc-700 shadow-lg flex items-center gap-1 uppercase">
-                <Flame className="w-3 h-3 text-amber-400" />
-                <span>Khamrah EDP</span>
+              <div className="absolute -top-1 -left-2 bg-zinc-950 text-white text-[7px] sm:text-[10px] font-sans font-semibold tracking-wider px-1 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-zinc-700 shadow-lg flex items-center gap-0.5 sm:gap-1 uppercase whitespace-nowrap">
+                <Flame className="w-2 h-2 sm:w-3 sm:h-3 text-amber-400" />
+                <span>Khamrah</span>
               </div>
             </div>
           </div>
@@ -129,16 +129,16 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
           {/* Floating Bottle 3: Bleu de Chanel (Top Right, Tilted Left) */}
           <div
             onClick={() => setActiveElement(elements.chanel)}
-            className="hidden lg:flex absolute right-2 xl:right-8 top-2 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
+            className="flex absolute -right-1 sm:right-2 xl:right-8 -top-1 sm:top-2 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
           >
-            <div className="relative w-44 xl:w-52 h-56 xl:h-64 -rotate-[12deg] group-hover:-rotate-[4deg] transition-transform duration-500 ease-out filter drop-shadow-[0_22px_30px_rgba(0,0,0,0.18)]">
+            <div className="relative w-18 sm:w-36 lg:w-44 xl:w-52 h-24 sm:h-48 lg:h-56 xl:h-64 -rotate-[12deg] group-hover:-rotate-[4deg] transition-transform duration-500 ease-out filter drop-shadow-[0_10px_16px_rgba(0,0,0,0.18)] sm:drop-shadow-[0_22px_30px_rgba(0,0,0,0.18)]">
               <img
                 src={BOTTLE_IMAGES.bleuChanel}
                 alt="Bleu de Chanel"
                 className="w-full h-full object-contain"
               />
-              <div className="absolute -bottom-1 -left-1 bg-zinc-900 text-amber-400 text-[10px] font-sans font-bold tracking-wider px-2.5 py-1 rounded-full border border-zinc-700 shadow-md uppercase">
-                Bleu de Chanel
+              <div className="absolute -bottom-1 -left-2 bg-zinc-900 text-amber-400 text-[7px] sm:text-[10px] font-sans font-bold tracking-wider px-1 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-zinc-700 shadow-md uppercase whitespace-nowrap">
+                Bleu Chanel
               </div>
             </div>
           </div>
@@ -146,28 +146,28 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
           {/* Floating UI Card Pill (Bottom Right) */}
           <div
             onClick={() => setActiveElement(elements.chanel)}
-            className="hidden md:flex absolute right-4 lg:right-32 xl:right-40 bottom-2 sm:bottom-6 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
+            className="flex absolute -right-1 sm:right-4 lg:right-32 xl:right-40 bottom-12 sm:bottom-6 z-20 group cursor-pointer flex-col items-center transition-all duration-500 hover:scale-105 hover:z-30"
           >
-            <div className="bg-white/90 backdrop-blur-md border border-zinc-300 p-3 sm:p-4 rounded-2xl shadow-xl rotate-[-8deg] group-hover:rotate-0 transition-transform duration-300 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-700 font-serif font-bold text-lg">
+            <div className="bg-white/90 backdrop-blur-md border border-zinc-300 p-1.5 sm:p-4 rounded-lg sm:rounded-2xl shadow-xl rotate-[-8deg] group-hover:rotate-0 transition-transform duration-300 flex items-center gap-1 sm:gap-3">
+              <div className="w-6 h-6 sm:w-10 sm:h-10 rounded sm:rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-700 font-serif font-bold text-[10px] sm:text-lg">
                 5ml
               </div>
               <div className="text-left">
-                <div className="text-xs font-bold text-zinc-900 uppercase tracking-wider">Travel Atomizer</div>
-                <div className="text-[11px] text-zinc-500 font-mono">75+ Sprays · Leakproof</div>
+                <div className="text-[9px] sm:text-xs font-bold text-zinc-900 uppercase tracking-wider">Atomizer</div>
+                <div className="text-[9px] sm:text-[11px] text-zinc-500 font-mono hidden sm:block">75+ Sprays · Leakproof</div>
               </div>
             </div>
           </div>
 
           {/* Central Main Headline & Typography */}
-          <div className="relative z-10 max-w-4xl mx-auto px-2 space-y-4 sm:space-y-6">
-            <h1 className="font-serif text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-normal tracking-tight text-zinc-950 leading-[0.98]">
+          <div className="relative z-10 max-w-4xl mx-auto px-10 sm:px-24 md:px-32 lg:px-48 space-y-3 sm:space-y-6">
+            <h1 className="font-serif text-3xl sm:text-7xl md:text-8xl lg:text-9xl font-normal tracking-tight text-zinc-950 leading-[0.98]">
               {headline.toLowerCase().includes('decant') ? (
                 <>
                   <span className="block font-sans font-extrabold tracking-tight uppercase text-zinc-950 drop-shadow-xs">
                     {headline}
                   </span>
-                  <span className="block font-serif italic text-zinc-800 font-normal mt-1 sm:mt-2 text-4xl sm:text-6xl md:text-7xl lg:text-8xl">
+                  <span className="block font-serif italic text-zinc-800 font-normal mt-0.5 sm:mt-2 text-xl sm:text-6xl md:text-7xl lg:text-8xl">
                     that feel extraordinary.
                   </span>
                 </>
@@ -176,64 +176,28 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
                   <span className="block font-sans font-extrabold tracking-tight uppercase text-zinc-950 drop-shadow-xs">
                     {headline}
                   </span>
-                  <span className="block font-serif italic text-zinc-800 font-normal mt-1 sm:mt-2 text-4xl sm:text-6xl md:text-7xl lg:text-8xl">
+                  <span className="block font-serif italic text-zinc-800 font-normal mt-0.5 sm:mt-2 text-xl sm:text-6xl md:text-7xl lg:text-8xl">
                     Luxury by the ML
                   </span>
                 </>
               )}
             </h1>
 
-            {/* Mobile / Compact Bottle Bar (visible on mobile where floating absolute bottles are hidden) */}
-            <div className="flex lg:hidden items-center justify-center gap-2 sm:gap-3 py-3 overflow-x-auto no-scrollbar">
-              <button
-                onClick={() => setActiveElement(elements.jpg)}
-                className="flex-shrink-0 relative group bg-zinc-50 border border-zinc-200 p-2 rounded-xl flex items-center gap-2 text-left hover:border-zinc-900 transition-colors shadow-xs"
-              >
-                <img src={BOTTLE_IMAGES.jpgElixir} alt="JPG" className="w-10 h-14 object-contain filter drop-shadow-md -rotate-6" />
-                <div className="pr-1">
-                  <div className="text-[10px] font-sans font-bold uppercase text-amber-700">JPG Elixir</div>
-                  <div className="text-[11px] font-serif font-semibold text-zinc-900">Le Male</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveElement(elements.khamrah)}
-                className="flex-shrink-0 relative group bg-zinc-50 border border-zinc-200 p-2 rounded-xl flex items-center gap-2 text-left hover:border-zinc-900 transition-colors shadow-xs"
-              >
-                <img src={BOTTLE_IMAGES.lattafaKhamrah} alt="Khamrah" className="w-10 h-14 object-contain filter drop-shadow-md rotate-6" />
-                <div className="pr-1">
-                  <div className="text-[10px] font-sans font-bold uppercase text-amber-700">Lattafa</div>
-                  <div className="text-[11px] font-serif font-semibold text-zinc-900">Khamrah EDP</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveElement(elements.chanel)}
-                className="flex-shrink-0 relative group bg-zinc-50 border border-zinc-200 p-2 rounded-xl flex items-center gap-2 text-left hover:border-zinc-900 transition-colors shadow-xs"
-              >
-                <img src={BOTTLE_IMAGES.bleuChanel} alt="Bleu Chanel" className="w-10 h-14 object-contain filter drop-shadow-md -rotate-6" />
-                <div className="pr-1">
-                  <div className="text-[10px] font-sans font-bold uppercase text-amber-700">Chanel</div>
-                  <div className="text-[11px] font-serif font-semibold text-zinc-900">Bleu Chanel</div>
-                </div>
-              </button>
-            </div>
-
             {/* Subheading / Specifier */}
-            <p className="font-mono text-xs sm:text-sm tracking-[0.25em] text-zinc-500 font-semibold uppercase">
+            <p className="font-mono text-[9px] sm:text-sm tracking-[0.15em] sm:tracking-[0.25em] text-zinc-500 font-semibold uppercase">
               {specifier}
             </p>
 
             {/* Tagline Narrative */}
-            <p className="font-sans text-sm sm:text-base text-zinc-600 font-normal max-w-xl mx-auto leading-relaxed">
+            <p className="font-sans text-xs sm:text-base text-zinc-600 font-normal max-w-xl mx-auto leading-relaxed">
               {tagline}
             </p>
 
             {/* CTA Buttons */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md mx-auto">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 w-full max-w-md mx-auto">
               <button
                 onClick={onExploreClick}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm tracking-[0.18em] uppercase font-sans font-semibold px-8 py-4 transition-all duration-300 cursor-pointer shadow-xl shadow-zinc-950/10 rounded-none border border-zinc-950"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.18em] uppercase font-sans font-semibold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-300 cursor-pointer shadow-xl shadow-zinc-950/10 rounded-none border border-zinc-950"
               >
                 <span>{primaryCta}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -241,7 +205,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
 
               <button
                 onClick={onOrderProduct || onExploreClick}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-zinc-300 hover:border-zinc-950 bg-white hover:bg-zinc-50 text-zinc-900 text-xs sm:text-sm tracking-[0.18em] uppercase font-sans font-semibold px-7 py-4 transition-all duration-300 cursor-pointer rounded-none"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-zinc-300 hover:border-zinc-950 bg-white hover:bg-zinc-50 text-zinc-900 text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.18em] uppercase font-sans font-semibold px-5 sm:px-7 py-3 sm:py-4 transition-all duration-300 cursor-pointer rounded-none"
               >
                 <span>{secondaryCta}</span>
                 <ArrowUpRight className="w-4 h-4 text-zinc-600" />
