@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Search, Image as ImageIcon, Check, X, Tag } from 'lucide-react';
 import { getErrorMessage } from '../services/api';
+import { ImageUploader } from './ImageUploader';
 
 interface ProductVariant {
   id?: string;
@@ -339,16 +340,12 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Product Image URL / Asset Path</label>
-                <input
-                  type="text"
-                  value={editingProduct.image || ''}
-                  onChange={e => setEditingProduct({ ...editingProduct, image: e.target.value })}
-                  required
-                  className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
-                />
-              </div>
+              <ImageUploader
+                label="Product Image"
+                value={editingProduct.image || ''}
+                onChange={url => setEditingProduct({ ...editingProduct, image: url })}
+                csrfToken={csrfToken}
+              />
 
               <div>
                 <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Short Editorial Description</label>

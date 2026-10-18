@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Save, Sparkles, Plus, Trash2, Edit2, Check, RefreshCw } from 'lucide-react';
 import { getErrorMessage } from '../services/api';
+import { ImageUploader } from './ImageUploader';
 
 interface HomepageCMSProps {
   csrfToken: string;
@@ -397,15 +398,12 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Hero Backdrop Image Asset URL</label>
-            <input
-              type="text"
-              value={heroForm.image}
-              onChange={(e) => setHeroForm({ ...heroForm, image: e.target.value })}
-              className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400 font-mono"
-            />
-          </div>
+          <ImageUploader
+            label="Hero Backdrop Image"
+            value={heroForm.image}
+            onChange={(url) => setHeroForm({ ...heroForm, image: url })}
+            csrfToken={csrfToken}
+          />
 
           <div className="pt-4 border-t border-zinc-800 flex justify-end">
             <button
@@ -718,15 +716,12 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-[10px] text-zinc-400 uppercase mb-1">Cover Image Asset URL</label>
-                <input
-                  type="text"
-                  value={editingArticle.image}
-                  onChange={(e) => setEditingArticle({ ...editingArticle, image: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white font-mono"
-                />
-              </div>
+              <ImageUploader
+                label="Cover Image"
+                value={editingArticle.image}
+                onChange={(url) => setEditingArticle({ ...editingArticle, image: url })}
+                csrfToken={csrfToken}
+              />
               <div>
                 <label className="block text-[10px] text-zinc-400 uppercase mb-1">Description / Excerpt Snippet</label>
                 <textarea
