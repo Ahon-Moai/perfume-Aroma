@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Droplets, Flower2, ShieldCheck, ChevronRight, X } from 'lucide-react';
+import { Sparkles, Droplets, ShieldCheck, ChevronRight, X, Flame, Award, CheckCircle2 } from 'lucide-react';
 import { IMAGES } from '../data/fragranceData';
 
 interface HeroProps {
@@ -15,6 +15,13 @@ interface HeroProps {
   };
 }
 
+// BOTTLE IMAGES PROVIDED BY USER
+const BOTTLE_IMAGES = {
+  jpgElixir: 'https://ik.imagekit.io/t1q0n1ovm/jean-paul-gaultier-le-male-elixir-parfum-perfume-cologne-495648-removebg-preview.png',
+  lattafaKhamrah: 'https://ik.imagekit.io/t1q0n1ovm/lattafa-khamrah-edp-perfume-cologne-871932-removebg-preview.png',
+  bleuChanel: 'https://ik.imagekit.io/t1q0n1ovm/pngegg.png?updatedAt=1791829401535'
+};
+
 interface OlfactoryElement {
   id: string;
   name: string;
@@ -28,171 +35,210 @@ interface OlfactoryElement {
 export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, heroData }) => {
   const [activeElement, setActiveElement] = useState<OlfactoryElement | null>(null);
 
-  const headline = heroData?.headline || 'LUXURY, BY THE ML';
-  const tagline = heroData?.tagline || 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity. Engineered for pocket elegance.';
-  const specifier = heroData?.specifier || '5 ML ( 75+ SPRAYS )';
-  const primaryCta = heroData?.primary_cta_text || 'ORDER PURE PORTIONS · ৳ 490';
-  const secondaryCta = heroData?.secondary_cta_text || 'EXPLORE ALL DECANTS';
-  const bgImage = heroData?.image || IMAGES.hero;
+  const headline = heroData?.headline || 'Decants';
+  const tagline = heroData?.tagline || 'Experience world-class luxury fragrances in hand-filled, authentic travel atomizers. Designed for modern perfume connoisseurs who appreciate elegance on the go.';
+  const specifier = heroData?.specifier || '5 ML ( 75+ SPRAYS ) · 100% PURE PORTIONS';
+  const primaryCta = heroData?.primary_cta_text || 'EXPLORE ALL DECANTS';
+  const secondaryCta = heroData?.secondary_cta_text || 'ORDER PURE PORTION · ৳ 490';
 
   const elements: OlfactoryElement[] = [
     {
-      id: 'neroli',
-      name: 'White Neroli Blossoms',
-      tier: 'Top Note · Solar Floral',
-      tagline: 'Hand-picked morning orange blossoms',
-      description: 'Bright, dewy white petals bursting with crystalline floral elegance and luminous solar citrus nuance.',
-      icon: '🌸',
-      image: IMAGES.purePortionsIngredients
-    },
-    {
-      id: 'vanilla',
-      name: 'Madagascar Bourbon Vanilla',
-      tier: 'Heart Note · Warm Gourmand',
-      tagline: 'Sun-cured dark vanilla bean pods',
-      description: 'Slow-cured black vanilla pods delivering deep, velvety warmth without synthetic sweetness.',
-      icon: '🌿',
-      image: IMAGES.purePortionsIngredients
-    },
-    {
-      id: 'amber',
-      name: 'Golden Amber Crystals',
-      tier: 'Base Note · Radiant Resin',
-      tagline: 'Translucent amber resin facets',
-      description: 'Rich balsamic resin crystals creating an enduring, golden trail of 12+ hour sillage.',
+      id: 'jpg',
+      name: 'Le Male Elixir',
+      tier: 'Jean Paul Gaultier · Warm Amber',
+      tagline: 'Deep honeyed tonka & lavender elixir',
+      description: 'An intense, radiant blend of wild lavender, warm honeyed tonka bean, and benzoin resin.',
       icon: '✨',
-      image: IMAGES.purePortionsIngredients
+      image: BOTTLE_IMAGES.jpgElixir
     },
     {
-      id: 'atomizer',
-      name: '5ml Pocket Precision Atomizer',
-      tier: 'Hardware · Travel Engineered',
-      tagline: '75+ ultra-fine micro-mist sprays',
-      description: 'High-pressure sealed glass flacon with glossy black cap and holographic framing. Zero leakage in transit.',
-      icon: '💧',
-      image: IMAGES.purePortionsBottle
+      id: 'khamrah',
+      name: 'Khamrah EDP',
+      tier: 'Lattafa · Gourmet Spice',
+      tagline: 'Rich cinnamon & praline amber',
+      description: 'Opulent gourmand fragrance infused with nutmeg, sweet praline, dates, and creamy vanilla.',
+      icon: '🔥',
+      image: BOTTLE_IMAGES.lattafaKhamrah
+    },
+    {
+      id: 'chanel',
+      name: 'Bleu de Chanel',
+      tier: 'Chanel · Woody Aromatic',
+      tagline: 'Crisp citrus & cedarwood sillage',
+      description: 'A timeless, sophisticated blend of fresh grapefruit, dry cedarwood, and smoky incense.',
+      icon: '💎',
+      image: BOTTLE_IMAGES.bleuChanel
     }
   ];
 
   return (
-    <section className="relative w-full overflow-hidden bg-zinc-950 text-white">
-      {/* Cinematic Panoramic Campaign Backdrop */}
-      <div className="relative w-full aspect-[16/10] sm:aspect-[21/9] lg:aspect-[24/10] min-h-[520px] sm:min-h-[580px] lg:min-h-[660px] max-h-[820px] overflow-hidden">
-        <img
-          src={bgImage}
-          alt="Pure Portions by ARRINA luxury 5ml perfume travel atomizer floating in zero gravity with neroli, vanilla beans, and amber crystals"
-          className="w-full h-full object-cover object-center scale-[1.01] transition-transform duration-1000 ease-out"
-          priority-hint="high"
-          referrerPolicy="no-referrer"
-        />
+    <section className="relative w-full overflow-hidden bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white min-h-[640px] sm:min-h-[720px] lg:min-h-[780px] flex flex-col justify-between py-8 sm:py-12 lg:py-16">
+      {/* Background Ambient Glows & Subtle Grid Pattern */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[350px] sm:h-[500px] bg-amber-500/10 rounded-full blur-[120px]" />
+        <div className="absolute -top-20 -left-20 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] bg-amber-600/15 rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-orange-500/10 rounded-full blur-[120px]" />
 
-        {/* Cinematic Scrims: Dark left gradient for editorial copy legibility while keeping center-right bright & sunlit */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/15 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+        {/* Delicate noise/grid background overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] opacity-40" />
+      </div>
 
-        {/* Main Content Overlay */}
-        <div className="absolute inset-0 flex flex-col justify-between max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-14 py-8 sm:py-12 pointer-events-none">
-          {/* Top subtle brand badge */}
-          <div className="pointer-events-auto flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/40 backdrop-blur-md border border-white/20 rounded-full text-[10px] tracking-[0.22em] uppercase font-sans text-amber-300">
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>THE SIGNATURE DECANTS EDITION</span>
-            </div>
+      {/* Main Container */}
+      <div className="relative max-w-[1400px] w-full mx-auto px-4 sm:px-8 lg:px-12 my-auto z-10 flex flex-col items-center text-center">
 
-            <div className="hidden md:flex items-center gap-3 text-[11px] font-sans tracking-widest text-zinc-300 uppercase">
-              <span className="text-white font-medium">ARRINA ATELIER</span>
-              <span>·</span>
-              <span>PURE PORTIONS COLLECTION</span>
+        {/* Top Floating Badge Ribbon */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 bg-zinc-900/80 border border-amber-500/30 rounded-full text-[10px] sm:text-xs tracking-[0.22em] uppercase font-sans text-amber-300 backdrop-blur-md shadow-xl mb-6 sm:mb-8 animate-fade-in">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+          <span>AUTHENTIC LUXURY PARFUM DECANTS</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+        </div>
+
+        {/* Dynamic Composition: Floating Perfume Bottle Deck + Big Text */}
+        <div className="relative w-full max-w-5xl my-4 sm:my-6 flex flex-col items-center justify-center">
+
+          {/* FLOATING BOTTLE LAYER 1 (Left: Lattafa Khamrah - Tilted left, depth blurred) */}
+          <div className="absolute left-2 sm:left-6 lg:left-12 top-[-20px] sm:top-[-10px] lg:top-[-30px] w-28 sm:w-44 lg:w-56 z-0 pointer-events-none transform -rotate-12 scale-90 sm:scale-95 filter blur-[0.5px] hover:blur-none transition-all duration-500 hover:scale-105 hover:z-30">
+            <div className="relative group">
+              <img
+                src={BOTTLE_IMAGES.lattafaKhamrah}
+                alt="Lattafa Khamrah Decant Bottle"
+                className="w-full h-auto drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)] object-contain transition-transform duration-700 ease-out"
+              />
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-black/70 border border-amber-500/40 rounded text-[9px] font-mono uppercase tracking-widest text-amber-300 whitespace-nowrap opacity-0 sm:opacity-100 transition-opacity">
+                Khamrah EDP
+              </div>
             </div>
           </div>
 
-          {/* Central Editorial Copy & Holographic Product Showcase */}
-          <div className="max-w-xl lg:max-w-2xl space-y-4 sm:space-y-5 pointer-events-auto my-auto pt-4">
-            {/* Holographic foil brand ribbon */}
-            <div className="inline-block relative">
-              <div className="px-3 py-1 bg-gradient-to-r from-cyan-500/20 via-pink-500/20 to-amber-500/20 border border-white/30 backdrop-blur-md rounded-none">
-                <span className="font-serif italic text-xs sm:text-sm tracking-wider text-white">
-                  Pure Portions <span className="not-italic text-[10px] tracking-[0.25em] font-sans uppercase text-amber-300">BY ARRINA</span>
-                </span>
+          {/* FLOATING BOTTLE LAYER 2 (Right: Bleu de Chanel / PNGEGG - Tilted right, depth glow) */}
+          <div className="absolute right-2 sm:right-6 lg:left-[calc(50%+180px)] top-[20px] sm:top-[30px] lg:top-[-10px] w-28 sm:w-44 lg:w-56 z-0 pointer-events-none transform rotate-12 scale-90 sm:scale-95 filter blur-[0.5px] hover:blur-none transition-all duration-500 hover:scale-105 hover:z-30">
+            <div className="relative group">
+              <img
+                src={BOTTLE_IMAGES.bleuChanel}
+                alt="Bleu de Chanel Decant Bottle"
+                className="w-full h-auto drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)] object-contain transition-transform duration-700 ease-out"
+              />
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-black/70 border border-amber-500/40 rounded text-[9px] font-mono uppercase tracking-widest text-amber-300 whitespace-nowrap opacity-0 sm:opacity-100 transition-opacity">
+                Bleu EDP
               </div>
             </div>
+          </div>
 
-            {/* Headline */}
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl tracking-tight text-white font-normal uppercase leading-[1.06] text-balance">
-              {headline}
+          {/* FLOATING BOTTLE LAYER 3 (Center Foreground Accent: JPG Le Male Elixir - Prominent tilted torso bottle) */}
+          <div className="absolute left-1/2 -translate-x-1/2 -top-12 sm:-top-20 lg:-top-24 w-32 sm:w-52 lg:w-64 z-20 pointer-events-none transform rotate-6 hover:rotate-0 transition-transform duration-700 ease-out">
+            <img
+              src={BOTTLE_IMAGES.jpgElixir}
+              alt="Jean Paul Gaultier Le Male Elixir Decant Bottle"
+              className="w-full h-auto drop-shadow-[0_25px_40px_rgba(245,158,11,0.25)] object-contain"
+            />
+          </div>
+
+          {/* CENTRAL BIG TYPOGRAPHY & HEADING */}
+          <div className="relative z-10 pt-16 sm:pt-28 lg:pt-32 space-y-3 sm:space-y-4 max-w-4xl px-2">
+
+            {/* Big Headline styled with mixed typography like reference design */}
+            <h1 className="font-serif text-4xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tight leading-[0.95] text-white drop-shadow-2xl">
+              {headline.toLowerCase().includes('decant') ? (
+                <>
+                  <span className="block text-white tracking-wider font-sans font-black">{headline}</span>
+                  <span className="block font-serif italic text-amber-400 font-normal tracking-normal text-3xl sm:text-6xl lg:text-7xl mt-1 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-500">
+                    that feel extraordinary.
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="block text-white font-sans font-black">{headline}</span>
+                  <span className="block font-serif italic text-amber-400 font-normal tracking-normal text-3xl sm:text-6xl lg:text-7xl mt-1">
+                    Luxury by the ML
+                  </span>
+                </>
+              )}
             </h1>
 
-            {/* Narrative description emphasizing the elements */}
-            <p className="text-xs sm:text-sm text-zinc-200 font-sans font-light tracking-wide leading-relaxed max-w-lg">
+            {/* Sub-Headline & Specifier */}
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <span className="h-[1px] w-8 sm:w-16 bg-gradient-to-r from-transparent to-amber-400/80" />
+              <p className="font-mono text-[11px] sm:text-xs tracking-[0.25em] text-amber-300 font-semibold uppercase">
+                {specifier}
+              </p>
+              <span className="h-[1px] w-8 sm:w-16 bg-gradient-to-l from-transparent to-amber-400/80" />
+            </div>
+
+            {/* Tagline narrative */}
+            <p className="text-xs sm:text-base text-zinc-300 font-sans font-light max-w-2xl mx-auto leading-relaxed px-4">
               {tagline}
             </p>
 
-            {/* 5 ML (75+ SPRAYS) Luxury Specifier from Image */}
-            <div className="flex items-center gap-3 py-1">
-              <div className="h-[1px] bg-white/40 w-8 sm:w-12" />
-              <p className="font-serif text-xs sm:text-sm tracking-[0.26em] text-amber-200 uppercase font-light">
-                {specifier}
-              </p>
-              <div className="h-[1px] bg-white/40 w-8 sm:w-12" />
+            {/* Floating Interactive Badges (Matching reference UI badge elements) */}
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-black/60 border border-zinc-800 rounded-lg text-zinc-300 backdrop-blur-md shadow-md">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[11px] font-sans">Guaranteed 100% Authentic</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-black/60 border border-zinc-800 rounded-lg text-zinc-300 backdrop-blur-md shadow-md">
+                <Droplets className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="text-[11px] font-sans">75+ Ultra-fine Sprays</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-black/60 border border-zinc-800 rounded-lg text-zinc-300 backdrop-blur-md shadow-md">
+                <Award className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[11px] font-sans">Travel Atomizers</span>
+              </div>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <button
-                onClick={onOrderProduct || onExploreClick}
-                className="inline-flex items-center gap-2.5 bg-white text-zinc-950 hover:bg-amber-300 hover:text-black text-[11px] sm:text-xs tracking-[0.16em] uppercase font-sans font-semibold px-6 py-3 transition-all duration-200 cursor-pointer shadow-lg"
-              >
-                <span>{primaryCta}</span>
-                <span className="text-xs font-mono">↗</span>
-              </button>
-
+            {/* Primary & Secondary Call To Action Buttons */}
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto">
               <button
                 onClick={onExploreClick}
-                className="inline-flex items-center gap-2 border border-white/60 hover:border-white bg-black/40 hover:bg-black/60 text-white text-[11px] sm:text-xs tracking-[0.16em] uppercase font-sans px-5 py-3 transition-all duration-200 cursor-pointer backdrop-blur-md"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-amber-400 hover:bg-amber-300 text-black text-xs sm:text-sm tracking-[0.16em] uppercase font-sans font-bold px-8 py-4 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer shadow-[0_10px_25px_rgba(245,158,11,0.3)] rounded-none"
+              >
+                <span>{primaryCta}</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={onOrderProduct || onExploreClick}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-zinc-700 hover:border-amber-400/80 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white text-xs sm:text-sm tracking-[0.16em] uppercase font-sans px-7 py-4 transition-all duration-300 cursor-pointer backdrop-blur-md rounded-none"
               >
                 <span>{secondaryCta}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <span className="text-amber-400 text-xs font-mono">↗</span>
               </button>
             </div>
-          </div>
 
-          {/* Bottom Elements Showcase Bar */}
-          <div className="pointer-events-auto pt-6 border-t border-white/15">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] tracking-[0.22em] uppercase font-sans text-amber-300 font-medium">
-                  OLFACTORY ELEMENTS:
-                </span>
-                <span className="text-[11px] text-zinc-400 font-light hidden sm:inline">
-                  Click to inspect raw botanicals & hardware
-                </span>
-              </div>
-
-              {/* Element Pills */}
-              <div className="flex flex-wrap items-center gap-2">
-                {elements.map((el) => (
-                  <button
-                    key={el.id}
-                    onClick={() => setActiveElement(el)}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-black/50 hover:bg-black/80 border border-white/20 hover:border-amber-400/80 rounded-full text-xs font-sans tracking-wide text-zinc-200 hover:text-white transition-all cursor-pointer backdrop-blur-md"
-                  >
-                    <span className="text-sm">{el.icon}</span>
-                    <span className="text-[11px] font-medium">{el.name.split(' ')[0]}</span>
-                    <span className="text-[9px] text-zinc-400 uppercase tracking-widest hidden xs:inline">
-                      ({el.tier.split(' ')[0]})
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
+
+        {/* Bottom Quick Decant Inspect Pills */}
+        <div className="mt-8 sm:mt-12 pt-6 border-t border-zinc-800/80 w-full max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Flame className="w-4 h-4 text-amber-400" />
+            <span className="text-[11px] tracking-[0.2em] uppercase font-sans text-amber-200 font-semibold">
+              FEATURED DECANTS IN SELECTION:
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {elements.map((el) => (
+              <button
+                key={el.id}
+                onClick={() => setActiveElement(el)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/80 hover:border-amber-400/80 rounded-full text-xs font-sans tracking-wide text-zinc-300 hover:text-white transition-all cursor-pointer backdrop-blur-md"
+              >
+                <span className="text-sm">{el.icon}</span>
+                <span className="text-[11px] font-medium">{el.name}</span>
+                <span className="text-[9px] text-amber-400 font-mono uppercase tracking-wider">
+                  Inspect ↗
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
       </div>
 
       {/* Interactive Element Modal Inspector */}
       {activeElement && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
-          <div className="relative w-full max-w-lg bg-zinc-950 border border-zinc-700 shadow-2xl p-6 sm:p-8 space-y-5 text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-lg bg-zinc-950 border border-amber-500/30 shadow-2xl p-6 sm:p-8 space-y-5 text-white">
             <button
               onClick={() => setActiveElement(null)}
               aria-label="Close element inspector"
@@ -215,11 +261,11 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
               </div>
             </div>
 
-            <div className="relative aspect-[16/9] w-full bg-zinc-900 overflow-hidden border border-zinc-800">
+            <div className="relative aspect-[16/10] w-full bg-gradient-to-b from-zinc-900 to-black overflow-hidden border border-zinc-800 flex items-center justify-center p-4">
               <img
                 src={activeElement.image}
                 alt={activeElement.name}
-                className="w-full h-full object-cover object-center"
+                className="max-h-full max-w-full object-contain drop-shadow-[0_15px_25px_rgba(245,158,11,0.2)]"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -236,12 +282,16 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
             <div className="pt-2 flex items-center justify-between border-t border-zinc-800">
               <div className="flex items-center gap-1.5 text-[10px] text-zinc-400">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>100% Raw botanical purity in every decant.</span>
+                <span>100% Authentic original perfume portion.</span>
               </div>
               <button
                 onClick={() => {
                   setActiveElement(null);
-                  if (onOrderProduct) onOrderProduct();
+                  if (onOrderProduct) {
+                    onOrderProduct();
+                  } else {
+                    onExploreClick();
+                  }
                 }}
                 className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-sans tracking-wider uppercase font-semibold transition-colors cursor-pointer"
               >
