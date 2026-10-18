@@ -82,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="absolute left-1/2 -translate-x-1/2 text-center">
           <a
             href="/"
-            className="font-serif text-2xl sm:text-3xl tracking-[0.25em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity"
+            className="font-bodoni text-base xs:text-lg sm:text-2xl md:text-3xl tracking-[0.08em] xs:tracking-[0.1em] sm:tracking-[0.18em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity whitespace-nowrap"
           >
             {storeSettings?.store_name || 'AROMATICA'}
           </a>

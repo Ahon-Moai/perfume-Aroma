@@ -3,8 +3,13 @@
 @theme {
   --font-serif: "Bodoni Moda", "Cormorant Garamond", Georgia, serif;
   --font-display: "Bodoni Moda", serif;
+  --font-bodoni: "Bodoni Moda", serif;
   --font-editorial: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+}
+
+.font-bodoni {
+  font-family: "Bodoni Moda", serif;
 }
 
 /* Custom smooth marquee */
