@@ -28,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({ storeSettings }) => {
       {/* Massive AROMATICA Wordmark Banner matching screenshot */}
       <div className="w-full border-b border-zinc-900/80 bg-zinc-950/60 py-6 sm:py-10 select-none overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center flex items-center justify-center">
-          <h1 className="font-serif text-[11vw] sm:text-[10vw] lg:text-[8.5vw] font-extralight tracking-[0.28em] text-white/95 uppercase leading-none scale-y-105">
+          <h1 className="font-bodoni text-[8vw] sm:text-[7vw] lg:text-[6vw] font-extralight tracking-[0.15em] sm:tracking-[0.22em] text-white/95 uppercase leading-none whitespace-nowrap">
             {storeSettings?.store_name || 'AROMATICA'}
           </h1>
         </div>
