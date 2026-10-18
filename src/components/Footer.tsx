@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  storeSettings?: any;
+}
+
+export const Footer: React.FC<FooterProps> = ({ storeSettings }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [error, setError] = useState('');
@@ -25,7 +29,7 @@ export const Footer: React.FC = () => {
       <div className="w-full border-b border-zinc-900/80 bg-zinc-950/60 py-6 sm:py-10 select-none overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center flex items-center justify-center">
           <h1 className="font-serif text-[11vw] sm:text-[10vw] lg:text-[8.5vw] font-extralight tracking-[0.28em] text-white/95 uppercase leading-none scale-y-105">
-            AROMATICA
+            {storeSettings?.store_name || 'AROMATICA'}
           </h1>
         </div>
       </div>
@@ -98,7 +102,7 @@ export const Footer: React.FC = () => {
           {/* Right Column: Tagline & Navigation Columns */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-8">
             <p className="text-xs sm:text-sm font-sans text-zinc-300 font-light tracking-wide">
-              The finest fragrances in the world. By the ml. For you.
+              {storeSettings?.tagline || 'The finest fragrances in the world. By the ml. For you.'}
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-xs font-sans">
@@ -173,7 +177,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="text-[10px] text-zinc-500 font-sans text-center sm:text-right">
-            © 2026, AROMATICA Powered by Shopify · Privacy policy · Refund policy · Terms of service · Contact information · Shipping policy
+            © {new Date().getFullYear()}, {storeSettings?.store_name || 'AROMATICA'} · {storeSettings?.address || 'Dhaka, Bangladesh'} · Privacy policy · Refund policy · Terms of service
           </div>
         </div>
       </div>

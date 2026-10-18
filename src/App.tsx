@@ -52,16 +52,31 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashCheck);
   }, []);
 
-  // Fetch live products & content from API on mount
+  // Live CMS & Store Settings State
+  const [storeSettings, setStoreSettings] = useState<any>(null);
+  const [homepageData, setHomepageData] = useState<any>(null);
+
+  // Fetch live products, store settings & homepage content from API on mount
   useEffect(() => {
     const loadApiData = async () => {
-      const liveProducts = await fetchPublicProducts();
+      const [liveProducts, settings, hpData] = await Promise.all([
+        fetchPublicProducts(),
+        fetchStoreSettings(),
+        fetchHomepageData()
+      ]);
+
       if (liveProducts && liveProducts.length > 0) {
         setProducts(liveProducts);
       }
+      if (settings) {
+        setStoreSettings(settings);
+      }
+      if (hpData) {
+        setHomepageData(hpData);
+      }
     };
     loadApiData();
-  }, []);
+  }, [viewMode]);
 
   // Check existing admin session
   useEffect(() => {
@@ -205,6 +220,7 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenWishlist={() => showToast('Wishlist: 3 items saved')}
+        storeSettings={storeSettings}
       />
 
       <main className="flex-1">
@@ -215,10 +231,13 @@ export default function App() {
             const purePortions = products.find((p) => p.id === 'prod-pure-portions') || products[0];
             if (purePortions) setSelectedProduct(purePortions);
           }}
+          heroData={homepageData?.sections?.hero?.content}
         />
 
         {/* C. Oversized category marquee */}
-        <CategoryMarquee />
+        <CategoryMarquee
+          items={homepageData?.sections?.category_marquee?.content?.items}
+        />
 
         {/* D. New Arrivals product carousel */}
         <NewArrivals
@@ -234,26 +253,32 @@ export default function App() {
         <SeasonsGallery />
 
         {/* G. Fragrance category filter strip */}
-        <BrandFilterStrip onSelectBrand={handleBrandSelect} />
+        <BrandFilterStrip
+          onSelectBrand={handleBrandSelect}
+          brands={homepageData?.brands}
+        />
 
         {/* H. Trust and shopping information section */}
-        <TrustSection />
+        <TrustSection storeSettings={storeSettings} />
 
         {/* I. Black FAQ section */}
-        <FAQSection />
+        <FAQSection faqs={homepageData?.faqs} />
 
         {/* J. Customer reviews section */}
-        <ReviewsSection />
+        <ReviewsSection reviews={homepageData?.reviews} />
 
         {/* K. Our Studio social-content section */}
-        <StudioSection />
+        <StudioSection socialCards={homepageData?.socialCards} />
 
         {/* L. Editorial blog and fragrance guides */}
-        <JournalSection onReadArticle={handleReadArticle} />
+        <JournalSection
+          onReadArticle={handleReadArticle}
+          articles={homepageData?.articles}
+        />
       </main>
 
       {/* M. Oversized AROMATICA brand footer */}
-      <Footer />
+      <Footer storeSettings={storeSettings} />
 
       {/* Interactive Drawers & Modals */}
       <QuickViewModal

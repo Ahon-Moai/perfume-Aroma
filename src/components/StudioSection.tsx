@@ -1,8 +1,14 @@
 import React, { useRef } from 'react';
 import { Heart, MessageCircle, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SOCIAL_CARDS } from '../data/fragranceData';
+import { SocialCard } from '../types';
 
-export const StudioSection: React.FC = () => {
+interface StudioSectionProps {
+  socialCards?: SocialCard[];
+}
+
+export const StudioSection: React.FC<StudioSectionProps> = ({ socialCards }) => {
+  const cards = socialCards && socialCards.length > 0 ? socialCards : SOCIAL_CARDS;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollLeft = () => {
@@ -44,7 +50,7 @@ export const StudioSection: React.FC = () => {
                 ref={scrollRef}
                 className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-3 -mx-4 px-4 sm:mx-0 sm:px-0"
               >
-                {SOCIAL_CARDS.map((card) => (
+                {cards.map((card) => (
                   <div
                     key={card.id}
                     className="flex-shrink-0 w-[210px] sm:w-[230px] bg-zinc-900/70 border border-zinc-800 rounded-xs overflow-hidden flex flex-col group cursor-pointer"

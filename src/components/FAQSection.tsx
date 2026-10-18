@@ -2,9 +2,14 @@ import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { FAQ_ITEMS } from '../data/fragranceData';
 
-export const FAQSection: React.FC = () => {
+interface FAQSectionProps {
+  faqs?: Array<{ id: string; question: string; answer: string }>;
+}
+
+export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
+  const faqList = faqs && faqs.length > 0 ? faqs : FAQ_ITEMS;
   // First accordion is open by default as in the screenshot
-  const [openId, setOpenId] = useState<string>('faq-1');
+  const [openId, setOpenId] = useState<string>(faqList[0]?.id || 'faq-1');
 
   const toggleAccordion = (id: string) => {
     setOpenId(openId === id ? '' : id);
@@ -17,7 +22,7 @@ export const FAQSection: React.FC = () => {
           {/* Left Column: Accordion Questions */}
           <div className="lg:col-span-7 order-2 lg:order-1">
             <div className="divide-y divide-zinc-800 border-t border-b border-zinc-800">
-              {FAQ_ITEMS.map((item) => {
+              {faqList.map((item) => {
                 const isOpen = openId === item.id;
                 return (
                   <div key={item.id} className="py-4 sm:py-5 transition-colors">

@@ -1,8 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Pause, Play, Quote } from 'lucide-react';
 import { REVIEWS_LIST } from '../data/fragranceData';
+import { ReviewItem } from '../types';
 
-export const ReviewsSection: React.FC = () => {
+interface ReviewsSectionProps {
+  reviews?: ReviewItem[];
+}
+
+export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
+  const reviewsData = reviews && reviews.length > 0 ? reviews : REVIEWS_LIST;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
 
@@ -70,7 +76,7 @@ export const ReviewsSection: React.FC = () => {
               ref={scrollRef}
               className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-4 -mx-4 px-4 sm:mx-0 sm:px-0"
             >
-              {REVIEWS_LIST.map((rev) => (
+              {reviewsData.map((rev) => (
                 <div
                   key={rev.id}
                   className="flex-shrink-0 w-[270px] sm:w-[320px] bg-[#f7f7f7] border border-zinc-150 p-6 rounded-xs flex flex-col justify-between min-h-[220px]"
