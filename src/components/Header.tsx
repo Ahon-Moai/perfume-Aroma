@@ -6,22 +6,33 @@ interface HeaderProps {
   onOpenCart: () => void;
   onOpenSearch: () => void;
   onOpenWishlist: () => void;
+  storeSettings?: any;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   cartCount,
   onOpenCart,
   onOpenSearch,
-  onOpenWishlist
+  onOpenWishlist,
+  storeSettings
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [announcementIndex, setAnnouncementIndex] = useState(0);
 
-  const announcements = [
+  const defaultAnnouncements = [
     'Upto 1500BDT Cashback On bKash Payments',
     'Free Shipping on Decant Orders Over BDT 3,000',
     'Guaranteed 100% Authentic & Unaltered Decants'
   ];
+
+  const customAnnouncement = storeSettings?.announcement_bar;
+  const announcements = customAnnouncement
+    ? customAnnouncement.includes('·')
+      ? customAnnouncement.split('·').map((s: string) => s.trim())
+      : customAnnouncement.includes('|')
+      ? customAnnouncement.split('|').map((s: string) => s.trim())
+      : [customAnnouncement]
+    : defaultAnnouncements;
 
   const nextAnnouncement = () => {
     setAnnouncementIndex((prev) => (prev + 1) % announcements.length);
@@ -73,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
             href="/"
             className="font-serif text-2xl sm:text-3xl tracking-[0.25em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity"
           >
-            AROMATICA
+            {storeSettings?.store_name || 'AROMATICA'}
           </a>
         </div>
 
@@ -152,14 +163,14 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div className="space-y-2 text-xs text-zinc-600 font-sans">
                 <p className="text-zinc-400 tracking-wider uppercase text-[10px]">Concierge Service</p>
-                <p>WhatsApp: +880 1700-AROMA</p>
-                <p>18 Hours Daily Support</p>
+                <p>Contact: {storeSettings?.contact_phone || '+880 1700-AROMA'}</p>
+                <p>Email: {storeSettings?.contact_email || 'concierge@aromatica.com.bd'}</p>
               </div>
             </div>
 
             <div className="pt-6 border-t border-zinc-100 text-xs text-zinc-400">
-              <p className="font-serif italic text-zinc-600">Luxury, By The ML.</p>
-              <p className="mt-1">AROMATICA Dhaka, Bangladesh</p>
+              <p className="font-serif italic text-zinc-600">{storeSettings?.tagline || 'Luxury, By The ML.'}</p>
+              <p className="mt-1">{storeSettings?.address || 'AROMATICA Dhaka, Bangladesh'}</p>
             </div>
           </div>
         </div>

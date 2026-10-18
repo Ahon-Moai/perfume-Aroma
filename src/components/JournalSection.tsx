@@ -5,9 +5,11 @@ import { JournalArticle } from '../types';
 
 interface JournalSectionProps {
   onReadArticle?: (article: JournalArticle) => void;
+  articles?: JournalArticle[];
 }
 
-export const JournalSection: React.FC<JournalSectionProps> = ({ onReadArticle }) => {
+export const JournalSection: React.FC<JournalSectionProps> = ({ onReadArticle, articles }) => {
+  const articlesList = articles && articles.length > 0 ? articles : JOURNAL_ARTICLES;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollLeft = () => {
@@ -57,7 +59,7 @@ export const JournalSection: React.FC<JournalSectionProps> = ({ onReadArticle })
               ref={scrollRef}
               className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-4 -mx-4 px-4 sm:mx-0 sm:px-0"
             >
-              {JOURNAL_ARTICLES.map((article) => (
+              {articlesList.map((article) => (
                 <div
                   key={article.id}
                   className="flex-shrink-0 w-[260px] sm:w-[290px] border border-zinc-150 bg-white rounded-xs overflow-hidden flex flex-col justify-between group"

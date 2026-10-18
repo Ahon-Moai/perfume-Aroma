@@ -5,6 +5,14 @@ import { IMAGES } from '../data/fragranceData';
 interface HeroProps {
   onExploreClick: () => void;
   onOrderProduct?: () => void;
+  heroData?: {
+    headline?: string;
+    tagline?: string;
+    specifier?: string;
+    primary_cta_text?: string;
+    secondary_cta_text?: string;
+    image?: string;
+  };
 }
 
 interface OlfactoryElement {
@@ -17,8 +25,15 @@ interface OlfactoryElement {
   image: string;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct }) => {
+export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, heroData }) => {
   const [activeElement, setActiveElement] = useState<OlfactoryElement | null>(null);
+
+  const headline = heroData?.headline || 'LUXURY, BY THE ML';
+  const tagline = heroData?.tagline || 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity. Engineered for pocket elegance.';
+  const specifier = heroData?.specifier || '5 ML ( 75+ SPRAYS )';
+  const primaryCta = heroData?.primary_cta_text || 'ORDER PURE PORTIONS · ৳ 490';
+  const secondaryCta = heroData?.secondary_cta_text || 'EXPLORE ALL DECANTS';
+  const bgImage = heroData?.image || IMAGES.hero;
 
   const elements: OlfactoryElement[] = [
     {
@@ -64,7 +79,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct }) =>
       {/* Cinematic Panoramic Campaign Backdrop */}
       <div className="relative w-full aspect-[16/10] sm:aspect-[21/9] lg:aspect-[24/10] min-h-[520px] sm:min-h-[580px] lg:min-h-[660px] max-h-[820px] overflow-hidden">
         <img
-          src={IMAGES.hero}
+          src={bgImage}
           alt="Pure Portions by ARRINA luxury 5ml perfume travel atomizer floating in zero gravity with neroli, vanilla beans, and amber crystals"
           className="w-full h-full object-cover object-center scale-[1.01] transition-transform duration-1000 ease-out"
           priority-hint="high"
@@ -104,19 +119,19 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct }) =>
 
             {/* Headline */}
             <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl tracking-tight text-white font-normal uppercase leading-[1.06] text-balance">
-              LUXURY, BY THE ML
+              {headline}
             </h1>
 
             {/* Narrative description emphasizing the elements */}
             <p className="text-xs sm:text-sm text-zinc-200 font-sans font-light tracking-wide leading-relaxed max-w-lg">
-              Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity. Engineered for pocket elegance.
+              {tagline}
             </p>
 
             {/* 5 ML (75+ SPRAYS) Luxury Specifier from Image */}
             <div className="flex items-center gap-3 py-1">
               <div className="h-[1px] bg-white/40 w-8 sm:w-12" />
               <p className="font-serif text-xs sm:text-sm tracking-[0.26em] text-amber-200 uppercase font-light">
-                5 ML ( 75+ SPRAYS )
+                {specifier}
               </p>
               <div className="h-[1px] bg-white/40 w-8 sm:w-12" />
             </div>
@@ -127,7 +142,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct }) =>
                 onClick={onOrderProduct || onExploreClick}
                 className="inline-flex items-center gap-2.5 bg-white text-zinc-950 hover:bg-amber-300 hover:text-black text-[11px] sm:text-xs tracking-[0.16em] uppercase font-sans font-semibold px-6 py-3 transition-all duration-200 cursor-pointer shadow-lg"
               >
-                <span>ORDER PURE PORTIONS · ৳ 490</span>
+                <span>{primaryCta}</span>
                 <span className="text-xs font-mono">↗</span>
               </button>
 
@@ -135,7 +150,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct }) =>
                 onClick={onExploreClick}
                 className="inline-flex items-center gap-2 border border-white/60 hover:border-white bg-black/40 hover:bg-black/60 text-white text-[11px] sm:text-xs tracking-[0.16em] uppercase font-sans px-5 py-3 transition-all duration-200 cursor-pointer backdrop-blur-md"
               >
-                <span>EXPLORE ALL DECANTS</span>
+                <span>{secondaryCta}</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>

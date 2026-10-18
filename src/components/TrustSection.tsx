@@ -1,7 +1,15 @@
 import React from 'react';
 import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 
-export const TrustSection: React.FC = () => {
+interface TrustSectionProps {
+  storeSettings?: any;
+}
+
+export const TrustSection: React.FC<TrustSectionProps> = ({ storeSettings }) => {
+  const feeDhaka = storeSettings?.shipping_fee_dhaka || '70';
+  const feeOutside = storeSettings?.shipping_fee_outside_dhaka || '130';
+  const freeThreshold = storeSettings?.free_shipping_threshold || '3000';
+
   return (
     <section className="w-full bg-white pt-12 pb-16 border-b border-zinc-100">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,10 +117,10 @@ export const TrustSection: React.FC = () => {
             {/* Card 3 */}
             <div className="bg-[#fbfbfb] border border-zinc-150 p-4 rounded-xs min-h-[120px] flex flex-col justify-between">
               <p className="text-[9px] tracking-[0.16em] uppercase text-zinc-400 font-sans">
-                DELIVERY
+                DELIVERY (Dhaka ৳{feeDhaka} / Outside ৳{feeOutside})
               </p>
               <p className="font-sans text-xs sm:text-sm font-semibold text-zinc-900 my-1 leading-snug">
-                Within 2-4 Business Days
+                Free Over ৳{freeThreshold}
               </p>
               <p className="text-[10px] text-zinc-500 font-sans">
                 Nationwide | Door to door

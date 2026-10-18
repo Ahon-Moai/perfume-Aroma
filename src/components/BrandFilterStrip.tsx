@@ -3,10 +3,12 @@ import { BRANDS_LIST } from '../data/fragranceData';
 
 interface BrandFilterStripProps {
   onSelectBrand?: (brand: string) => void;
+  brands?: Array<{ name: string; isNew?: boolean }>;
 }
 
-export const BrandFilterStrip: React.FC<BrandFilterStripProps> = ({ onSelectBrand }) => {
-  const [activeItem, setActiveItem] = useState<string>('HERRERA');
+export const BrandFilterStrip: React.FC<BrandFilterStripProps> = ({ onSelectBrand, brands }) => {
+  const list = brands && brands.length > 0 ? brands : BRANDS_LIST;
+  const [activeItem, setActiveItem] = useState<string>(list[0]?.name || 'HERRERA');
 
   const handleSelect = (name: string) => {
     setActiveItem(name);
@@ -19,7 +21,7 @@ export const BrandFilterStrip: React.FC<BrandFilterStripProps> = ({ onSelectBran
     <div id="brands" className="w-full bg-white py-6 border-b border-zinc-100 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-          {BRANDS_LIST.map((brand) => {
+          {list.map((brand) => {
             const isSelected = activeItem === brand.name;
             return (
               <button

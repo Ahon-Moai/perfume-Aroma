@@ -1,7 +1,11 @@
 import React from 'react';
 
-export const CategoryMarquee: React.FC = () => {
-  const marqueeItems = [
+interface CategoryMarqueeProps {
+  items?: string[];
+}
+
+export const CategoryMarquee: React.FC<CategoryMarqueeProps> = ({ items }) => {
+  const defaultItems = [
     'CURATE',
     'JUDGE',
     'REFINE',
@@ -11,6 +15,8 @@ export const CategoryMarquee: React.FC = () => {
     'REFINE',
     'TEST'
   ];
+
+  const marqueeItems = items && items.length > 0 ? items : defaultItems;
 
   return (
     <div className="w-full bg-white border-b border-zinc-200 overflow-hidden py-3 sm:py-5 select-none">
