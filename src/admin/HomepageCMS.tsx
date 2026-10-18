@@ -8,9 +8,10 @@ interface HomepageCMSProps {
 }
 
 export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
-  const [activeTab, setActiveTab] = useState<'hero' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
+  const [activeTab, setActiveTab] = useState<'hero' | 'video' | 'sections' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [availableProducts, setAvailableProducts] = useState<Array<{ id: string; name: string; brand: string }>>([]);
 
   // Hero Form
   const [heroForm, setHeroForm] = useState({
@@ -20,6 +21,44 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     primary_cta_text: 'ORDER PURE PORTIONS · ৳ 490',
     secondary_cta_text: 'EXPLORE ALL DECANTS',
     image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg'
+  });
+
+  // Video Section Form
+  const [videoForm, setVideoForm] = useState({
+    video_url: 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-background-41527-large.mp4',
+    poster_image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
+    headline: 'ELEGANCE REFRACTED IN MOTION',
+    tagline: 'Experience the delicate liquid craftsmanship of pure decanting, captured in ultra-high precision visual art.',
+    cta_text: 'DISCOVER SIGNATURE COLLECTION',
+    is_enabled: true
+  });
+
+  // Dynamic Custom Sections (4 Sections)
+  const [customSections, setCustomSections] = useState<Record<string, { title: string; subtitle: string; is_enabled: boolean; product_ids: string[] }>>({
+    custom_section_1: {
+      title: 'MOST LOVED DECANTS',
+      subtitle: 'CURATED BESTSELLERS FOR DISCOVERING YOUR SIGNATURE SCENT',
+      is_enabled: true,
+      product_ids: ['prod-pure-portions', 'prod-vanilla01', 'prod-rose01']
+    },
+    custom_section_2: {
+      title: 'ORIENTAL & OUD SELECTIONS',
+      subtitle: 'DEEP, SMOKY & REFINED RESINS',
+      is_enabled: true,
+      product_ids: ['prod-genesis-leo', 'prod-venena']
+    },
+    custom_section_3: {
+      title: 'FLORAL & AMBER ESSENCES',
+      subtitle: 'RADIANT VELVET PETALS & SOLAR DEW',
+      is_enabled: true,
+      product_ids: ['prod-asdaaf-raneen', 'prod-rose01']
+    },
+    custom_section_4: {
+      title: 'LIMITED VAULT EDITIONS',
+      subtitle: 'EXCLUSIVE BATCH ALLOCATIONS',
+      is_enabled: true,
+      product_ids: ['prod-vanilla01', 'prod-genesis-leo', 'prod-pure-portions']
+    }
   });
 
   // Marquee
@@ -40,8 +79,18 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
   const fetchCMSData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/homepage.php');
-      const data = await res.json();
+      const [cmsRes, prodRes] = await Promise.all([
+        fetch('/api/admin/homepage.php'),
+        fetch('/api/admin/products.php')
+      ]);
+
+      const data = await cmsRes.json();
+      const pData = await prodRes.json();
+
+      if (pData.success && Array.isArray(pData.data)) {
+        setAvailableProducts(pData.data.map((p: any) => ({ id: p.id, name: p.name, brand: p.brand })));
+      }
+
       if (data.success && data.data) {
         const payload = data.data;
 
@@ -50,6 +99,31 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         if (heroSec && heroSec.content) {
           setHeroForm((prev) => ({ ...prev, ...heroSec.content }));
         }
+
+        // Video
+        const vidSec = payload.sections?.video_hero;
+        if (vidSec && vidSec.content) {
+          setVideoForm((prev) => ({
+            ...prev,
+            ...vidSec.content,
+            is_enabled: vidSec.is_enabled !== undefined ? Boolean(vidSec.is_enabled) : true
+          }));
+        }
+
+        // Custom Sections
+        const nextCustom: any = { ...customSections };
+        ['custom_section_1', 'custom_section_2', 'custom_section_3', 'custom_section_4'].forEach((key) => {
+          if (payload.sections?.[key]) {
+            const sec = payload.sections[key];
+            nextCustom[key] = {
+              title: sec.title || nextCustom[key].title,
+              subtitle: sec.subtitle || nextCustom[key].subtitle,
+              is_enabled: sec.is_enabled !== undefined ? Boolean(sec.is_enabled) : true,
+              product_ids: Array.isArray(sec.content?.product_ids) ? sec.content.product_ids : nextCustom[key].product_ids
+            };
+          }
+        });
+        setCustomSections(nextCustom);
 
         // Marquee
         const marqueeSec = payload.sections?.category_marquee;
@@ -76,6 +150,79 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
   useEffect(() => {
     fetchCMSData();
   }, []);
+
+  const handleSaveVideo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/homepage.php', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          type: 'section',
+          section_key: 'video_hero',
+          title: videoForm.headline || 'AURA & SILLAGE IN MOTION',
+          subtitle: videoForm.tagline || 'VISUAL OLFACTORY STORY',
+          content: videoForm,
+          is_enabled: videoForm.is_enabled ? 1 : 0,
+          display_order: 3
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('Video Section saved successfully!');
+        fetchCMSData();
+      } else {
+        alert(getErrorMessage(data?.error || data, 'Failed to save Video section'));
+      }
+    } catch (e) {
+      alert('Error saving Video section');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveCustomSection = async (secKey: string) => {
+    setSaving(true);
+    const secData = customSections[secKey];
+    try {
+      const res = await fetch('/api/admin/homepage.php', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          type: 'section',
+          section_key: secKey,
+          title: secData.title,
+          subtitle: secData.subtitle,
+          content: {
+            is_enabled: secData.is_enabled,
+            product_ids: secData.product_ids
+          },
+          is_enabled: secData.is_enabled ? 1 : 0,
+          display_order: 4 + parseInt(secKey.slice(-1) || '1', 10)
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert(`Collection "${secData.title}" saved successfully!`);
+        fetchCMSData();
+      } else {
+        alert(getErrorMessage(data?.error || data, 'Failed to save collection section'));
+      }
+    } catch (e) {
+      alert('Error saving collection section');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleSaveHero = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -317,6 +464,8 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       <div className="flex border-b border-zinc-800 space-x-2 overflow-x-auto">
         {[
           { id: 'hero', label: 'Hero Banner' },
+          { id: 'video', label: 'Homepage Video' },
+          { id: 'sections', label: 'Custom Product Sections' },
           { id: 'marquee', label: 'Marquee Ticker' },
           { id: 'reviews', label: 'Customer Reviews' },
           { id: 'faqs', label: 'FAQs' },
@@ -418,7 +567,231 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         </form>
       )}
 
-      {/* Tab 2: Marquee Form */}
+      {/* Tab 2: Video Section Form */}
+      {activeTab === 'video' && (
+        <form onSubmit={handleSaveVideo} className="bg-zinc-900 border border-zinc-800 p-6 space-y-5 text-xs text-zinc-300">
+          <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
+            <div className="flex items-center gap-2 text-amber-300">
+              <Sparkles className="w-4 h-4" />
+              <h3 className="font-serif text-base text-white">Homepage Video Showcase Settings</h3>
+            </div>
+            <label className="inline-flex items-center gap-2 cursor-pointer">
+              <span className="text-zinc-400 text-xs">Section Enabled</span>
+              <input
+                type="checkbox"
+                checked={videoForm.is_enabled}
+                onChange={(e) => setVideoForm({ ...videoForm, is_enabled: e.target.checked })}
+                className="sr-only peer"
+              />
+              <div className="w-8 h-4 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400 relative"></div>
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Direct Video URL (.mp4 / .webm)</label>
+              <input
+                type="text"
+                value={videoForm.video_url}
+                onChange={(e) => setVideoForm({ ...videoForm, video_url: e.target.value })}
+                placeholder="https://... or /uploads/video.mp4"
+                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400 font-mono"
+              />
+              <p className="text-[10px] text-zinc-500 mt-1">
+                Upload video in Media Manager or paste any standard MP4/WebM media link
+              </p>
+            </div>
+
+            <ImageUploader
+              label="Video Poster Image (Thumbnail)"
+              value={videoForm.poster_image}
+              onChange={(url) => setVideoForm({ ...videoForm, poster_image: url })}
+              csrfToken={csrfToken}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Video Overlay Headline</label>
+              <input
+                type="text"
+                value={videoForm.headline}
+                onChange={(e) => setVideoForm({ ...videoForm, headline: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">CTA Button Label</label>
+              <input
+                type="text"
+                value={videoForm.cta_text}
+                onChange={(e) => setVideoForm({ ...videoForm, cta_text: e.target.value })}
+                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Tagline / Narrative Description</label>
+            <textarea
+              value={videoForm.tagline}
+              onChange={(e) => setVideoForm({ ...videoForm, tagline: e.target.value })}
+              rows={2}
+              className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+            />
+          </div>
+
+          {videoForm.video_url && (
+            <div className="border border-zinc-800 p-3 bg-zinc-950 rounded space-y-2">
+              <span className="text-[10px] uppercase text-zinc-400 tracking-wider">Live Video Preview</span>
+              <div className="aspect-video max-w-md mx-auto overflow-hidden bg-black rounded">
+                <video src={videoForm.video_url} poster={videoForm.poster_image} controls className="w-full h-full object-cover" />
+              </div>
+            </div>
+          )}
+
+          <div className="pt-4 border-t border-zinc-800 flex justify-end">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+            >
+              <Save className="w-4 h-4" />
+              <span>{saving ? 'Saving...' : 'Save Video Section'}</span>
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Tab 3: Custom Product Sections Form */}
+      {activeTab === 'sections' && (
+        <div className="space-y-6">
+          <div className="bg-zinc-900 border border-zinc-800 p-4">
+            <h3 className="font-serif text-base text-white">Custom Dynamic Homepage Sections</h3>
+            <p className="text-xs text-zinc-400 mt-1">
+              Create and customize 3–4 dynamic product collections on your storefront. Rename section titles and select assigned products.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {['custom_section_1', 'custom_section_2', 'custom_section_3', 'custom_section_4'].map((secKey, idx) => {
+              const sec = customSections[secKey] || {
+                title: `Collection Section ${idx + 1}`,
+                subtitle: 'Curated selection',
+                is_enabled: true,
+                product_ids: []
+              };
+
+              return (
+                <div key={secKey} className="bg-zinc-900 border border-zinc-800 p-5 space-y-4 text-xs text-zinc-300">
+                  <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                    <span className="font-mono text-[11px] font-bold text-amber-300 uppercase">
+                      Section #{idx + 1} ({secKey})
+                    </span>
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      <span className="text-zinc-400 text-[10px]">Active</span>
+                      <input
+                        type="checkbox"
+                        checked={sec.is_enabled}
+                        onChange={(e) => {
+                          setCustomSections({
+                            ...customSections,
+                            [secKey]: { ...sec, is_enabled: e.target.checked }
+                          });
+                        }}
+                        className="sr-only peer"
+                      />
+                      <div className="w-7 h-4 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400 relative"></div>
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Section Title</label>
+                    <input
+                      type="text"
+                      value={sec.title}
+                      onChange={(e) => {
+                        setCustomSections({
+                          ...customSections,
+                          [secKey]: { ...sec, title: e.target.value }
+                        });
+                      }}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Subtitle / Descriptor</label>
+                    <input
+                      type="text"
+                      value={sec.subtitle}
+                      onChange={(e) => {
+                        setCustomSections({
+                          ...customSections,
+                          [secKey]: { ...sec, subtitle: e.target.value }
+                        });
+                      }}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">
+                      Assigned Products ({sec.product_ids.length} selected)
+                    </label>
+                    <div className="max-h-36 overflow-y-auto bg-zinc-950 border border-zinc-800 p-2 space-y-1">
+                      {availableProducts.map((p) => {
+                        const isSelected = sec.product_ids.includes(p.id);
+                        return (
+                          <label
+                            key={p.id}
+                            className={`flex items-center justify-between p-1.5 text-[11px] rounded cursor-pointer transition-colors ${
+                              isSelected ? 'bg-amber-400/20 text-white' : 'text-zinc-400 hover:bg-zinc-800'
+                            }`}
+                          >
+                            <span>
+                              <strong className="text-amber-300 font-normal">{p.brand}</strong> — {p.name}
+                            </span>
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={(e) => {
+                                const nextIds = e.target.checked
+                                  ? [...sec.product_ids, p.id]
+                                  : sec.product_ids.filter((id) => id !== p.id);
+                                setCustomSections({
+                                  ...customSections,
+                                  [secKey]: { ...sec, product_ids: nextIds }
+                                });
+                              }}
+                              className="accent-amber-400 cursor-pointer"
+                            />
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-zinc-800 flex justify-end">
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => handleSaveCustomSection(secKey)}
+                      className="px-4 py-1.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Save className="w-3.5 h-3.5" />
+                      <span>Save Section #{idx + 1}</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Tab 4: Marquee Form */}
       {activeTab === 'marquee' && (
         <form onSubmit={handleSaveMarquee} className="bg-zinc-900 border border-zinc-800 p-6 space-y-5 text-xs text-zinc-300">
           <div className="flex items-center gap-2 pb-3 border-b border-zinc-800 text-amber-300">

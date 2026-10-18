@@ -10,7 +10,8 @@ import { CategoryMarquee } from './components/CategoryMarquee';
 import { NewArrivals } from './components/NewArrivals';
 import { CampaignBanners } from './components/CampaignBanners';
 import { SeasonsGallery } from './components/SeasonsGallery';
-import { BrandFilterStrip } from './components/BrandFilterStrip';
+import { VideoSection } from './components/VideoSection';
+import { CustomProductSections } from './components/CustomProductSections';
 import { TrustSection } from './components/TrustSection';
 import { FAQSection } from './components/FAQSection';
 import { ReviewsSection } from './components/ReviewsSection';
@@ -77,6 +78,18 @@ export default function App() {
     };
     loadApiData();
   }, [viewMode]);
+
+  // Deep-link routing for direct product URLs (?product=prod-id)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const targetId = params.get('product');
+    if (targetId && products.length > 0) {
+      const found = products.find((p) => p.id === targetId || p.slug === targetId);
+      if (found) {
+        setSelectedProduct(found);
+      }
+    }
+  }, [products]);
 
   // Check existing admin session
   useEffect(() => {
@@ -252,10 +265,18 @@ export default function App() {
         {/* F. Seasons campaign gallery */}
         <SeasonsGallery />
 
-        {/* G. Fragrance category filter strip */}
-        <BrandFilterStrip
-          onSelectBrand={handleBrandSelect}
-          brands={homepageData?.brands}
+        {/* G. Cinematic Video Section */}
+        <VideoSection
+          videoData={homepageData?.sections?.video_hero?.content}
+          onExploreClick={handleExploreClick}
+        />
+
+        {/* Dynamic Custom Product Sections */}
+        <CustomProductSections
+          homepageData={homepageData}
+          allProducts={products}
+          onSelectProduct={(p) => setSelectedProduct(p)}
+          onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
         />
 
         {/* H. Trust and shopping information section */}

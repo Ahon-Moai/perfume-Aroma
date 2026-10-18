@@ -10,6 +10,13 @@ interface ProductVariant {
   stock_qty: number;
 }
 
+interface AttributeItem {
+  id: string;
+  name: string;
+  value: number;
+  enabled: boolean;
+}
+
 interface Product {
   id: string;
   brand: string;
@@ -20,6 +27,10 @@ interface Product {
   starting_price: number;
   image: string;
   notes: string[];
+  top_notes?: string[];
+  heart_notes?: string[];
+  base_notes?: string[];
+  attributes?: AttributeItem[];
   status: 'draft' | 'published' | 'archived';
   inventory_qty: number;
   is_featured: boolean;
@@ -60,6 +71,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
     fetchProducts();
   }, []);
 
+  const DEFAULT_ATTRIBUTES: AttributeItem[] = [
+    { id: 'longevity', name: 'Longevity', value: 85, enabled: true },
+    { id: 'sillage', name: 'Sillage / Trail', value: 80, enabled: true },
+    { id: 'projection', name: 'Projection', value: 75, enabled: true },
+    { id: 'versatility', name: 'Versatility', value: 90, enabled: true },
+    { id: 'mass_appeal', name: 'Mass Appeal', value: 88, enabled: true }
+  ];
+
   const handleOpenCreate = () => {
     setEditingProduct({
       id: 'prod-' + Math.random().toString(36).substr(2, 6),
@@ -71,6 +90,10 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       starting_price: 490,
       image: '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg',
       notes: ['Neroli Blossom', 'Madagascar Vanilla'],
+      top_notes: ['Neroli Blossom', 'Bergamot'],
+      heart_notes: ['Madagascar Bourbon Vanilla', 'Jasmine Nectar'],
+      base_notes: ['Golden Amber Crystals', 'White Musk'],
+      attributes: DEFAULT_ATTRIBUTES,
       status: 'published',
       inventory_qty: 100,
       is_featured: true,
@@ -88,6 +111,10 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
   const handleOpenEdit = (p: Product) => {
     setEditingProduct({
       ...p,
+      top_notes: Array.isArray(p.top_notes) ? p.top_notes : [],
+      heart_notes: Array.isArray(p.heart_notes) ? p.heart_notes : [],
+      base_notes: Array.isArray(p.base_notes) ? p.base_notes : [],
+      attributes: Array.isArray(p.attributes) && p.attributes.length > 0 ? p.attributes : DEFAULT_ATTRIBUTES,
       variants: p.variants && p.variants.length > 0 ? p.variants : [
         { size: '5ml', price: p.starting_price, stock_qty: p.inventory_qty }
       ]
@@ -355,6 +382,121 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                   rows={2}
                   className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
                 />
+              </div>
+
+              {/* Fragrance Notes Pyramid */}
+              <div className="pt-3 border-t border-zinc-800 space-y-3">
+                <h4 className="text-xs font-semibold text-amber-300 uppercase tracking-wider">Fragrance Notes Breakdown</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] text-zinc-400 uppercase mb-1">Top Notes (comma-separated)</label>
+                    <input
+                      type="text"
+                      value={(editingProduct.top_notes || []).join(', ')}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        top_notes: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                      })}
+                      placeholder="e.g. Neroli, Bergamot"
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] text-zinc-400 uppercase mb-1">Heart / Middle Notes</label>
+                    <input
+                      type="text"
+                      value={(editingProduct.heart_notes || []).join(', ')}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        heart_notes: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                      })}
+                      placeholder="e.g. Bourbon Vanilla, Rose"
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] text-zinc-400 uppercase mb-1">Base Notes</label>
+                    <input
+                      type="text"
+                      value={(editingProduct.base_notes || []).join(', ')}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        base_notes: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                      })}
+                      placeholder="e.g. Golden Amber, Oud"
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Olfactory Attribute Sliders */}
+              <div className="pt-3 border-t border-zinc-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-semibold text-amber-300 uppercase tracking-wider">Perfume Attributes & Intensity Sliders</h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const attrs = editingProduct.attributes || DEFAULT_ATTRIBUTES;
+                      setEditingProduct({
+                        ...editingProduct,
+                        attributes: [...attrs, { id: 'attr-' + Date.now(), name: 'Custom Rating', value: 80, enabled: true }]
+                      });
+                    }}
+                    className="text-[10px] bg-zinc-800 hover:bg-zinc-700 px-2 py-1 text-zinc-200 uppercase"
+                  >
+                    + Add Attribute Slider
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-zinc-950 p-3 border border-zinc-800">
+                  {(editingProduct.attributes || DEFAULT_ATTRIBUTES).map((attr, idx) => (
+                    <div key={attr.id || idx} className="p-2 border border-zinc-800 bg-zinc-900/60 space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <input
+                          type="text"
+                          value={attr.name}
+                          onChange={e => {
+                            const attrs = [...(editingProduct.attributes || DEFAULT_ATTRIBUTES)];
+                            attrs[idx].name = e.target.value;
+                            setEditingProduct({ ...editingProduct, attributes: attrs });
+                          }}
+                          className="bg-transparent text-xs font-medium text-white border-b border-zinc-700 focus:border-amber-400 px-1 py-0.5"
+                        />
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-mono font-bold text-amber-400">{attr.value}%</span>
+                          <label className="inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={attr.enabled}
+                              onChange={e => {
+                                const attrs = [...(editingProduct.attributes || DEFAULT_ATTRIBUTES)];
+                                attrs[idx].enabled = e.target.checked;
+                                setEditingProduct({ ...editingProduct, attributes: attrs });
+                              }}
+                              className="sr-only peer"
+                            />
+                            <div className="w-7 h-4 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400 relative"></div>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={attr.value}
+                          onChange={e => {
+                            const attrs = [...(editingProduct.attributes || DEFAULT_ATTRIBUTES)];
+                            attrs[idx].value = Number(e.target.value);
+                            setEditingProduct({ ...editingProduct, attributes: attrs });
+                          }}
+                          className="w-full h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Variants Section */}

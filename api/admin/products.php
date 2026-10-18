@@ -34,6 +34,10 @@ if ($method === 'GET') {
         $product['variants'] = $variants;
         $product['images'] = $images;
         $product['notes'] = json_decode($product['notes'] ?? '[]', true) ?: [];
+        $product['top_notes'] = json_decode($product['top_notes'] ?? '[]', true) ?: [];
+        $product['heart_notes'] = json_decode($product['heart_notes'] ?? '[]', true) ?: [];
+        $product['base_notes'] = json_decode($product['base_notes'] ?? '[]', true) ?: [];
+        $product['attributes'] = json_decode($product['attributes_json'] ?? '[]', true) ?: [];
 
         jsonResponse($product, 200);
     } else {
@@ -45,6 +49,10 @@ if ($method === 'GET') {
             $vStmt->execute([$p['id']]);
             $p['variants'] = $vStmt->fetchAll();
             $p['notes'] = json_decode($p['notes'] ?? '[]', true) ?: [];
+            $p['top_notes'] = json_decode($p['top_notes'] ?? '[]', true) ?: [];
+            $p['heart_notes'] = json_decode($p['heart_notes'] ?? '[]', true) ?: [];
+            $p['base_notes'] = json_decode($p['base_notes'] ?? '[]', true) ?: [];
+            $p['attributes'] = json_decode($p['attributes_json'] ?? '[]', true) ?: [];
         }
 
         jsonResponse($products, 200);
@@ -67,6 +75,10 @@ if ($method === 'GET') {
     $description = sanitizeString($input['description'] ?? '');
     $image = sanitizeString($input['image'] ?? '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg');
     $notes = is_array($input['notes'] ?? null) ? json_encode($input['notes']) : json_encode([]);
+    $topNotes = is_array($input['top_notes'] ?? $input['topNotes'] ?? null) ? json_encode($input['top_notes'] ?? $input['topNotes']) : json_encode([]);
+    $heartNotes = is_array($input['heart_notes'] ?? $input['heartNotes'] ?? null) ? json_encode($input['heart_notes'] ?? $input['heartNotes']) : json_encode([]);
+    $baseNotes = is_array($input['base_notes'] ?? $input['baseNotes'] ?? null) ? json_encode($input['base_notes'] ?? $input['baseNotes']) : json_encode([]);
+    $attributesJson = is_array($input['attributes'] ?? $input['attributes_json'] ?? null) ? json_encode($input['attributes'] ?? $input['attributes_json']) : json_encode([]);
     $status = sanitizeString($input['status'] ?? 'published');
     $inventoryQty = (int)($input['inventory_qty'] ?? $input['inventoryQty'] ?? 100);
     $isFeatured = !empty($input['is_featured']) ? 1 : 0;
@@ -79,11 +91,11 @@ if ($method === 'GET') {
     try {
         $db->beginTransaction();
 
-        $stmt = $db->prepare("INSERT INTO products (id, brand, name, slug, category, gender, concentration, starting_price, cost_price, short_description, description, image, notes, status, inventory_qty, is_featured, is_new_arrival) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO products (id, brand, name, slug, category, gender, concentration, starting_price, cost_price, short_description, description, image, notes, top_notes, heart_notes, base_notes, attributes_json, status, inventory_qty, is_featured, is_new_arrival) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $id, $brand, $name, $slug, $category, $gender, $concentration,
             $startingPrice, $costPrice, $shortDescription, $description,
-            $image, $notes, $status, $inventoryQty, $isFeatured, $isNewArrival
+            $image, $notes, $topNotes, $heartNotes, $baseNotes, $attributesJson, $status, $inventoryQty, $isFeatured, $isNewArrival
         ]);
 
         // Variants
@@ -135,6 +147,10 @@ if ($method === 'GET') {
     $description = sanitizeString($input['description'] ?? '');
     $image = sanitizeString($input['image'] ?? '');
     $notes = is_array($input['notes'] ?? null) ? json_encode($input['notes']) : json_encode([]);
+    $topNotes = is_array($input['top_notes'] ?? $input['topNotes'] ?? null) ? json_encode($input['top_notes'] ?? $input['topNotes']) : json_encode([]);
+    $heartNotes = is_array($input['heart_notes'] ?? $input['heartNotes'] ?? null) ? json_encode($input['heart_notes'] ?? $input['heartNotes']) : json_encode([]);
+    $baseNotes = is_array($input['base_notes'] ?? $input['baseNotes'] ?? null) ? json_encode($input['base_notes'] ?? $input['baseNotes']) : json_encode([]);
+    $attributesJson = is_array($input['attributes'] ?? $input['attributes_json'] ?? null) ? json_encode($input['attributes'] ?? $input['attributes_json']) : json_encode([]);
     $status = sanitizeString($input['status'] ?? 'published');
     $inventoryQty = (int)($input['inventory_qty'] ?? $input['inventoryQty'] ?? 100);
     $isFeatured = !empty($input['is_featured']) ? 1 : 0;
@@ -145,7 +161,7 @@ if ($method === 'GET') {
 
         $stmt = $db->prepare("UPDATE products SET brand = ?, name = ?, slug = ?, category = ?, gender = ?, concentration = ?, starting_price = ?, cost_price = ?, short_description = ?, description = ?, image = IF(?, ?, image), notes = ?, status = ?, inventory_qty = ?, is_featured = ?, is_new_arrival = ? WHERE id = ?");
         // Portable handling for optional image update
-        $db->exec("UPDATE products SET brand = " . $db->quote($brand) . ", name = " . $db->quote($name) . ", slug = " . $db->quote($slug) . ", category = " . $db->quote($category) . ", gender = " . $db->quote($gender) . ", concentration = " . $db->quote($concentration) . ", starting_price = $startingPrice, cost_price = $costPrice, short_description = " . $db->quote($shortDescription) . ", description = " . $db->quote($description) . ($image ? ", image = " . $db->quote($image) : "") . ", notes = " . $db->quote($notes) . ", status = " . $db->quote($status) . ", inventory_qty = $inventoryQty, is_featured = $isFeatured, is_new_arrival = $isNewArrival WHERE id = " . $db->quote($id));
+        $db->exec("UPDATE products SET brand = " . $db->quote($brand) . ", name = " . $db->quote($name) . ", slug = " . $db->quote($slug) . ", category = " . $db->quote($category) . ", gender = " . $db->quote($gender) . ", concentration = " . $db->quote($concentration) . ", starting_price = $startingPrice, cost_price = $costPrice, short_description = " . $db->quote($shortDescription) . ", description = " . $db->quote($description) . ($image ? ", image = " . $db->quote($image) : "") . ", notes = " . $db->quote($notes) . ", top_notes = " . $db->quote($topNotes) . ", heart_notes = " . $db->quote($heartNotes) . ", base_notes = " . $db->quote($baseNotes) . ", attributes_json = " . $db->quote($attributesJson) . ", status = " . $db->quote($status) . ", inventory_qty = $inventoryQty, is_featured = $isFeatured, is_new_arrival = $isNewArrival WHERE id = " . $db->quote($id));
 
         // Sync Variants
         $variants = $input['variants'] ?? $input['sizes'] ?? [];
