@@ -18,7 +18,7 @@ import { ReviewsSection } from './components/ReviewsSection';
 import { StudioSection } from './components/StudioSection';
 import { JournalSection } from './components/JournalSection';
 import { Footer } from './components/Footer';
-import { QuickViewModal } from './components/QuickViewModal';
+import { ProductDetailPage } from './components/ProductDetailPage';
 import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { AdminLogin } from './admin/AdminLogin';
@@ -26,36 +26,67 @@ import { AdminLayout } from './admin/AdminLayout';
 import { NEW_ARRIVALS } from './data/fragranceData';
 import { FragranceProduct, CartItem, JournalArticle } from './types';
 import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMessage } from './services/api';
-import { Shield, Sparkles } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 export default function App() {
   const [products, setProducts] = useState<FragranceProduct[]>(NEW_ARRIVALS);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<FragranceProduct | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Routing State: 'home' | 'product' | 'admin'
+  const [route, setRoute] = useState<{ path: 'home' | 'product' | 'admin'; productSlugOrId?: string }>({ path: 'home' });
 
   // Admin View State
   const [viewMode, setViewMode] = useState<'storefront' | 'admin'>('storefront');
   const [adminUser, setAdminUser] = useState<any | null>(null);
   const [csrfToken, setCsrfToken] = useState<string>('');
 
-  // Check URL hash or path for admin
-  useEffect(() => {
-    const handleHashCheck = () => {
-      if (window.location.hash === '#admin' || window.location.pathname.startsWith('/admin')) {
-        setViewMode('admin');
-      }
-    };
-    handleHashCheck();
-    window.addEventListener('hashchange', handleHashCheck);
-    return () => window.removeEventListener('hashchange', handleHashCheck);
-  }, []);
-
   // Live CMS & Store Settings State
   const [storeSettings, setStoreSettings] = useState<any>(null);
   const [homepageData, setHomepageData] = useState<any>(null);
+
+  // Sync route state with window.location
+  useEffect(() => {
+    const syncRouteWithUrl = () => {
+      const pathname = window.location.pathname;
+      const hash = window.location.hash;
+      const searchParams = new URLSearchParams(window.location.search);
+
+      if (hash === '#admin' || pathname.startsWith('/admin')) {
+        setViewMode('admin');
+        setRoute({ path: 'admin' });
+        return;
+      } else {
+        setViewMode('storefront');
+      }
+
+      const queryProd = searchParams.get('product');
+      if (queryProd) {
+        setRoute({ path: 'product', productSlugOrId: queryProd });
+        return;
+      }
+
+      if (pathname.startsWith('/products/') || pathname.startsWith('/product/')) {
+        const slugOrId = pathname.replace(/^\/(products|product)\//, '').split('/')[0];
+        if (slugOrId) {
+          setRoute({ path: 'product', productSlugOrId: slugOrId });
+          return;
+        }
+      }
+
+      setRoute({ path: 'home' });
+    };
+
+    syncRouteWithUrl();
+    window.addEventListener('popstate', syncRouteWithUrl);
+    window.addEventListener('hashchange', syncRouteWithUrl);
+    return () => {
+      window.removeEventListener('popstate', syncRouteWithUrl);
+      window.removeEventListener('hashchange', syncRouteWithUrl);
+    };
+  }, []);
 
   // Fetch live products, store settings & homepage content from API on mount
   useEffect(() => {
@@ -79,18 +110,6 @@ export default function App() {
     loadApiData();
   }, [viewMode]);
 
-  // Deep-link routing for direct product URLs (?product=prod-id)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const targetId = params.get('product');
-    if (targetId && products.length > 0) {
-      const found = products.find((p) => p.id === targetId || p.slug === targetId);
-      if (found) {
-        setSelectedProduct(found);
-      }
-    }
-  }, [products]);
-
   // Check existing admin session
   useEffect(() => {
     const checkSession = async () => {
@@ -107,6 +126,24 @@ export default function App() {
     };
     checkSession();
   }, []);
+
+  const navigateToProduct = (productOrSlug: FragranceProduct | string) => {
+    const slugOrId = typeof productOrSlug === 'string' ? productOrSlug : (productOrSlug.slug || productOrSlug.id);
+    const targetUrl = `/products/${slugOrId}`;
+    if (window.location.pathname !== targetUrl) {
+      window.history.pushState({}, '', targetUrl);
+    }
+    setRoute({ path: 'product', productSlugOrId: slugOrId });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToHome = () => {
+    if (window.location.pathname !== '/' && window.location.hash !== '#admin') {
+      window.history.pushState({}, '', '/');
+    }
+    setRoute({ path: 'home' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const showToast = (msg: any) => {
     setToastMessage(typeof msg === 'string' ? msg : getErrorMessage(msg, 'Notification'));
@@ -129,6 +166,11 @@ export default function App() {
       }
     });
     showToast(`Added ${size} ${product.brand} - ${product.name} to bag`);
+  };
+
+  const handleBuyNow = (product: FragranceProduct, size: string, price: number, qty = 1) => {
+    handleAddToCart(product, size, price, qty);
+    setIsCartOpen(true);
   };
 
   const handleUpdateQty = (productId: string, size: string, delta: number) => {
@@ -154,18 +196,21 @@ export default function App() {
     showToast('Decant removed from bag');
   };
 
-  const handleBrandSelect = (brandName: string) => {
-    showToast(`Filter applied: ${brandName}`);
-  };
-
   const handleExploreClick = () => {
-    const el = document.getElementById('new-arrivals');
-    el?.scrollIntoView({ behavior: 'smooth' });
+    if (route.path !== 'home') {
+      navigateToHome();
+      setTimeout(() => {
+        const el = document.getElementById('new-arrivals');
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById('new-arrivals');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleSelectGenderCategory = (gender: 'Him' | 'Her') => {
-    const el = document.getElementById('new-arrivals');
-    el?.scrollIntoView({ behavior: 'smooth' });
+    handleExploreClick();
     showToast(`Displaying curated decants for ${gender}`);
   };
 
@@ -180,10 +225,16 @@ export default function App() {
     setAdminUser(null);
     setCsrfToken('');
     setViewMode('storefront');
+    navigateToHome();
     showToast('Logged out from Admin CMS');
   };
 
   const totalCartCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  // Active product for detail page
+  const currentProduct = route.path === 'product' && route.productSlugOrId
+    ? products.find((p) => p.slug === route.productSlugOrId || p.id === route.productSlugOrId) || null
+    : null;
 
   // If in Admin CMS Mode
   if (viewMode === 'admin') {
@@ -202,7 +253,10 @@ export default function App() {
         user={adminUser}
         csrfToken={csrfToken}
         onLogout={handleAdminLogout}
-        onSwitchToStorefront={() => setViewMode('storefront')}
+        onSwitchToStorefront={() => {
+          setViewMode('storefront');
+          navigateToHome();
+        }}
       />
     );
   }
@@ -211,7 +265,10 @@ export default function App() {
     <div className="min-h-screen bg-white text-zinc-900 font-sans flex flex-col selection:bg-zinc-900 selection:text-white relative">
       {/* Admin Quick Switch floating button for store manager */}
       <button
-        onClick={() => setViewMode('admin')}
+        onClick={() => {
+          setViewMode('admin');
+          window.location.hash = '#admin';
+        }}
         className="fixed bottom-6 left-6 z-40 bg-zinc-950 text-white hover:bg-amber-400 hover:text-black px-3 py-2 border border-zinc-700 shadow-2xl text-[10px] font-sans tracking-widest uppercase flex items-center gap-2 transition-all cursor-pointer"
         title="Open Admin CMS Dashboard"
       >
@@ -222,7 +279,7 @@ export default function App() {
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-zinc-950 text-white border border-zinc-700 px-4 py-2.5 shadow-2xl text-xs font-sans tracking-wide flex items-center gap-2 animate-bounce">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -233,83 +290,94 @@ export default function App() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenWishlist={() => showToast('Wishlist: 3 items saved')}
+        onNavigateHome={navigateToHome}
         storeSettings={storeSettings}
       />
 
       <main className="flex-1">
-        {/* B. Full-width luxury hero showcasing Pure Portions by ARRINA */}
-        <Hero
-          onExploreClick={handleExploreClick}
-          onOrderProduct={() => {
-            const purePortions = products.find((p) => p.id === 'prod-pure-portions') || products[0];
-            if (purePortions) setSelectedProduct(purePortions);
-          }}
-          heroData={homepageData?.sections?.hero?.content}
-        />
+        {route.path === 'product' ? (
+          /* Dedicated Product Detail Page */
+          <ProductDetailPage
+            product={currentProduct}
+            allProducts={products}
+            onNavigateHome={navigateToHome}
+            onNavigateToProduct={navigateToProduct}
+            onAddToCart={handleAddToCart}
+            onBuyNow={handleBuyNow}
+            showToast={showToast}
+          />
+        ) : (
+          /* Storefront Homepage */
+          <>
+            {/* B. Full-width luxury hero showcasing Pure Portions by ARRINA */}
+            <Hero
+              onExploreClick={handleExploreClick}
+              onOrderProduct={() => {
+                const purePortions = products.find((p) => p.id === 'prod-pure-portions') || products[0];
+                if (purePortions) navigateToProduct(purePortions);
+              }}
+              heroData={homepageData?.sections?.hero?.content}
+            />
 
-        {/* C. Oversized category marquee */}
-        <CategoryMarquee
-          items={homepageData?.sections?.category_marquee?.content?.items}
-        />
+            {/* C. Oversized category marquee */}
+            <CategoryMarquee
+              items={homepageData?.sections?.category_marquee?.content?.items}
+            />
 
-        {/* D. New Arrivals product carousel */}
-        <NewArrivals
-          products={products}
-          onSelectProduct={(p) => setSelectedProduct(p)}
-          onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
-        />
+            {/* D. New Arrivals product carousel */}
+            <NewArrivals
+              products={products}
+              onSelectProduct={(p) => navigateToProduct(p)}
+              onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
+            />
 
-        {/* E. For Him / For Her editorial banners */}
-        <CampaignBanners onSelectCategory={handleSelectGenderCategory} />
+            {/* E. For Him / For Her editorial banners */}
+            <CampaignBanners onSelectCategory={handleSelectGenderCategory} />
 
-        {/* F. Seasons campaign gallery */}
-        <SeasonsGallery />
+            {/* F. Seasons campaign gallery */}
+            <SeasonsGallery />
 
-        {/* G. Premium Video Product Showcase Carousel */}
-        <VideoSection
-          videoData={homepageData?.sections?.video_showcase?.content || homepageData?.sections?.video_hero?.content}
-          products={products}
-          onSelectProduct={(p) => setSelectedProduct(p)}
-          onExploreClick={handleExploreClick}
-        />
+            {/* G. Premium Video Product Showcase Carousel */}
+            <VideoSection
+              videoData={homepageData?.sections?.video_showcase?.content || homepageData?.sections?.video_hero?.content}
+              products={products}
+              onSelectProduct={(p) => navigateToProduct(p)}
+              onExploreClick={handleExploreClick}
+            />
 
-        {/* Dynamic Custom Product Sections */}
-        <CustomProductSections
-          homepageData={homepageData}
-          allProducts={products}
-          onSelectProduct={(p) => setSelectedProduct(p)}
-          onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
-        />
+            {/* Dynamic Custom Product Sections */}
+            <CustomProductSections
+              homepageData={homepageData}
+              allProducts={products}
+              onSelectProduct={(p) => navigateToProduct(p)}
+              onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
+            />
 
-        {/* H. Trust and shopping information section */}
-        <TrustSection storeSettings={storeSettings} />
+            {/* H. Trust and shopping information section */}
+            <TrustSection storeSettings={storeSettings} />
 
-        {/* I. Black FAQ section */}
-        <FAQSection faqs={homepageData?.faqs} />
+            {/* I. Black FAQ section */}
+            <FAQSection faqs={homepageData?.faqs} />
 
-        {/* J. Customer reviews section */}
-        <ReviewsSection reviews={homepageData?.reviews} />
+            {/* J. Customer reviews section */}
+            <ReviewsSection reviews={homepageData?.reviews} />
 
-        {/* K. Our Studio social-content section */}
-        <StudioSection socialCards={homepageData?.socialCards} />
+            {/* K. Our Studio social-content section */}
+            <StudioSection socialCards={homepageData?.socialCards} />
 
-        {/* L. Editorial blog and fragrance guides */}
-        <JournalSection
-          onReadArticle={handleReadArticle}
-          articles={homepageData?.articles}
-        />
+            {/* L. Editorial blog and fragrance guides */}
+            <JournalSection
+              onReadArticle={handleReadArticle}
+              articles={homepageData?.articles}
+            />
+          </>
+        )}
       </main>
 
       {/* M. Oversized AROMATICA brand footer */}
       <Footer storeSettings={storeSettings} />
 
-      {/* Interactive Drawers & Modals */}
-      <QuickViewModal
-        product={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={handleAddToCart}
-      />
-
+      {/* Interactive Drawers & Search Modal */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -323,7 +391,7 @@ export default function App() {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         products={products}
-        onSelectProduct={(p) => setSelectedProduct(p)}
+        onSelectProduct={(p) => navigateToProduct(p)}
       />
     </div>
   );

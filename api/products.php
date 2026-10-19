@@ -56,6 +56,8 @@ if ($id || $slug) {
     $imgStmt = $db->prepare("SELECT image_path, alt_text, is_primary FROM product_images WHERE product_id = ? ORDER BY display_order ASC");
     $imgStmt->execute([$product['id']]);
     $images = $imgStmt->fetchAll();
+    $additionalImages = array_column($images, 'image_path');
+    $allImages = array_values(array_unique(array_filter(array_merge([$product['image']], $additionalImages))));
 
     $notes = json_decode($product['notes'] ?? '[]', true) ?: [];
     $topNotes = json_decode($product['top_notes'] ?? '[]', true) ?: [];
@@ -73,6 +75,8 @@ if ($id || $slug) {
         'concentration' => $product['concentration'],
         'startingPrice' => (float)$product['starting_price'],
         'image' => $product['image'],
+        'images' => $allImages,
+        'additionalImages' => $additionalImages,
         'notes' => $notes,
         'topNotes' => $topNotes,
         'heartNotes' => $heartNotes,
@@ -81,8 +85,7 @@ if ($id || $slug) {
         'sizes' => $sizes,
         'shortDescription' => $product['short_description'],
         'description' => $product['description'],
-        'inventoryQty' => (int)$product['inventory_qty'],
-        'additionalImages' => array_column($images, 'image_path')
+        'inventoryQty' => (int)$product['inventory_qty']
     ];
 
     jsonResponse($formattedProduct, 200);
@@ -124,9 +127,10 @@ $stmt = $db->prepare($sql);
 $stmt->execute($params);
 $products = $stmt->fetchAll();
 
-// Fetch variants for all returned products
+// Fetch variants and images for all returned products
 $productIds = array_column($products, 'id');
 $variantsByProduct = [];
+$imagesByProduct = [];
 
 if (!empty($productIds)) {
     $inClause = implode(',', array_fill(0, count($productIds), '?'));
@@ -142,9 +146,17 @@ if (!empty($productIds)) {
             'stock_qty' => (int)$v['stock_qty']
         ];
     }
+
+    $imgStmt = $db->prepare("SELECT product_id, image_path FROM product_images WHERE product_id IN ($inClause) ORDER BY display_order ASC");
+    $imgStmt->execute($productIds);
+    $allImages = $imgStmt->fetchAll();
+
+    foreach ($allImages as $img) {
+        $imagesByProduct[$img['product_id']][] = $img['image_path'];
+    }
 }
 
-$formattedList = array_map(function($p) use ($variantsByProduct) {
+$formattedList = array_map(function($p) use ($variantsByProduct, $imagesByProduct) {
     $notes = json_decode($p['notes'] ?? '[]', true) ?: [];
     $topNotes = json_decode($p['top_notes'] ?? '[]', true) ?: [];
     $heartNotes = json_decode($p['heart_notes'] ?? '[]', true) ?: [];
@@ -156,6 +168,9 @@ $formattedList = array_map(function($p) use ($variantsByProduct) {
         $sizes = [['size' => '5ml', 'price' => (float)$p['starting_price'], 'stock_qty' => (int)$p['inventory_qty']]];
     }
 
+    $additionalImages = $imagesByProduct[$p['id']] ?? [];
+    $allImages = array_values(array_unique(array_filter(array_merge([$p['image']], $additionalImages))));
+
     return [
         'id' => $p['id'],
         'brand' => $p['brand'],
@@ -166,13 +181,16 @@ $formattedList = array_map(function($p) use ($variantsByProduct) {
         'concentration' => $p['concentration'],
         'startingPrice' => (float)$p['starting_price'],
         'image' => $p['image'],
+        'images' => $allImages,
+        'additionalImages' => $additionalImages,
         'notes' => $notes,
         'topNotes' => $topNotes,
         'heartNotes' => $heartNotes,
         'baseNotes' => $baseNotes,
         'attributes' => $attributes,
         'sizes' => $sizes,
-        'shortDescription' => $p['short_description']
+        'shortDescription' => $p['short_description'],
+        'description' => $p['description'] ?? ''
     ];
 }, $products);
 
