@@ -364,16 +364,52 @@ $homepageSections = [
     'display_order' => 2
   ],
   [
-    'section_key' => 'video_hero',
+    'section_key' => 'video_showcase',
     'title' => 'AURA & SILLAGE IN MOTION',
-    'subtitle' => 'VISUAL OLFACTORY STORY',
+    'subtitle' => 'Weightless liquid gold suspended in high-pressure glass atomizers. Experience the delicate art of artisanal decanting.',
     'content_json' => json_encode([
-      'video_url' => 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-background-41527-large.mp4',
-      'poster_image' => '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
-      'headline' => 'ELEGANCE REFRACTED IN MOTION',
-      'tagline' => 'Experience the delicate liquid craftsmanship of pure decanting, captured in ultra-high precision visual art.',
-      'cta_text' => 'DISCOVER SIGNATURE COLLECTION',
-      'is_enabled' => true
+      'headline' => 'AURA & SILLAGE IN MOTION',
+      'tagline' => 'Weightless liquid gold suspended in high-pressure glass atomizers. Experience the delicate art of artisanal decanting.',
+      'badge_text' => 'ARRINA CINEMATIC ATELIER',
+      'is_enabled' => true,
+      'cards' => [
+        [
+          'id' => 'card-1',
+          'product_id' => 'prod-pure-portions',
+          'title' => 'Pure Portions (5ml)',
+          'video_url' => 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-background-41527-large.mp4',
+          'thumbnail_url' => '/src/assets/images/element_pure_portions_bottle_1791911761493.jpg',
+          'display_order' => 1,
+          'is_enabled' => true
+        ],
+        [
+          'id' => 'card-2',
+          'product_id' => 'prod-rose01',
+          'title' => 'Rose 01',
+          'video_url' => 'https://assets.mixkit.co/videos/preview/mixkit-hand-holding-a-bottle-of-perfume-41528-large.mp4',
+          'thumbnail_url' => '/src/assets/images/perfume_rose01_1791908158391.jpg',
+          'display_order' => 2,
+          'is_enabled' => true
+        ],
+        [
+          'id' => 'card-3',
+          'product_id' => 'prod-vanilla01',
+          'title' => 'Vanilla 01',
+          'video_url' => 'https://assets.mixkit.co/videos/preview/mixkit-hands-spraying-perfume-on-a-wrist-41529-large.mp4',
+          'thumbnail_url' => '/src/assets/images/perfume_vanilla01_1791908158466.jpg',
+          'display_order' => 3,
+          'is_enabled' => true
+        ],
+        [
+          'id' => 'card-4',
+          'product_id' => 'prod-genesis-leo',
+          'title' => 'Genesis Leo',
+          'video_url' => 'https://assets.mixkit.co/videos/preview/mixkit-drop-of-water-falling-into-a-liquid-surface-41526-large.mp4',
+          'thumbnail_url' => '/src/assets/images/perfume_genesis_leo_1791908160379.jpg',
+          'display_order' => 4,
+          'is_enabled' => true
+        ]
+      ]
     ]),
     'display_order' => 3
   ],

@@ -81,6 +81,6 @@ return [
     'upload' => [
         'dir' => $rootDir . '/uploads',
         'public_path' => '/uploads',
-        'max_size_mb' => (int)env('MAX_UPLOAD_SIZE_MB', 5),
+        'max_size_mb' => (int)env('MAX_UPLOAD_SIZE_MB', 50),
     ]
 ];
