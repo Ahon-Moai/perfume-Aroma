@@ -26,6 +26,8 @@ interface Product {
   concentration: string;
   starting_price: number;
   image: string;
+  additional_images?: string[];
+  images?: string[];
   notes: string[];
   top_notes?: string[];
   heart_notes?: string[];
@@ -89,6 +91,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       concentration: 'Eau de Parfum',
       starting_price: 490,
       image: '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg',
+      additional_images: [],
       notes: ['Neroli Blossom', 'Madagascar Vanilla'],
       top_notes: ['Neroli Blossom', 'Bergamot'],
       heart_notes: ['Madagascar Bourbon Vanilla', 'Jasmine Nectar'],
@@ -111,6 +114,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
   const handleOpenEdit = (p: Product) => {
     setEditingProduct({
       ...p,
+      additional_images: Array.isArray(p.additional_images) ? p.additional_images : (Array.isArray(p.images) ? p.images : []),
       top_notes: Array.isArray(p.top_notes) ? p.top_notes : [],
       heart_notes: Array.isArray(p.heart_notes) ? p.heart_notes : [],
       base_notes: Array.isArray(p.base_notes) ? p.base_notes : [],
@@ -368,11 +372,74 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
               </div>
 
               <ImageUploader
-                label="Product Image"
+                label="Primary Main Product Image"
                 value={editingProduct.image || ''}
                 onChange={url => setEditingProduct({ ...editingProduct, image: url })}
                 csrfToken={csrfToken}
               />
+
+              {/* Product Gallery / Additional Images Section */}
+              <div className="pt-3 border-t border-zinc-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs font-semibold text-amber-300 uppercase tracking-wider">Product Gallery Thumbnails</h4>
+                    <p className="text-[10px] text-zinc-400">Additional angle, close-up, or packaging images for the product detail gallery.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const gallery = editingProduct.additional_images || [];
+                      setEditingProduct({
+                        ...editingProduct,
+                        additional_images: [...gallery, '']
+                      });
+                    }}
+                    className="text-[10px] bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 text-zinc-200 uppercase font-medium"
+                  >
+                    + Add Gallery Image
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {(editingProduct.additional_images || []).map((imgUrl, idx) => (
+                    <div key={idx} className="flex items-center gap-3 bg-zinc-950 p-3 border border-zinc-800">
+                      <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
+                        {imgUrl ? (
+                          <img src={imgUrl} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
+                        ) : (
+                          <ImageIcon className="w-5 h-5 text-zinc-600" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <ImageUploader
+                          label={`Gallery Image #${idx + 1}`}
+                          value={imgUrl}
+                          onChange={url => {
+                            const gallery = [...(editingProduct.additional_images || [])];
+                            gallery[idx] = url;
+                            setEditingProduct({ ...editingProduct, additional_images: gallery });
+                          }}
+                          csrfToken={csrfToken}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const gallery = (editingProduct.additional_images || []).filter((_, i) => i !== idx);
+                          setEditingProduct({ ...editingProduct, additional_images: gallery });
+                        }}
+                        className="text-red-400 p-2 hover:text-red-300 hover:bg-zinc-900"
+                        title="Remove Image"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  {(editingProduct.additional_images || []).length === 0 && (
+                    <p className="text-[11px] text-zinc-500 italic">No additional gallery images added yet. Click "+ Add Gallery Image" above to add thumbnails.</p>
+                  )}
+                </div>
+              </div>
 
               <div>
                 <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Short Editorial Description</label>
