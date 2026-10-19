@@ -29,7 +29,7 @@ import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMes
 import { Shield } from 'lucide-react';
 
 export default function App() {
-  const [products, setProducts] = useState<FragranceProduct[]>(NEW_ARRIVALS);
+  const [products, setProducts] = useState<FragranceProduct[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
