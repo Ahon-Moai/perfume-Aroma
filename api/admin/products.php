@@ -32,7 +32,9 @@ if ($method === 'GET') {
         $images = $imgStmt->fetchAll();
 
         $product['variants'] = $variants;
-        $product['images'] = $images;
+        $product['images'] = array_map(function($i) { return $i['image_path']; }, $images);
+        $product['additional_images'] = array_map(function($i) { return $i['image_path']; }, $images);
+        $product['gallery_images'] = $images;
         $product['notes'] = json_decode($product['notes'] ?? '[]', true) ?: [];
         $product['top_notes'] = json_decode($product['top_notes'] ?? '[]', true) ?: [];
         $product['heart_notes'] = json_decode($product['heart_notes'] ?? '[]', true) ?: [];
@@ -48,6 +50,13 @@ if ($method === 'GET') {
             $vStmt = $db->prepare("SELECT * FROM product_variants WHERE product_id = ?");
             $vStmt->execute([$p['id']]);
             $p['variants'] = $vStmt->fetchAll();
+
+            $imgStmt = $db->prepare("SELECT image_path FROM product_images WHERE product_id = ? ORDER BY display_order ASC");
+            $imgStmt->execute([$p['id']]);
+            $imgRows = $imgStmt->fetchAll();
+            $p['additional_images'] = array_column($imgRows, 'image_path');
+            $p['images'] = array_column($imgRows, 'image_path');
+
             $p['notes'] = json_decode($p['notes'] ?? '[]', true) ?: [];
             $p['top_notes'] = json_decode($p['top_notes'] ?? '[]', true) ?: [];
             $p['heart_notes'] = json_decode($p['heart_notes'] ?? '[]', true) ?: [];
@@ -114,6 +123,17 @@ if ($method === 'GET') {
             }
         }
 
+        // Additional Gallery Images
+        $additionalImages = $input['additional_images'] ?? $input['additionalImages'] ?? $input['images'] ?? [];
+        if (!empty($additionalImages) && is_array($additionalImages)) {
+            $imgStmt = $db->prepare("INSERT INTO product_images (product_id, image_path, display_order, is_primary) VALUES (?, ?, ?, 0)");
+            foreach ($additionalImages as $order => $imgPath) {
+                if (is_string($imgPath) && !empty(trim($imgPath))) {
+                    $imgStmt->execute([$id, trim($imgPath), $order + 1]);
+                }
+            }
+        }
+
         // Audit Log
         $logStmt = $db->prepare("INSERT INTO audit_logs (user_id, action, entity, entity_id, details) VALUES (?, 'create_product', 'products', ?, ?)");
         $logStmt->execute([$admin['id'], $id, "Created product: $name"]);
@@ -177,6 +197,18 @@ if ($method === 'GET') {
                 $varId = $id . '-var-' . ($idx + 1);
 
                 $vStmt->execute([$varId, $id, $vSize, $vPrice, $vCost, $vSku, $vStock]);
+            }
+        }
+
+        // Sync Gallery Images
+        $additionalImages = $input['additional_images'] ?? $input['additionalImages'] ?? $input['images'] ?? null;
+        if ($additionalImages !== null && is_array($additionalImages)) {
+            $db->exec("DELETE FROM product_images WHERE product_id = " . $db->quote($id));
+            $imgStmt = $db->prepare("INSERT INTO product_images (product_id, image_path, display_order, is_primary) VALUES (?, ?, ?, 0)");
+            foreach ($additionalImages as $order => $imgPath) {
+                if (is_string($imgPath) && !empty(trim($imgPath))) {
+                    $imgStmt->execute([$id, trim($imgPath), $order + 1]);
+                }
             }
         }
 
