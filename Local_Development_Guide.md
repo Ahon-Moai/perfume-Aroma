@@ -40,7 +40,7 @@ DB_FILE=database/aromatica.sqlite
 
 # Media Uploads Configuration
 UPLOAD_DIR=../uploads
-MAX_UPLOAD_SIZE_MB=5
+MAX_UPLOAD_SIZE_MB=50
 ```
 
 ### Step 3: Initialize Database & Seed Content

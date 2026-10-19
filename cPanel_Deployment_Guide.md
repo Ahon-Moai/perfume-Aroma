@@ -63,7 +63,7 @@ DB_PASS=your_strong_mysql_password_here
 
 # Media Storage Directory (Relative to app root)
 UPLOAD_DIR=../uploads
-MAX_UPLOAD_SIZE_MB=5
+MAX_UPLOAD_SIZE_MB=50
 ```
 
 2. Upload `.env` to your application directory on cPanel.
