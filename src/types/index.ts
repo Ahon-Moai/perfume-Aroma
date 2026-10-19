@@ -63,3 +63,21 @@ export interface JournalArticle {
   description: string;
   image: string;
 }
+
+export interface VideoShowcaseCard {
+  id: string;
+  product_id?: string;
+  title: string;
+  video_url: string;
+  thumbnail_url?: string;
+  display_order?: number;
+  is_enabled?: boolean;
+}
+
+export interface VideoShowcaseSectionData {
+  headline?: string;
+  tagline?: string;
+  badge_text?: string;
+  is_enabled?: boolean;
+  cards?: VideoShowcaseCard[];
+}

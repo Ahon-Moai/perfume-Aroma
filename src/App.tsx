@@ -265,9 +265,11 @@ export default function App() {
         {/* F. Seasons campaign gallery */}
         <SeasonsGallery />
 
-        {/* G. Cinematic Video Section */}
+        {/* G. Premium Video Product Showcase Carousel */}
         <VideoSection
-          videoData={homepageData?.sections?.video_hero?.content}
+          videoData={homepageData?.sections?.video_showcase?.content || homepageData?.sections?.video_hero?.content}
+          products={products}
+          onSelectProduct={(p) => setSelectedProduct(p)}
           onExploreClick={handleExploreClick}
         />
 

@@ -18,18 +18,18 @@ if ($method !== 'POST') {
     jsonError('Method not allowed', 405);
 }
 
-if (!isset($_FILES['file']) && !isset($_FILES['image'])) {
-    jsonError('No image file uploaded', 400);
+if (!isset($_FILES['file']) && !isset($_FILES['image']) && !isset($_FILES['video'])) {
+    jsonError('No file uploaded', 400);
 }
 
-$fileKey = isset($_FILES['file']) ? 'file' : 'image';
+$fileKey = isset($_FILES['file']) ? 'file' : (isset($_FILES['video']) ? 'video' : 'image');
 $file = $_FILES[$fileKey];
 
 if ($file['error'] !== UPLOAD_ERR_OK) {
     jsonError('File upload failed with error code: ' . $file['error'], 400);
 }
 
-$maxSizeBytes = ($config['upload']['max_size_mb'] ?? 5) * 1024 * 1024;
+$maxSizeBytes = ($config['upload']['max_size_mb'] ?? 50) * 1024 * 1024;
 if ($file['size'] > $maxSizeBytes) {
     jsonError('File size exceeds maximum allowed limit of ' . $config['upload']['max_size_mb'] . 'MB', 400);
 }
@@ -43,17 +43,23 @@ finfo_close($finfo);
 $allowedMimeTypes = [
     'image/jpeg' => 'jpg',
     'image/png' => 'png',
-    'image/webp' => 'webp'
+    'image/webp' => 'webp',
+    'video/mp4' => 'mp4',
+    'video/webm' => 'webm',
+    'video/ogg' => 'ogv',
+    'video/quicktime' => 'mov',
+    'video/x-matroska' => 'mkv'
 ];
 
 if (!array_key_exists($mimeType, $allowedMimeTypes)) {
-    jsonError('Invalid file type. Only JPG, PNG, and WEBP images are allowed.', 400);
+    jsonError('Invalid file type. Only JPG, PNG, WEBP images and MP4, WebM, MOV videos are allowed.', 400);
 }
 
 // Validate extension
 $originalName = basename($file['name']);
 $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+$allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'webm', 'ogv', 'mov', 'mkv'];
+if (!in_array($ext, $allowedExts)) {
     $ext = $allowedMimeTypes[$mimeType];
 }
 

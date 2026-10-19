@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Save, Sparkles, Plus, Trash2, Edit2, Check, RefreshCw } from 'lucide-react';
+import { Layout, Save, Sparkles, Plus, Trash2, Edit2, Check, RefreshCw, ArrowUp, ArrowDown, Film } from 'lucide-react';
 import { getErrorMessage } from '../services/api';
 import { ImageUploader } from './ImageUploader';
+import { VideoUploader } from './VideoUploader';
+import { VideoShowcaseCard } from '../types';
 
 interface HomepageCMSProps {
   csrfToken: string;
@@ -11,7 +13,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
   const [activeTab, setActiveTab] = useState<'hero' | 'video' | 'sections' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [availableProducts, setAvailableProducts] = useState<Array<{ id: string; name: string; brand: string }>>([]);
+  const [availableProducts, setAvailableProducts] = useState<Array<{ id: string; name: string; brand: string; image?: string }>>([]);
 
   // Hero Form
   const [heroForm, setHeroForm] = useState({
@@ -23,15 +25,15 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg'
   });
 
-  // Video Section Form
-  const [videoForm, setVideoForm] = useState({
-    video_url: 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-background-41527-large.mp4',
-    poster_image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
-    headline: 'ELEGANCE REFRACTED IN MOTION',
-    tagline: 'Experience the delicate liquid craftsmanship of pure decanting, captured in ultra-high precision visual art.',
-    cta_text: 'DISCOVER SIGNATURE COLLECTION',
+  // Video Product Showcase Section State
+  const [showcaseHeader, setShowcaseHeader] = useState({
+    headline: 'AURA & SILLAGE IN MOTION',
+    tagline: 'Weightless liquid gold suspended in high-pressure glass atomizers. Experience the delicate art of artisanal decanting.',
+    badge_text: 'ARRINA CINEMATIC ATELIER',
     is_enabled: true
   });
+
+  const [showcaseCards, setShowcaseCards] = useState<VideoShowcaseCard[]>([]);
 
   // Dynamic Custom Sections (4 Sections)
   const [customSections, setCustomSections] = useState<Record<string, { title: string; subtitle: string; is_enabled: boolean; product_ids: string[] }>>({
@@ -88,7 +90,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       const pData = await prodRes.json();
 
       if (pData.success && Array.isArray(pData.data)) {
-        setAvailableProducts(pData.data.map((p: any) => ({ id: p.id, name: p.name, brand: p.brand })));
+        setAvailableProducts(pData.data.map((p: any) => ({ id: p.id, name: p.name, brand: p.brand, image: p.image })));
       }
 
       if (data.success && data.data) {
@@ -100,14 +102,31 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
           setHeroForm((prev) => ({ ...prev, ...heroSec.content }));
         }
 
-        // Video
-        const vidSec = payload.sections?.video_hero;
+        // Video Showcase
+        const vidSec = payload.sections?.video_showcase || payload.sections?.video_hero;
         if (vidSec && vidSec.content) {
-          setVideoForm((prev) => ({
-            ...prev,
-            ...vidSec.content,
+          setShowcaseHeader({
+            headline: vidSec.title || vidSec.content.headline || 'AURA & SILLAGE IN MOTION',
+            tagline: vidSec.subtitle || vidSec.content.tagline || 'Weightless liquid gold suspended in high-pressure glass atomizers.',
+            badge_text: vidSec.content.badge_text || 'ARRINA CINEMATIC ATELIER',
             is_enabled: vidSec.is_enabled !== undefined ? Boolean(vidSec.is_enabled) : true
-          }));
+          });
+
+          if (Array.isArray(vidSec.content.cards)) {
+            setShowcaseCards(vidSec.content.cards);
+          } else if (vidSec.content.video_url) {
+            setShowcaseCards([
+              {
+                id: 'card-1',
+                product_id: 'prod-pure-portions',
+                title: vidSec.content.headline || 'Pure Portions (5ml)',
+                video_url: vidSec.content.video_url,
+                thumbnail_url: vidSec.content.poster_image,
+                display_order: 1,
+                is_enabled: true
+              }
+            ]);
+          }
         }
 
         // Custom Sections
@@ -151,10 +170,15 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     fetchCMSData();
   }, []);
 
-  const handleSaveVideo = async (e: React.FormEvent) => {
+  const handleSaveVideoShowcase = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
+      const formattedCards = showcaseCards.map((card, index) => ({
+        ...card,
+        display_order: index + 1
+      }));
+
       const res = await fetch('/api/admin/homepage.php', {
         method: 'PUT',
         headers: {
@@ -163,18 +187,24 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         },
         body: JSON.stringify({
           type: 'section',
-          section_key: 'video_hero',
-          title: videoForm.headline || 'AURA & SILLAGE IN MOTION',
-          subtitle: videoForm.tagline || 'VISUAL OLFACTORY STORY',
-          content: videoForm,
-          is_enabled: videoForm.is_enabled ? 1 : 0,
+          section_key: 'video_showcase',
+          title: showcaseHeader.headline || 'AURA & SILLAGE IN MOTION',
+          subtitle: showcaseHeader.tagline || 'Weightless liquid gold suspended in high-pressure glass atomizers.',
+          content: {
+            headline: showcaseHeader.headline,
+            tagline: showcaseHeader.tagline,
+            badge_text: showcaseHeader.badge_text,
+            is_enabled: showcaseHeader.is_enabled,
+            cards: formattedCards
+          },
+          is_enabled: showcaseHeader.is_enabled ? 1 : 0,
           display_order: 3
         })
       });
 
       const data = await res.json();
       if (data.success) {
-        alert('Video Section saved successfully!');
+        alert('Video Product Showcase saved successfully!');
         fetchCMSData();
       } else {
         alert(getErrorMessage(data?.error || data, 'Failed to save Video section'));
@@ -184,6 +214,60 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleAddCard = () => {
+    const newCard: VideoShowcaseCard = {
+      id: 'card-' + Date.now(),
+      product_id: availableProducts[0]?.id || '',
+      title: availableProducts[0]?.name || 'New Video Product Showcase',
+      video_url: 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-background-41527-large.mp4',
+      thumbnail_url: availableProducts[0]?.image || '/src/assets/images/element_pure_portions_bottle_1791911761493.jpg',
+      display_order: showcaseCards.length + 1,
+      is_enabled: true
+    };
+    setShowcaseCards([...showcaseCards, newCard]);
+  };
+
+  const handleUpdateCard = (id: string, updates: Partial<VideoShowcaseCard>) => {
+    setShowcaseCards((prev) =>
+      prev.map((card) => {
+        if (card.id !== id) return card;
+        const updated = { ...card, ...updates };
+
+        // Auto-fill title & thumbnail if product_id is updated
+        if (updates.product_id && updates.product_id !== card.product_id) {
+          const matchedProd = availableProducts.find((p) => p.id === updates.product_id);
+          if (matchedProd) {
+            if (!updated.title || updated.title === card.title) updated.title = matchedProd.name;
+            if (!updated.thumbnail_url || updated.thumbnail_url === card.thumbnail_url) {
+              updated.thumbnail_url = matchedProd.image || '';
+            }
+          }
+        }
+        return updated;
+      })
+    );
+  };
+
+  const handleDeleteCard = (id: string) => {
+    if (!confirm('Are you sure you want to delete this showcase video card?')) return;
+    setShowcaseCards((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const handleMoveCard = (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) ||
+      (direction === 'down' && index === showcaseCards.length - 1)
+    ) {
+      return;
+    }
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const next = [...showcaseCards];
+    const temp = next[index];
+    next[index] = next[targetIndex];
+    next[targetIndex] = temp;
+    setShowcaseCards(next);
   };
 
   const handleSaveCustomSection = async (secKey: string) => {
@@ -455,7 +539,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         <div>
           <h2 className="font-serif text-xl text-white font-normal">Homepage Content Builder</h2>
           <p className="text-xs text-zinc-400 mt-0.5">
-            Modify live homepage copy, hero imagery, marquee text, FAQs, reviews, and editorial diary
+            Modify live homepage copy, hero imagery, video showcase cards, marquee text, FAQs, and reviews
           </p>
         </div>
       </div>
@@ -464,7 +548,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       <div className="flex border-b border-zinc-800 space-x-2 overflow-x-auto">
         {[
           { id: 'hero', label: 'Hero Banner' },
-          { id: 'video', label: 'Homepage Video' },
+          { id: 'video', label: 'Video Showcase Cards' },
           { id: 'sections', label: 'Custom Product Sections' },
           { id: 'marquee', label: 'Marquee Ticker' },
           { id: 'reviews', label: 'Customer Reviews' },
@@ -567,98 +651,206 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         </form>
       )}
 
-      {/* Tab 2: Video Section Form */}
+      {/* Tab 2: Premium Video Showcase Manager */}
       {activeTab === 'video' && (
-        <form onSubmit={handleSaveVideo} className="bg-zinc-900 border border-zinc-800 p-6 space-y-5 text-xs text-zinc-300">
+        <form onSubmit={handleSaveVideoShowcase} className="bg-zinc-900 border border-zinc-800 p-6 space-y-6 text-xs text-zinc-300">
           <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
             <div className="flex items-center gap-2 text-amber-300">
-              <Sparkles className="w-4 h-4" />
-              <h3 className="font-serif text-base text-white">Homepage Video Showcase Settings</h3>
+              <Film className="w-4 h-4" />
+              <h3 className="font-serif text-base text-white">Premium Video Product Showcase Settings</h3>
             </div>
             <label className="inline-flex items-center gap-2 cursor-pointer">
-              <span className="text-zinc-400 text-xs">Section Enabled</span>
+              <span className="text-zinc-400 text-xs">Entire Section Active</span>
               <input
                 type="checkbox"
-                checked={videoForm.is_enabled}
-                onChange={(e) => setVideoForm({ ...videoForm, is_enabled: e.target.checked })}
+                checked={showcaseHeader.is_enabled}
+                onChange={(e) => setShowcaseHeader({ ...showcaseHeader, is_enabled: e.target.checked })}
                 className="sr-only peer"
               />
               <div className="w-8 h-4 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400 relative"></div>
             </label>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Section Header Inputs */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-zinc-950 p-4 border border-zinc-800">
             <div>
-              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Direct Video URL (.mp4 / .webm)</label>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Badge / Ribbon Text</label>
               <input
                 type="text"
-                value={videoForm.video_url}
-                onChange={(e) => setVideoForm({ ...videoForm, video_url: e.target.value })}
-                placeholder="https://... or /uploads/video.mp4"
-                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400 font-mono"
-              />
-              <p className="text-[10px] text-zinc-500 mt-1">
-                Upload video in Media Manager or paste any standard MP4/WebM media link
-              </p>
-            </div>
-
-            <ImageUploader
-              label="Video Poster Image (Thumbnail)"
-              value={videoForm.poster_image}
-              onChange={(url) => setVideoForm({ ...videoForm, poster_image: url })}
-              csrfToken={csrfToken}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Video Overlay Headline</label>
-              <input
-                type="text"
-                value={videoForm.headline}
-                onChange={(e) => setVideoForm({ ...videoForm, headline: e.target.value })}
-                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                value={showcaseHeader.badge_text}
+                onChange={(e) => setShowcaseHeader({ ...showcaseHeader, badge_text: e.target.value })}
+                className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
               />
             </div>
-
             <div>
-              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">CTA Button Label</label>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Section Headline</label>
               <input
                 type="text"
-                value={videoForm.cta_text}
-                onChange={(e) => setVideoForm({ ...videoForm, cta_text: e.target.value })}
-                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                value={showcaseHeader.headline}
+                onChange={(e) => setShowcaseHeader({ ...showcaseHeader, headline: e.target.value })}
+                className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Tagline Narrative</label>
+              <input
+                type="text"
+                value={showcaseHeader.tagline}
+                onChange={(e) => setShowcaseHeader({ ...showcaseHeader, tagline: e.target.value })}
+                className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Tagline / Narrative Description</label>
-            <textarea
-              value={videoForm.tagline}
-              onChange={(e) => setVideoForm({ ...videoForm, tagline: e.target.value })}
-              rows={2}
-              className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
-            />
-          </div>
+          {/* Cards List Manager */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+              <h4 className="font-serif text-sm text-white font-normal">
+                Showcase Video Cards ({showcaseCards.length})
+              </h4>
+              <button
+                type="button"
+                onClick={handleAddCard}
+                className="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Video Card</span>
+              </button>
+            </div>
 
-          {videoForm.video_url && (
-            <div className="border border-zinc-800 p-3 bg-zinc-950 rounded space-y-2">
-              <span className="text-[10px] uppercase text-zinc-400 tracking-wider">Live Video Preview</span>
-              <div className="aspect-video max-w-md mx-auto overflow-hidden bg-black rounded">
-                <video src={videoForm.video_url} poster={videoForm.poster_image} controls className="w-full h-full object-cover" />
+            {showcaseCards.length === 0 ? (
+              <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800">
+                No video cards in showcase. Click "Add Video Card" to start.
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="space-y-4">
+                {showcaseCards.map((card, idx) => (
+                  <div
+                    key={card.id}
+                    className="bg-zinc-950 border border-zinc-800 p-4 space-y-4 relative transition-colors hover:border-zinc-700"
+                  >
+                    {/* Top Bar for Card */}
+                    <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2.5">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-xs font-bold text-amber-300">
+                          Card #{idx + 1}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            disabled={idx === 0}
+                            onClick={() => handleMoveCard(idx, 'up')}
+                            className="p-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 disabled:opacity-30 rounded cursor-pointer"
+                            title="Move Up"
+                          >
+                            <ArrowUp className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={idx === showcaseCards.length - 1}
+                            onClick={() => handleMoveCard(idx, 'down')}
+                            className="p-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 disabled:opacity-30 rounded cursor-pointer"
+                            title="Move Down"
+                          >
+                            <ArrowDown className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <label className="inline-flex items-center gap-2 cursor-pointer">
+                          <span className="text-zinc-400 text-[10px]">Enabled</span>
+                          <input
+                            type="checkbox"
+                            checked={card.is_enabled !== false}
+                            onChange={(e) => handleUpdateCard(card.id, { is_enabled: e.target.checked })}
+                            className="sr-only peer"
+                          />
+                          <div className="w-7 h-4 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400 relative"></div>
+                        </label>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteCard(card.id)}
+                          className="p-1 text-zinc-500 hover:text-red-400 transition-colors"
+                          title="Delete Card"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Card Content Inputs */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Product Selector & Display Title */}
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">
+                            Associated Product (Optional)
+                          </label>
+                          <select
+                            value={card.product_id || ''}
+                            onChange={(e) => handleUpdateCard(card.id, { product_id: e.target.value })}
+                            className="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                          >
+                            <option value="">-- Custom (No direct product link) --</option>
+                            {availableProducts.map((p) => (
+                              <option key={p.id} value={p.id}>
+                                {p.brand} - {p.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">
+                            Card Title (Displayed on bottom panel)
+                          </label>
+                          <input
+                            type="text"
+                            value={card.title}
+                            onChange={(e) => handleUpdateCard(card.id, { title: e.target.value })}
+                            placeholder="Product name or headline"
+                            className="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Thumbnail Image Uploader */}
+                      <div>
+                        <ImageUploader
+                          label="Product Thumbnail Image"
+                          value={card.thumbnail_url || ''}
+                          onChange={(url) => handleUpdateCard(card.id, { thumbnail_url: url })}
+                          csrfToken={csrfToken}
+                          placeholder="Select thumbnail or upload image"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Video File Uploader */}
+                    <div>
+                      <VideoUploader
+                        label="Product Video File (.mp4 / .webm)"
+                        value={card.video_url}
+                        onChange={(url) => handleUpdateCard(card.id, { video_url: url })}
+                        csrfToken={csrfToken}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="pt-4 border-t border-zinc-800 flex justify-end">
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
             >
               <Save className="w-4 h-4" />
-              <span>{saving ? 'Saving...' : 'Save Video Section'}</span>
+              <span>{saving ? 'Saving...' : 'Save Video Showcase Changes'}</span>
             </button>
           </div>
         </form>
@@ -828,7 +1020,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         </form>
       )}
 
-      {/* Tab 3: Reviews Manager */}
+      {/* Tab 5: Reviews Manager */}
       {activeTab === 'reviews' && (
         <div className="bg-zinc-900 border border-zinc-800 p-6 space-y-6 text-xs text-zinc-300">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
@@ -943,7 +1135,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         </div>
       )}
 
-      {/* Tab 4: FAQs Manager */}
+      {/* Tab 6: FAQs Manager */}
       {activeTab === 'faqs' && (
         <div className="bg-zinc-900 border border-zinc-800 p-6 space-y-6 text-xs text-zinc-300">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
@@ -1032,7 +1224,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         </div>
       )}
 
-      {/* Tab 5: Articles Manager */}
+      {/* Tab 7: Articles Manager */}
       {activeTab === 'articles' && (
         <div className="bg-zinc-900 border border-zinc-800 p-6 space-y-6 text-xs text-zinc-300">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
