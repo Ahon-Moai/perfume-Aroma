@@ -292,7 +292,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       {/* Edit / Create Product Modal */}
       {isModalOpen && editingProduct && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 shadow-2xl p-6 sm:p-8 space-y-6 text-white my-8">
+          <div className="relative w-full max-w-3xl bg-zinc-900 border border-zinc-800 shadow-2xl p-6 sm:p-8 space-y-6 text-white my-8">
             <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
               <h3 className="font-serif text-xl font-normal text-white">
                 {products.some(p => p.id === editingProduct.id) ? 'Edit Fragrance Product' : 'Create New Product'}
@@ -402,15 +402,8 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
 
                 <div className="space-y-3">
                   {(editingProduct.additional_images || []).map((imgUrl, idx) => (
-                    <div key={idx} className="flex items-center gap-3 bg-zinc-950 p-3 border border-zinc-800">
-                      <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
-                        {imgUrl ? (
-                          <img src={imgUrl} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
-                        ) : (
-                          <ImageIcon className="w-5 h-5 text-zinc-600" />
-                        )}
-                      </div>
-                      <div className="flex-1">
+                    <div key={idx} className="flex items-start justify-between gap-3 bg-zinc-950 p-3 border border-zinc-800">
+                      <div className="flex-1 min-w-0">
                         <ImageUploader
                           label={`Gallery Image #${idx + 1}`}
                           value={imgUrl}
@@ -428,7 +421,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                           const gallery = (editingProduct.additional_images || []).filter((_, i) => i !== idx);
                           setEditingProduct({ ...editingProduct, additional_images: gallery });
                         }}
-                        className="text-red-400 p-2 hover:text-red-300 hover:bg-zinc-900"
+                        className="text-red-400 p-1.5 hover:text-red-300 hover:bg-zinc-900 rounded shrink-0 transition-colors mt-5"
                         title="Remove Image"
                       >
                         <Trash2 className="w-4 h-4" />
