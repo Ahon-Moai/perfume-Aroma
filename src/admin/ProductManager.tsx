@@ -291,22 +291,26 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
 
       {/* Edit / Create Product Modal */}
       {isModalOpen && editingProduct && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-3xl bg-zinc-900 border border-zinc-800 shadow-2xl p-6 sm:p-8 space-y-6 text-white my-8">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+          <div className="relative w-full max-w-3xl bg-zinc-900 border border-zinc-800 shadow-2xl flex flex-col max-h-[90vh] text-white my-auto rounded-none">
+            {/* Modal Header - Fixed */}
+            <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4 shrink-0 bg-zinc-900">
               <h3 className="font-serif text-xl font-normal text-white">
                 {products.some(p => p.id === editingProduct.id) ? 'Edit Fragrance Product' : 'Create New Product'}
               </h3>
               <button
+                type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 text-zinc-400 hover:text-white"
+                className="p-1.5 text-zinc-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Modal Content - Scrollable */}
+            <form onSubmit={handleSave} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Brand Name</label>
                   <input
@@ -629,18 +633,21 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                 </div>
               </div>
 
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-zinc-800">
+              </div>
+
+              {/* Modal Footer - Fixed */}
+              <div className="px-6 py-4 flex items-center justify-end gap-3 border-t border-zinc-800 shrink-0 bg-zinc-900">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs uppercase tracking-wider"
+                  className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs uppercase tracking-wider transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider"
+                  className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider transition-colors"
                 >
                   {saving ? 'Saving...' : 'Save Product'}
                 </button>
