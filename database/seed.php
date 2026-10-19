@@ -362,6 +362,60 @@ $homepageSections = [
       'items' => ['SOLAR FLORAL AMBER', 'EXOTIC OUD & WOODS', 'GOURMAND VANILLA', 'FRESH CITRUS & SPICE']
     ]),
     'display_order' => 2
+  ],
+  [
+    'section_key' => 'video_hero',
+    'title' => 'AURA & SILLAGE IN MOTION',
+    'subtitle' => 'VISUAL OLFACTORY STORY',
+    'content_json' => json_encode([
+      'video_url' => 'https://assets.mixkit.co/videos/preview/mixkit-perfume-bottle-in-a-dark-background-41527-large.mp4',
+      'poster_image' => '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
+      'headline' => 'ELEGANCE REFRACTED IN MOTION',
+      'tagline' => 'Experience the delicate liquid craftsmanship of pure decanting, captured in ultra-high precision visual art.',
+      'cta_text' => 'DISCOVER SIGNATURE COLLECTION',
+      'is_enabled' => true
+    ]),
+    'display_order' => 3
+  ],
+  [
+    'section_key' => 'custom_section_1',
+    'title' => 'MOST LOVED DECANTS',
+    'subtitle' => 'CURATED BESTSELLERS FOR DISCOVERING YOUR SIGNATURE SCENT',
+    'content_json' => json_encode([
+      'is_enabled' => true,
+      'product_ids' => ['prod-pure-portions', 'prod-vanilla01', 'prod-rose01']
+    ]),
+    'display_order' => 4
+  ],
+  [
+    'section_key' => 'custom_section_2',
+    'title' => 'ORIENTAL & OUD SELECTIONS',
+    'subtitle' => 'DEEP, SMOKY & REFINED RESINS',
+    'content_json' => json_encode([
+      'is_enabled' => true,
+      'product_ids' => ['prod-genesis-leo', 'prod-venena']
+    ]),
+    'display_order' => 5
+  ],
+  [
+    'section_key' => 'custom_section_3',
+    'title' => 'FLORAL & AMBER ESSENCES',
+    'subtitle' => 'RADIANT VELVET PETALS & SOLAR DEW',
+    'content_json' => json_encode([
+      'is_enabled' => true,
+      'product_ids' => ['prod-asdaaf-raneen', 'prod-rose01']
+    ]),
+    'display_order' => 6
+  ],
+  [
+    'section_key' => 'custom_section_4',
+    'title' => 'LIMITED VAULT EDITIONS',
+    'subtitle' => 'EXCLUSIVE BATCH ALLOCATIONS',
+    'content_json' => json_encode([
+      'is_enabled' => true,
+      'product_ids' => ['prod-vanilla01', 'prod-genesis-leo', 'prod-pure-portions']
+    ]),
+    'display_order' => 7
   ]
 ];
 

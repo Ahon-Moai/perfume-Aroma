@@ -3,17 +3,31 @@ export interface DecantSize {
   price: number; // in BDT (৳)
 }
 
+export interface FragranceAttribute {
+  id: string;
+  name: string; // e.g. "Longevity", "Sillage", "Projection", "Intensity"
+  value: number; // 0 to 100 percentage
+  enabled: boolean;
+}
+
 export interface FragranceProduct {
   id: string;
   brand: string;
   name: string;
+  slug?: string;
   category: string; // e.g. "Woody", "Floral", "Gourmand", "Amber"
   gender?: "Him" | "Her" | "Unisex";
   startingPrice: number;
   image: string;
   notes?: string[];
+  topNotes?: string[];
+  heartNotes?: string[];
+  baseNotes?: string[];
+  attributes?: FragranceAttribute[];
   sizes: DecantSize[];
   concentration?: string; // e.g. "Eau de Parfum", "Extrait de Parfum"
+  shortDescription?: string;
+  description?: string;
 }
 
 export interface CartItem {

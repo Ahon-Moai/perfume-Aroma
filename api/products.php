@@ -58,6 +58,10 @@ if ($id || $slug) {
     $images = $imgStmt->fetchAll();
 
     $notes = json_decode($product['notes'] ?? '[]', true) ?: [];
+    $topNotes = json_decode($product['top_notes'] ?? '[]', true) ?: [];
+    $heartNotes = json_decode($product['heart_notes'] ?? '[]', true) ?: [];
+    $baseNotes = json_decode($product['base_notes'] ?? '[]', true) ?: [];
+    $attributes = json_decode($product['attributes_json'] ?? '[]', true) ?: [];
 
     $formattedProduct = [
         'id' => $product['id'],
@@ -70,6 +74,10 @@ if ($id || $slug) {
         'startingPrice' => (float)$product['starting_price'],
         'image' => $product['image'],
         'notes' => $notes,
+        'topNotes' => $topNotes,
+        'heartNotes' => $heartNotes,
+        'baseNotes' => $baseNotes,
+        'attributes' => $attributes,
         'sizes' => $sizes,
         'shortDescription' => $product['short_description'],
         'description' => $product['description'],
@@ -138,6 +146,11 @@ if (!empty($productIds)) {
 
 $formattedList = array_map(function($p) use ($variantsByProduct) {
     $notes = json_decode($p['notes'] ?? '[]', true) ?: [];
+    $topNotes = json_decode($p['top_notes'] ?? '[]', true) ?: [];
+    $heartNotes = json_decode($p['heart_notes'] ?? '[]', true) ?: [];
+    $baseNotes = json_decode($p['base_notes'] ?? '[]', true) ?: [];
+    $attributes = json_decode($p['attributes_json'] ?? '[]', true) ?: [];
+
     $sizes = $variantsByProduct[$p['id']] ?? [];
     if (empty($sizes)) {
         $sizes = [['size' => '5ml', 'price' => (float)$p['starting_price'], 'stock_qty' => (int)$p['inventory_qty']]];
@@ -154,6 +167,10 @@ $formattedList = array_map(function($p) use ($variantsByProduct) {
         'startingPrice' => (float)$p['starting_price'],
         'image' => $p['image'],
         'notes' => $notes,
+        'topNotes' => $topNotes,
+        'heartNotes' => $heartNotes,
+        'baseNotes' => $baseNotes,
+        'attributes' => $attributes,
         'sizes' => $sizes,
         'shortDescription' => $p['short_description']
     ];
