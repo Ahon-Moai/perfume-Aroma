@@ -19,6 +19,8 @@ export interface FragranceProduct {
   gender?: "Him" | "Her" | "Unisex";
   startingPrice: number;
   image: string;
+  images?: string[];
+  additionalImages?: string[];
   notes?: string[];
   topNotes?: string[];
   heartNotes?: string[];

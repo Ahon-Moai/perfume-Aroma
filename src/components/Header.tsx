@@ -6,6 +6,7 @@ interface HeaderProps {
   onOpenCart: () => void;
   onOpenSearch: () => void;
   onOpenWishlist: () => void;
+  onNavigateHome?: () => void;
   storeSettings?: any;
 }
 
@@ -14,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCart,
   onOpenSearch,
   onOpenWishlist,
+  onNavigateHome,
   storeSettings
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -82,7 +84,13 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="absolute left-1/2 -translate-x-1/2 text-center">
           <a
             href="/"
-            className="font-bodoni text-base xs:text-lg sm:text-2xl md:text-3xl tracking-[0.08em] xs:tracking-[0.1em] sm:tracking-[0.18em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity whitespace-nowrap"
+            onClick={(e) => {
+              if (onNavigateHome) {
+                e.preventDefault();
+                onNavigateHome();
+              }
+            }}
+            className="font-bodoni text-base xs:text-lg sm:text-2xl md:text-3xl tracking-[0.08em] xs:tracking-[0.1em] sm:tracking-[0.18em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer"
           >
             {storeSettings?.store_name || 'AROMATICA'}
           </a>

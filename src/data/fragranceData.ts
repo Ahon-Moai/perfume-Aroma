@@ -40,6 +40,7 @@ export const IMAGES = {
 export const NEW_ARRIVALS: FragranceProduct[] = [
   {
     id: 'prod-pure-portions',
+    slug: 'pure-portions',
     brand: 'ARRINA',
     name: 'Pure Portions (5ml Atomizer)',
     category: 'Solar Floral Amber',
@@ -47,7 +48,23 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
     concentration: 'Extrait de Parfum',
     startingPrice: 490,
     image: '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg',
+    images: [
+      '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg',
+      '/src/assets/images/element_vanilla_neroli_1791911761343.jpg',
+      '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
+      '/src/assets/images/studio_social_amber_spray_1791908204588.jpg'
+    ],
+    additionalImages: [
+      '/src/assets/images/element_vanilla_neroli_1791911761343.jpg',
+      '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
+      '/src/assets/images/studio_social_amber_spray_1791908204588.jpg'
+    ],
+    shortDescription: 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity.',
+    description: 'Pure Portions is ARRINA ATELIER\'s hallmark decant edition. Encased in high-clarity Italian glass tubes with precision fine-mist dispersion nozzles, each portion is freshly decanted directly from sealed retail flacons without exposure to heat or oxygen.',
     notes: ['Neroli Blossom', 'Madagascar Bourbon Vanilla', 'Golden Amber Crystals', 'Solar Dew'],
+    topNotes: ['Neroli Blossom', 'Solar Dew', 'Bergamot Zest'],
+    heartNotes: ['Madagascar Bourbon Vanilla', 'Orchid Petals', 'White Jasmine'],
+    baseNotes: ['Golden Amber Crystals', 'Sandalwood', 'Cashmeran'],
     sizes: [
       { size: '5ml', price: 490 },
       { size: '10ml (2x5ml)', price: 920 },
@@ -56,6 +73,7 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
   },
   {
     id: 'prod-rose01',
+    slug: 'rose-01',
     brand: 'SWISS ARABIAN',
     name: 'Rose 01',
     category: 'Floral',
@@ -63,7 +81,23 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
     concentration: 'Eau de Parfum',
     startingPrice: 661,
     image: '/src/assets/images/perfume_rose01_1791908158391.jpg',
+    images: [
+      '/src/assets/images/perfume_rose01_1791908158391.jpg',
+      '/src/assets/images/season_sculptural_roses_1791908202058.jpg',
+      '/src/assets/images/campaign_for_her_1791908163547.jpg',
+      '/src/assets/images/article_perfume_roses_water_1791908274460.jpg'
+    ],
+    additionalImages: [
+      '/src/assets/images/season_sculptural_roses_1791908202058.jpg',
+      '/src/assets/images/campaign_for_her_1791908163547.jpg',
+      '/src/assets/images/article_perfume_roses_water_1791908274460.jpg'
+    ],
+    shortDescription: 'A captivating bouquet of velvet damask roses wrapped in radiant pink peppercorns and cashmeran.',
+    description: 'Rose 01 by Swiss Arabian is an opulent tribute to classical floral elegance infused with modern warmth. Opening with sparkling pink pepper, it unfolds into a luscious heart of freshly blooming damask rose and dries down into velvety cashmeran and clean white musk.',
     notes: ['Damask Rose', 'Pink Peppercorn', 'Cashmeran', 'White Musk'],
+    topNotes: ['Pink Peppercorn', 'Lychee', 'Bergamot'],
+    heartNotes: ['Damask Rose', 'Peony', 'Nutmeg'],
+    baseNotes: ['Cashmeran', 'White Musk', 'Cedarwood'],
     sizes: [
       { size: '3ml', price: 661 },
       { size: '5ml', price: 990 },
@@ -73,6 +107,7 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
   },
   {
     id: 'prod-vanilla01',
+    slug: 'vanilla-01',
     brand: 'SWISS ARABIAN',
     name: 'Vanilla 01',
     category: 'Gourmand',
@@ -80,7 +115,21 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
     concentration: 'Eau de Parfum',
     startingPrice: 661,
     image: '/src/assets/images/perfume_vanilla01_1791908158466.jpg',
+    images: [
+      '/src/assets/images/perfume_vanilla01_1791908158466.jpg',
+      '/src/assets/images/element_vanilla_neroli_1791911761343.jpg',
+      '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg'
+    ],
+    additionalImages: [
+      '/src/assets/images/element_vanilla_neroli_1791911761343.jpg',
+      '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg'
+    ],
+    shortDescription: 'Rich, sun-cured vanilla bean infused with golden ambergris and warm brown sugar.',
+    description: 'Vanilla 01 is an intoxicating gourmand masterpiece. Deep, resinous Madagascar vanilla pods blend smoothly with salted ambergris and caramelized sugar, leaving an irresistible trail of sensual tonka bean.',
     notes: ['Madagascar Bourbon Vanilla', 'Ambergris', 'Brown Sugar', 'Tonka'],
+    topNotes: ['Brown Sugar', 'Almond Blossom'],
+    heartNotes: ['Madagascar Bourbon Vanilla', 'Caramel'],
+    baseNotes: ['Ambergris', 'Tonka Bean', 'White Musk'],
     sizes: [
       { size: '3ml', price: 661 },
       { size: '5ml', price: 990 },
@@ -90,6 +139,7 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
   },
   {
     id: 'prod-genesis-leo',
+    slug: 'genesis-leo',
     brand: 'FRENCH AVENUE',
     name: 'Genesis Leo',
     category: 'Woody Oriental',
@@ -97,7 +147,21 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
     concentration: 'Extrait de Parfum',
     startingPrice: 302,
     image: '/src/assets/images/perfume_genesis_leo_1791908160379.jpg',
+    images: [
+      '/src/assets/images/perfume_genesis_leo_1791908160379.jpg',
+      '/src/assets/images/campaign_for_him_1791908163466.jpg',
+      '/src/assets/images/season_dark_forest_1791908203381.jpg'
+    ],
+    additionalImages: [
+      '/src/assets/images/campaign_for_him_1791908163466.jpg',
+      '/src/assets/images/season_dark_forest_1791908203381.jpg'
+    ],
+    shortDescription: 'Regal smoked oud laced with spicy saffron, birch wood, and dark Tuscan leather.',
+    description: 'Genesis Leo by French Avenue is a command of strength and presence. Crafted in Extrait de Parfum concentration, it opens with brilliant crimson saffron before unleashing a dark core of smoked birch, royal oud resin, and smooth leather.',
     notes: ['Royal Oud', 'Saffron', 'Smoked Birch', 'Leather'],
+    topNotes: ['Saffron', 'Thyme', 'Raspberry'],
+    heartNotes: ['Smoked Birch', 'Olibanum', 'Jasmine'],
+    baseNotes: ['Royal Oud', 'Tuscan Leather', 'Amberwood'],
     sizes: [
       { size: '3ml', price: 302 },
       { size: '5ml', price: 470 },
@@ -107,6 +171,7 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
   },
   {
     id: 'prod-venena',
+    slug: 'venena',
     brand: 'FRENCH AVENUE',
     name: 'Venena',
     category: 'Spicy Amber',
@@ -114,7 +179,21 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
     concentration: 'Eau de Parfum',
     startingPrice: 411,
     image: '/src/assets/images/perfume_venena_1791908161282.jpg',
+    images: [
+      '/src/assets/images/perfume_venena_1791908161282.jpg',
+      '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
+      '/src/assets/images/studio_social_travertine_1791908203434.jpg'
+    ],
+    additionalImages: [
+      '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
+      '/src/assets/images/studio_social_travertine_1791908203434.jpg'
+    ],
+    shortDescription: 'Dark cardamom and sweet black plum layered over smoldering incense and dark tobacco.',
+    description: 'Venena by French Avenue evokes magnetic mystery. Rich black plum notes intersect with green crushed cardamom pods and warm tobacco leaves, settling into a smokey amber base.',
     notes: ['Black Plum', 'Cardamom', 'Dark Tobacco', 'Incense'],
+    topNotes: ['Green Cardamom', 'Black Plum'],
+    heartNotes: ['Dark Tobacco Leaf', 'Incense Smoke'],
+    baseNotes: ['Amber Resins', 'Guaiac Wood', 'Vanilla'],
     sizes: [
       { size: '3ml', price: 411 },
       { size: '5ml', price: 640 },
@@ -124,6 +203,7 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
   },
   {
     id: 'prod-asdaaf-raneen',
+    slug: 'asdaaf-raneen',
     brand: 'ASDAAF',
     name: 'Raneen',
     category: 'Floral Amber',
@@ -131,7 +211,21 @@ export const NEW_ARRIVALS: FragranceProduct[] = [
     concentration: 'Eau de Parfum',
     startingPrice: 336,
     image: '/src/assets/images/perfume_asdaaf_raneen_1791908163183.jpg',
+    images: [
+      '/src/assets/images/perfume_asdaaf_raneen_1791908163183.jpg',
+      '/src/assets/images/studio_social_hand_decant_1791908204628.jpg',
+      '/src/assets/images/hero_perfume_architectural_1791908158566.jpg'
+    ],
+    additionalImages: [
+      '/src/assets/images/studio_social_hand_decant_1791908204628.jpg',
+      '/src/assets/images/hero_perfume_architectural_1791908158566.jpg'
+    ],
+    shortDescription: 'Sweet orange blossom and buttery praline drizzled with white jasmine nectar.',
+    description: 'Raneen by Asdaaf is a joyful, luminous floral amber fragrance. Crisp citrus blossoms lead into creamy praline accords and delicate jasmine blossoms.',
     notes: ['Orange Blossom', 'Praline', 'White Jasmine', 'Sweet Vanilla'],
+    topNotes: ['Orange Blossom', 'Mandarin'],
+    heartNotes: ['White Jasmine', 'Praline'],
+    baseNotes: ['Sweet Vanilla', 'Sandalwood', 'Musk'],
     sizes: [
       { size: '3ml', price: 336 },
       { size: '5ml', price: 520 },

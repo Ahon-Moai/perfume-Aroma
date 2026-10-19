@@ -87,9 +87,14 @@ $products = [
     'concentration' => 'Extrait de Parfum',
     'starting_price' => 490,
     'image' => '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg',
+    'additional_images' => [
+      '/src/assets/images/element_vanilla_neroli_1791911761343.jpg',
+      '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
+      '/src/assets/images/studio_social_amber_spray_1791908204588.jpg'
+    ],
     'notes' => json_encode(['Neroli Blossom', 'Madagascar Bourbon Vanilla', 'Golden Amber Crystals', 'Solar Dew']),
     'short_description' => 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity.',
-    'description' => 'Pure Portions is ARRINA ATELIER\'s hallmark decant edition. Sealed in glass with precision high-pressure spray head.',
+    'description' => 'Pure Portions is ARRINA ATELIER\'s hallmark decant edition. Encased in high-clarity Italian glass tubes with precision fine-mist dispersion nozzles.',
     'sizes' => [
       ['size' => '5ml', 'price' => 490],
       ['size' => '10ml (2x5ml)', 'price' => 920],
@@ -105,6 +110,11 @@ $products = [
     'concentration' => 'Eau de Parfum',
     'starting_price' => 661,
     'image' => '/src/assets/images/perfume_rose01_1791908158391.jpg',
+    'additional_images' => [
+      '/src/assets/images/season_sculptural_roses_1791908202058.jpg',
+      '/src/assets/images/campaign_for_her_1791908163547.jpg',
+      '/src/assets/images/article_perfume_roses_water_1791908274460.jpg'
+    ],
     'notes' => json_encode(['Damask Rose', 'Pink Peppercorn', 'Cashmeran', 'White Musk']),
     'short_description' => 'A captivating bouquet of velvet damask roses wrapped in soft musk.',
     'description' => 'Rose 01 by Swiss Arabian combines delicate pink peppercorns with luminous rose petals.',
@@ -124,6 +134,10 @@ $products = [
     'concentration' => 'Eau de Parfum',
     'starting_price' => 661,
     'image' => '/src/assets/images/perfume_vanilla01_1791908158466.jpg',
+    'additional_images' => [
+      '/src/assets/images/element_vanilla_neroli_1791911761343.jpg',
+      '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg'
+    ],
     'notes' => json_encode(['Madagascar Bourbon Vanilla', 'Ambergris', 'Brown Sugar', 'Tonka']),
     'short_description' => 'Rich, sun-cured vanilla bean infused with golden ambergris.',
     'description' => 'Warm, comforting and velvety dark vanilla blend crafted for lingering warmth.',
@@ -143,6 +157,10 @@ $products = [
     'concentration' => 'Extrait de Parfum',
     'starting_price' => 302,
     'image' => '/src/assets/images/perfume_genesis_leo_1791908160379.jpg',
+    'additional_images' => [
+      '/src/assets/images/campaign_for_him_1791908163466.jpg',
+      '/src/assets/images/season_dark_forest_1791908203381.jpg'
+    ],
     'notes' => json_encode(['Royal Oud', 'Saffron', 'Smoked Birch', 'Leather']),
     'short_description' => 'Regal smoked oud laced with spicy saffron and dark leather.',
     'description' => 'Genesis Leo delivers intense projection and masculine luxury.',
@@ -162,6 +180,10 @@ $products = [
     'concentration' => 'Eau de Parfum',
     'starting_price' => 411,
     'image' => '/src/assets/images/perfume_venena_1791908161282.jpg',
+    'additional_images' => [
+      '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
+      '/src/assets/images/studio_social_travertine_1791908203434.jpg'
+    ],
     'notes' => json_encode(['Black Plum', 'Cardamom', 'Dark Tobacco', 'Incense']),
     'short_description' => 'Dark cardamom and sweet black plum over smoldering incense.',
     'description' => 'An enigmatic evening fragrance designed for bold presence.',
@@ -181,6 +203,10 @@ $products = [
     'concentration' => 'Eau de Parfum',
     'starting_price' => 336,
     'image' => '/src/assets/images/perfume_asdaaf_raneen_1791908163183.jpg',
+    'additional_images' => [
+      '/src/assets/images/studio_social_hand_decant_1791908204628.jpg',
+      '/src/assets/images/hero_perfume_architectural_1791908158566.jpg'
+    ],
     'notes' => json_encode(['Orange Blossom', 'Praline', 'White Jasmine', 'Sweet Vanilla']),
     'short_description' => 'Sweet orange blossom and praline drizzled with jasmine nectar.',
     'description' => 'Raneen is a joyful floral amber fragrance with delicious gourmand facets.',
@@ -195,8 +221,10 @@ $products = [
 
 $stmtProd = $db->prepare("INSERT INTO products (id, brand, name, slug, category, gender, concentration, starting_price, short_description, description, image, notes, status, inventory_qty, is_featured, is_new_arrival) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 100, 1, 1)");
 $stmtVar = $db->prepare("INSERT INTO product_variants (id, product_id, size, price, stock_qty) VALUES (?, ?, ?, ?, 100)");
+$stmtImg = $db->prepare("INSERT INTO product_images (product_id, image_path, display_order, is_primary) VALUES (?, ?, ?, ?)");
 
 foreach ($products as $p) {
+    $db->exec("DELETE FROM product_images WHERE product_id = " . $db->quote($p['id']));
     $db->exec("DELETE FROM product_variants WHERE product_id = " . $db->quote($p['id']));
     $db->exec("DELETE FROM products WHERE id = " . $db->quote($p['id']));
 
@@ -219,6 +247,12 @@ foreach ($products as $p) {
     foreach ($p['sizes'] as $idx => $s) {
         $varId = $p['id'] . '-var-' . ($idx + 1);
         $stmtVar->execute([$varId, $p['id'], $s['size'], $s['price']]);
+    }
+
+    if (!empty($p['additional_images'])) {
+        foreach ($p['additional_images'] as $order => $imgPath) {
+            $stmtImg->execute([$p['id'], $imgPath, $order + 1, 0]);
+        }
     }
 }
 
