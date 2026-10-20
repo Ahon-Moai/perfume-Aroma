@@ -64,6 +64,7 @@ if ($id || $slug) {
     $heartNotes = json_decode($product['heart_notes'] ?? '[]', true) ?: [];
     $baseNotes = json_decode($product['base_notes'] ?? '[]', true) ?: [];
     $attributes = json_decode($product['attributes_json'] ?? '[]', true) ?: [];
+    $scentProfile = json_decode($product['scent_profile_json'] ?? 'null', true) ?: new \stdClass();
 
     $formattedProduct = [
         'id' => $product['id'],
@@ -82,6 +83,7 @@ if ($id || $slug) {
         'heartNotes' => $heartNotes,
         'baseNotes' => $baseNotes,
         'attributes' => $attributes,
+        'scentProfile' => $scentProfile,
         'sizes' => $sizes,
         'shortDescription' => $product['short_description'],
         'description' => $product['description'],
@@ -162,6 +164,7 @@ $formattedList = array_map(function($p) use ($variantsByProduct, $imagesByProduc
     $heartNotes = json_decode($p['heart_notes'] ?? '[]', true) ?: [];
     $baseNotes = json_decode($p['base_notes'] ?? '[]', true) ?: [];
     $attributes = json_decode($p['attributes_json'] ?? '[]', true) ?: [];
+    $scentProfile = json_decode($p['scent_profile_json'] ?? 'null', true) ?: new \stdClass();
 
     $sizes = $variantsByProduct[$p['id']] ?? [];
     if (empty($sizes)) {
@@ -188,6 +191,7 @@ $formattedList = array_map(function($p) use ($variantsByProduct, $imagesByProduc
         'heartNotes' => $heartNotes,
         'baseNotes' => $baseNotes,
         'attributes' => $attributes,
+        'scentProfile' => $scentProfile,
         'sizes' => $sizes,
         'shortDescription' => $p['short_description'],
         'description' => $p['description'] ?? ''

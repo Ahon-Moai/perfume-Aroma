@@ -17,6 +17,24 @@ interface AttributeItem {
   enabled: boolean;
 }
 
+interface ScentProfile {
+  fragranceFamily?: string[];
+  topNotes?: string[];
+  heartNotes?: string[];
+  baseNotes?: string[];
+  suitableSeasons?: string[];
+  suitableOccasions?: string[];
+  scentImpressionMood?: string[];
+  intensity?: string;
+  projection?: string;
+  longevity?: string;
+  fragranceConcentration?: string;
+  genderPositioning?: string;
+  bestTimeToWear?: string[];
+  sweetnessLevel?: string;
+  scentDescription?: string;
+}
+
 interface Product {
   id: string;
   brand: string;
@@ -33,6 +51,7 @@ interface Product {
   heart_notes?: string[];
   base_notes?: string[];
   attributes?: AttributeItem[];
+  scent_profile?: ScentProfile;
   status: 'draft' | 'published' | 'archived';
   inventory_qty: number;
   is_featured: boolean;
@@ -81,6 +100,37 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
     { id: 'mass_appeal', name: 'Mass Appeal', value: 88, enabled: true }
   ];
 
+  // Option constants for Scent Profile inputs
+  const FRAGRANCE_FAMILIES = [
+    'Fresh/Aquatic', 'Citrus', 'Woody', 'Spicy', 'Floral',
+    'Sweet/Gourmand', 'Amber/Oriental', 'Musky', 'Aromatic', 'Leather', 'Green/Herbal'
+  ];
+
+  const SUITABLE_SEASONS = [
+    'Summer', 'Winter', 'Spring', 'Autumn', 'Rainy/Monsoon', 'All Seasons'
+  ];
+
+  const SUITABLE_OCCASIONS = [
+    'Everyday/Casual', 'Office/University', 'Date Night', 'Parties/Nightlife',
+    'Formal Events', 'Weddings/Special Occasions', 'Gym/Outdoor Activities'
+  ];
+
+  const MOOD_IMPRESSIONS = [
+    'Fresh & Energetic', 'Clean & Approachable', 'Elegant & Classy',
+    'Sweet & Cozy', 'Seductive', 'Bold & Confident', 'Sophisticated'
+  ];
+
+  const BEST_TIMES = ['Daytime', 'Evening/Nighttime', 'Both'];
+
+  const SINGLE_SELECT_OPTIONS = {
+    intensity: ['Light', 'Moderate', 'Strong', 'Unknown'],
+    projection: ['Intimate', 'Moderate', 'Heavy', 'Unknown'],
+    longevity: ['Short-lasting', 'Moderate', 'Long-lasting', 'Unknown'],
+    fragranceConcentration: ['EDT', 'EDP', 'Parfum', 'Extrait', 'Other', 'Unknown'],
+    genderPositioning: ['Masculine', 'Feminine', 'Unisex', 'Unknown'],
+    sweetnessLevel: ['Low', 'Medium', 'High', 'Unknown']
+  };
+
   const handleOpenCreate = () => {
     setEditingProduct({
       id: 'prod-' + Math.random().toString(36).substr(2, 6),
@@ -97,6 +147,23 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       heart_notes: ['Madagascar Bourbon Vanilla', 'Jasmine Nectar'],
       base_notes: ['Golden Amber Crystals', 'White Musk'],
       attributes: DEFAULT_ATTRIBUTES,
+      scent_profile: {
+        fragranceFamily: [],
+        topNotes: ['Neroli Blossom', 'Bergamot'],
+        heartNotes: ['Madagascar Bourbon Vanilla', 'Jasmine Nectar'],
+        baseNotes: ['Golden Amber Crystals', 'White Musk'],
+        suitableSeasons: [],
+        suitableOccasions: [],
+        scentImpressionMood: [],
+        intensity: 'Unknown',
+        projection: 'Unknown',
+        longevity: 'Unknown',
+        fragranceConcentration: 'EDP',
+        genderPositioning: 'Unisex',
+        bestTimeToWear: [],
+        sweetnessLevel: 'Unknown',
+        scentDescription: ''
+      },
       status: 'published',
       inventory_qty: 100,
       is_featured: true,
@@ -112,6 +179,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
   };
 
   const handleOpenEdit = (p: Product) => {
+    const sp = p.scent_profile || {};
     setEditingProduct({
       ...p,
       additional_images: Array.isArray(p.additional_images) ? p.additional_images : (Array.isArray(p.images) ? p.images : []),
@@ -119,6 +187,23 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       heart_notes: Array.isArray(p.heart_notes) ? p.heart_notes : [],
       base_notes: Array.isArray(p.base_notes) ? p.base_notes : [],
       attributes: Array.isArray(p.attributes) && p.attributes.length > 0 ? p.attributes : DEFAULT_ATTRIBUTES,
+      scent_profile: {
+        fragranceFamily: Array.isArray(sp.fragranceFamily) ? sp.fragranceFamily : [],
+        topNotes: Array.isArray(sp.topNotes) ? sp.topNotes : (Array.isArray(p.top_notes) ? p.top_notes : []),
+        heartNotes: Array.isArray(sp.heartNotes) ? sp.heartNotes : (Array.isArray(p.heart_notes) ? p.heart_notes : []),
+        baseNotes: Array.isArray(sp.baseNotes) ? sp.baseNotes : (Array.isArray(p.base_notes) ? p.base_notes : []),
+        suitableSeasons: Array.isArray(sp.suitableSeasons) ? sp.suitableSeasons : [],
+        suitableOccasions: Array.isArray(sp.suitableOccasions) ? sp.suitableOccasions : [],
+        scentImpressionMood: Array.isArray(sp.scentImpressionMood) ? sp.scentImpressionMood : [],
+        intensity: sp.intensity || 'Unknown',
+        projection: sp.projection || 'Unknown',
+        longevity: sp.longevity || 'Unknown',
+        fragranceConcentration: sp.fragranceConcentration || (p.concentration === 'Eau de Parfum' ? 'EDP' : 'Unknown'),
+        genderPositioning: sp.genderPositioning || p.gender || 'Unknown',
+        bestTimeToWear: Array.isArray(sp.bestTimeToWear) ? sp.bestTimeToWear : [],
+        sweetnessLevel: sp.sweetnessLevel || 'Unknown',
+        scentDescription: sp.scentDescription || ''
+      },
       variants: p.variants && p.variants.length > 0 ? p.variants : [
         { size: '5ml', price: p.starting_price, stock_qty: p.inventory_qty }
       ]
@@ -491,6 +576,389 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                       className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white"
                     />
                   </div>
+                </div>
+              </div>
+
+              {/* Find Your Scent Recommendation Engine Attributes (15 Fields) */}
+              <div className="pt-4 border-t border-amber-500/30 bg-amber-950/10 p-4 border rounded space-y-4">
+                <div>
+                  <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                    <Tag className="w-3.5 h-3.5" />
+                    <span>Find Your Scent - Recommendation System Attributes</span>
+                  </h4>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    Configure perfume attributes used by the recommendation engine. Unselected values remain Unknown/empty.
+                  </p>
+                </div>
+
+                {/* 1. Fragrance Family (Multi-select) */}
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1.5 font-semibold">
+                    1. Fragrance Family (Multi-Select)
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {FRAGRANCE_FAMILIES.map((family) => {
+                      const selected = (editingProduct.scent_profile?.fragranceFamily || []).includes(family);
+                      return (
+                        <button
+                          type="button"
+                          key={family}
+                          onClick={() => {
+                            const current = editingProduct.scent_profile?.fragranceFamily || [];
+                            const updated = selected
+                              ? current.filter(item => item !== family)
+                              : [...current, family];
+                            setEditingProduct({
+                              ...editingProduct,
+                              scent_profile: { ...editingProduct.scent_profile, fragranceFamily: updated }
+                            });
+                          }}
+                          className={`px-2.5 py-1 text-[11px] border transition-colors cursor-pointer ${
+                            selected
+                              ? 'bg-amber-400 text-black border-amber-400 font-medium'
+                              : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
+                          }`}
+                        >
+                          {selected ? '✓ ' : '+ '}{family}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2, 3, 4. Top, Heart, Base Notes */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      2. Top Notes (Multiple Entries)
+                    </label>
+                    <input
+                      type="text"
+                      value={(editingProduct.scent_profile?.topNotes || []).join(', ')}
+                      onChange={e => {
+                        const arr = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                        setEditingProduct({
+                          ...editingProduct,
+                          top_notes: arr,
+                          scent_profile: { ...editingProduct.scent_profile, topNotes: arr }
+                        });
+                      }}
+                      placeholder="e.g. Bergamot, Lemon, Pink Pepper"
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      3. Heart Notes (Multiple Entries)
+                    </label>
+                    <input
+                      type="text"
+                      value={(editingProduct.scent_profile?.heartNotes || []).join(', ')}
+                      onChange={e => {
+                        const arr = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                        setEditingProduct({
+                          ...editingProduct,
+                          heart_notes: arr,
+                          scent_profile: { ...editingProduct.scent_profile, heartNotes: arr }
+                        });
+                      }}
+                      placeholder="e.g. Lavender, Rose, Jasmine"
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      4. Base Notes (Multiple Entries)
+                    </label>
+                    <input
+                      type="text"
+                      value={(editingProduct.scent_profile?.baseNotes || []).join(', ')}
+                      onChange={e => {
+                        const arr = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                        setEditingProduct({
+                          ...editingProduct,
+                          base_notes: arr,
+                          scent_profile: { ...editingProduct.scent_profile, baseNotes: arr }
+                        });
+                      }}
+                      placeholder="e.g. Vanilla, Amber, Sandalwood"
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                {/* 5. Suitable Seasons (Multi-select) */}
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1.5 font-semibold">
+                    5. Suitable Seasons (Multi-Select)
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {SUITABLE_SEASONS.map((season) => {
+                      const selected = (editingProduct.scent_profile?.suitableSeasons || []).includes(season);
+                      return (
+                        <button
+                          type="button"
+                          key={season}
+                          onClick={() => {
+                            const current = editingProduct.scent_profile?.suitableSeasons || [];
+                            const updated = selected
+                              ? current.filter(item => item !== season)
+                              : [...current, season];
+                            setEditingProduct({
+                              ...editingProduct,
+                              scent_profile: { ...editingProduct.scent_profile, suitableSeasons: updated }
+                            });
+                          }}
+                          className={`px-2.5 py-1 text-[11px] border transition-colors cursor-pointer ${
+                            selected
+                              ? 'bg-amber-400 text-black border-amber-400 font-medium'
+                              : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
+                          }`}
+                        >
+                          {selected ? '✓ ' : '+ '}{season}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 6. Suitable Occasions (Multi-select) */}
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1.5 font-semibold">
+                    6. Suitable Occasions (Multi-Select)
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {SUITABLE_OCCASIONS.map((occ) => {
+                      const selected = (editingProduct.scent_profile?.suitableOccasions || []).includes(occ);
+                      return (
+                        <button
+                          type="button"
+                          key={occ}
+                          onClick={() => {
+                            const current = editingProduct.scent_profile?.suitableOccasions || [];
+                            const updated = selected
+                              ? current.filter(item => item !== occ)
+                              : [...current, occ];
+                            setEditingProduct({
+                              ...editingProduct,
+                              scent_profile: { ...editingProduct.scent_profile, suitableOccasions: updated }
+                            });
+                          }}
+                          className={`px-2.5 py-1 text-[11px] border transition-colors cursor-pointer ${
+                            selected
+                              ? 'bg-amber-400 text-black border-amber-400 font-medium'
+                              : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
+                          }`}
+                        >
+                          {selected ? '✓ ' : '+ '}{occ}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 7. Scent Impression / Mood (Multi-select) */}
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1.5 font-semibold">
+                    7. Scent Impression / Mood (Multi-Select)
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {MOOD_IMPRESSIONS.map((mood) => {
+                      const selected = (editingProduct.scent_profile?.scentImpressionMood || []).includes(mood);
+                      return (
+                        <button
+                          type="button"
+                          key={mood}
+                          onClick={() => {
+                            const current = editingProduct.scent_profile?.scentImpressionMood || [];
+                            const updated = selected
+                              ? current.filter(item => item !== mood)
+                              : [...current, mood];
+                            setEditingProduct({
+                              ...editingProduct,
+                              scent_profile: { ...editingProduct.scent_profile, scentImpressionMood: updated }
+                            });
+                          }}
+                          className={`px-2.5 py-1 text-[11px] border transition-colors cursor-pointer ${
+                            selected
+                              ? 'bg-amber-400 text-black border-amber-400 font-medium'
+                              : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
+                          }`}
+                        >
+                          {selected ? '✓ ' : '+ '}{mood}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Single Select Dropdowns: 8-12 & 14 */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* 8. Intensity */}
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      8. Intensity
+                    </label>
+                    <select
+                      value={editingProduct.scent_profile?.intensity || 'Unknown'}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        scent_profile: { ...editingProduct.scent_profile, intensity: e.target.value }
+                      })}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    >
+                      {SINGLE_SELECT_OPTIONS.intensity.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 9. Projection */}
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      9. Projection
+                    </label>
+                    <select
+                      value={editingProduct.scent_profile?.projection || 'Unknown'}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        scent_profile: { ...editingProduct.scent_profile, projection: e.target.value }
+                      })}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    >
+                      {SINGLE_SELECT_OPTIONS.projection.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 10. Longevity */}
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      10. Longevity
+                    </label>
+                    <select
+                      value={editingProduct.scent_profile?.longevity || 'Unknown'}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        scent_profile: { ...editingProduct.scent_profile, longevity: e.target.value }
+                      })}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    >
+                      {SINGLE_SELECT_OPTIONS.longevity.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 11. Fragrance Concentration */}
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      11. Fragrance Concentration
+                    </label>
+                    <select
+                      value={editingProduct.scent_profile?.fragranceConcentration || 'Unknown'}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        scent_profile: { ...editingProduct.scent_profile, fragranceConcentration: e.target.value }
+                      })}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    >
+                      {SINGLE_SELECT_OPTIONS.fragranceConcentration.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 12. Gender Positioning */}
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      12. Gender Positioning
+                    </label>
+                    <select
+                      value={editingProduct.scent_profile?.genderPositioning || 'Unknown'}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        scent_profile: { ...editingProduct.scent_profile, genderPositioning: e.target.value }
+                      })}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    >
+                      {SINGLE_SELECT_OPTIONS.genderPositioning.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* 14. Sweetness Level */}
+                  <div>
+                    <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                      14. Sweetness Level
+                    </label>
+                    <select
+                      value={editingProduct.scent_profile?.sweetnessLevel || 'Unknown'}
+                      onChange={e => setEditingProduct({
+                        ...editingProduct,
+                        scent_profile: { ...editingProduct.scent_profile, sweetnessLevel: e.target.value }
+                      })}
+                      className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                    >
+                      {SINGLE_SELECT_OPTIONS.sweetnessLevel.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* 13. Best Time to Wear (Multi-select) */}
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1.5 font-semibold">
+                    13. Best Time to Wear (Multi-Select)
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {BEST_TIMES.map((time) => {
+                      const selected = (editingProduct.scent_profile?.bestTimeToWear || []).includes(time);
+                      return (
+                        <button
+                          type="button"
+                          key={time}
+                          onClick={() => {
+                            const current = editingProduct.scent_profile?.bestTimeToWear || [];
+                            const updated = selected
+                              ? current.filter(item => item !== time)
+                              : [...current, time];
+                            setEditingProduct({
+                              ...editingProduct,
+                              scent_profile: { ...editingProduct.scent_profile, bestTimeToWear: updated }
+                            });
+                          }}
+                          className={`px-2.5 py-1 text-[11px] border transition-colors cursor-pointer ${
+                            selected
+                              ? 'bg-amber-400 text-black border-amber-400 font-medium'
+                              : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'
+                          }`}
+                        >
+                          {selected ? '✓ ' : '+ '}{time}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 15. Scent Description / Profile */}
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-300 uppercase mb-1 font-semibold">
+                    15. Scent Description / Profile Character
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={editingProduct.scent_profile?.scentDescription || ''}
+                    onChange={e => setEditingProduct({
+                      ...editingProduct,
+                      scent_profile: { ...editingProduct.scent_profile, scentDescription: e.target.value }
+                    })}
+                    placeholder="Short editable text describing fragrance's overall character..."
+                    className="w-full bg-zinc-950 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                  />
                 </div>
               </div>
 
