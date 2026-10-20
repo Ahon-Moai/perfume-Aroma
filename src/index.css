@@ -1,15 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --font-serif: "Bodoni Moda", "Cormorant Garamond", Georgia, serif;
-  --font-display: "Bodoni Moda", serif;
-  --font-bodoni: "Bodoni Moda", serif;
-  --font-editorial: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Urbanist", system-ui, -apple-system, sans-serif;
+  --font-serif: "Urbanist", system-ui, -apple-system, sans-serif;
+  --font-display: "Urbanist", system-ui, -apple-system, sans-serif;
+  --font-bodoni: "Urbanist", system-ui, -apple-system, sans-serif;
+  --font-editorial: "Urbanist", system-ui, -apple-system, sans-serif;
+}
+
+* {
+  font-family: "Urbanist", sans-serif;
 }
 
 .font-bodoni {
-  font-family: "Bodoni Moda", serif;
+  font-family: "Urbanist", sans-serif;
 }
 
 /* Custom smooth marquee */
