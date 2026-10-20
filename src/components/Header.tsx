@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Search, User, Heart, ShoppingBag, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Menu, Search, User, ShoppingBag, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface HeaderProps {
   cartCount: number;
@@ -115,14 +115,6 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label="Account"
           >
             <User className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
-          </button>
-
-          <button
-            onClick={onOpenWishlist}
-            className="p-2 hover:text-zinc-600 transition-colors relative"
-            aria-label="Wishlist"
-          >
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
           </button>
 
           <button
