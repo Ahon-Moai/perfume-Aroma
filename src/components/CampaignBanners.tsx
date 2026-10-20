@@ -1,18 +1,29 @@
 import React from 'react';
 import { IMAGES } from '../data/fragranceData';
+import { CampaignBannersData } from '../types';
 
 interface CampaignBannersProps {
   onSelectCategory: (gender: 'Him' | 'Her') => void;
+  campaignData?: CampaignBannersData;
 }
 
-export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCategory }) => {
+export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCategory, campaignData }) => {
+  const sectionTitle = campaignData?.section_title || 'FOR HIM | HER';
+  const forHimTitle = campaignData?.for_him_title || 'For Him';
+  const forHimButtonText = campaignData?.for_him_button_text || 'SHOP DECANTS';
+  const forHimImage = campaignData?.for_him_image || IMAGES.campaigns.forHim;
+
+  const forHerTitle = campaignData?.for_her_title || 'For Her';
+  const forHerButtonText = campaignData?.for_her_button_text || 'SHOP DECANTS';
+  const forHerImage = campaignData?.for_her_image || IMAGES.campaigns.forHer;
+
   return (
     <section id="for-him-her" className="w-full bg-white pt-8 pb-14 border-b border-zinc-100">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Right-aligned Section Heading as in screenshot */}
         <div className="flex justify-end mb-4 sm:mb-6">
           <h2 className="font-serif text-lg sm:text-2xl font-light tracking-[0.16em] text-zinc-950 uppercase">
-            FOR HIM | HER
+            {sectionTitle}
           </h2>
         </div>
 
@@ -25,8 +36,8 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
           >
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
               <img
-                src={IMAGES.campaigns.forHim}
-                alt="For Him luxury fragrance decants campaign set"
+                src={forHimImage}
+                alt={`${forHimTitle} luxury fragrance decants campaign set`}
                 className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 referrerPolicy="no-referrer"
                 loading="lazy"
@@ -36,10 +47,10 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
             {/* Black Lower Bar */}
             <div className="bg-black text-white px-5 py-3.5 flex items-center justify-between border-t border-zinc-900">
               <span className="font-serif text-sm sm:text-base font-normal tracking-wide text-zinc-100">
-                For Him
+                {forHimTitle}
               </span>
               <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.18em] uppercase text-zinc-300 group-hover:text-white group-hover:underline underline-offset-4 transition-all">
-                SHOP DECANTS
+                {forHimButtonText}
               </span>
             </div>
           </div>
@@ -51,8 +62,8 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
           >
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
               <img
-                src={IMAGES.campaigns.forHer}
-                alt="For Her luxury fragrance decants campaign vanity"
+                src={forHerImage}
+                alt={`${forHerTitle} luxury fragrance decants campaign vanity`}
                 className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 referrerPolicy="no-referrer"
                 loading="lazy"
@@ -62,10 +73,10 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
             {/* Black Lower Bar */}
             <div className="bg-black text-white px-5 py-3.5 flex items-center justify-between border-t border-zinc-900">
               <span className="font-serif text-sm sm:text-base font-normal tracking-wide text-zinc-100">
-                For Her
+                {forHerTitle}
               </span>
               <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.18em] uppercase text-zinc-300 group-hover:text-white group-hover:underline underline-offset-4 transition-all">
-                SHOP DECANTS
+                {forHerButtonText}
               </span>
             </div>
           </div>

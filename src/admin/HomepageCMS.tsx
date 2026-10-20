@@ -10,7 +10,7 @@ interface HomepageCMSProps {
 }
 
 export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
-  const [activeTab, setActiveTab] = useState<'hero' | 'video' | 'sections' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
+  const [activeTab, setActiveTab] = useState<'hero' | 'campaigns' | 'seasons' | 'video' | 'sections' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [availableProducts, setAvailableProducts] = useState<Array<{ id: string; name: string; brand: string; image?: string }>>([]);
@@ -24,6 +24,54 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     secondary_cta_text: 'EXPLORE ALL DECANTS',
     image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg'
   });
+
+  // Campaign Banners Form (For Him / For Her)
+  const [campaignForm, setCampaignForm] = useState({
+    section_title: 'FOR HIM | HER',
+    for_him_title: 'For Him',
+    for_him_button_text: 'SHOP DECANTS',
+    for_him_image: '/src/assets/images/campaign_for_him_1791908163466.jpg',
+    for_her_title: 'For Her',
+    for_her_button_text: 'SHOP DECANTS',
+    for_her_image: '/src/assets/images/campaign_for_her_1791908163547.jpg'
+  });
+
+  // Seasons Gallery Form
+  const [seasonsHeader, setSeasonsHeader] = useState({
+    section_title: 'SEASONS',
+    section_subtitle: 'CHOOSE YOURS'
+  });
+
+  const [seasonCards, setSeasonCards] = useState<Array<{ id: string; name: string; description: string; image: string; alt?: string }>>([
+    {
+      id: 'season-autumn',
+      name: 'Autumn Bloom',
+      description: 'Red sun dunes & smoked woods',
+      image: '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
+      alt: 'Autumn Dune with Blood Red Sun fragrance campaign'
+    },
+    {
+      id: 'season-winter',
+      name: 'Architectural Winter',
+      description: 'Concrete geometry & crimson sillage',
+      image: '/src/assets/images/season_monochrome_street_1791908200992.jpg',
+      alt: 'Monochrome street architecture with crimson ribbon fragrance campaign'
+    },
+    {
+      id: 'season-summer',
+      name: 'Midnight Rose',
+      description: 'Velvet petals & monochrome pedestal',
+      image: '/src/assets/images/season_sculptural_roses_1791908202058.jpg',
+      alt: 'Sculptural velvet roses on geometric pedestal campaign'
+    },
+    {
+      id: 'season-spring',
+      name: 'Crimson Shadows',
+      description: 'Stark birch forest & damp moss',
+      image: '/src/assets/images/season_dark_forest_1791908203381.jpg',
+      alt: 'Dark birch forest with red branches fragrance campaign'
+    }
+  ]);
 
   // Video Product Showcase Section State
   const [showcaseHeader, setShowcaseHeader] = useState({
@@ -100,6 +148,24 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         const heroSec = payload.sections?.hero;
         if (heroSec && heroSec.content) {
           setHeroForm((prev) => ({ ...prev, ...heroSec.content }));
+        }
+
+        // Campaign Banners (For Him | Her)
+        const campSec = payload.sections?.campaign_banners;
+        if (campSec && campSec.content) {
+          setCampaignForm((prev) => ({ ...prev, ...campSec.content }));
+        }
+
+        // Seasons Gallery
+        const seasonsSec = payload.sections?.seasons_gallery;
+        if (seasonsSec && seasonsSec.content) {
+          setSeasonsHeader({
+            section_title: seasonsSec.title || seasonsSec.content.section_title || 'SEASONS',
+            section_subtitle: seasonsSec.subtitle || seasonsSec.content.section_subtitle || 'CHOOSE YOURS'
+          });
+          if (Array.isArray(seasonsSec.content.cards)) {
+            setSeasonCards(seasonsSec.content.cards);
+          }
         }
 
         // Video Showcase
@@ -306,6 +372,117 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleSaveCampaignBanners = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/homepage.php', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          type: 'section',
+          section_key: 'campaign_banners',
+          title: campaignForm.section_title || 'FOR HIM | HER',
+          subtitle: 'GENDER CATEGORY CAMPAIGNS',
+          content: campaignForm,
+          is_enabled: true,
+          display_order: 2.5
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('Campaign Banners (For Him / Her) saved successfully!');
+        fetchCMSData();
+      } else {
+        alert(getErrorMessage(data?.error || data, 'Failed to save Campaign Banners'));
+      }
+    } catch (e) {
+      alert('Error saving Campaign Banners');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveSeasonsGallery = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/homepage.php', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          type: 'section',
+          section_key: 'seasons_gallery',
+          title: seasonsHeader.section_title || 'SEASONS',
+          subtitle: seasonsHeader.section_subtitle || 'CHOOSE YOURS',
+          content: {
+            section_title: seasonsHeader.section_title,
+            section_subtitle: seasonsHeader.section_subtitle,
+            cards: seasonCards
+          },
+          is_enabled: true,
+          display_order: 2.8
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('Seasons Gallery saved successfully!');
+        fetchCMSData();
+      } else {
+        alert(getErrorMessage(data?.error || data, 'Failed to save Seasons Gallery'));
+      }
+    } catch (e) {
+      alert('Error saving Seasons Gallery');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleAddSeasonCard = () => {
+    const newCard = {
+      id: 'season-' + Date.now(),
+      name: 'New Season Edition',
+      description: 'Fragrance notes & sensory descriptor',
+      image: '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
+      alt: 'Seasonal fragrance campaign image'
+    };
+    setSeasonCards([...seasonCards, newCard]);
+  };
+
+  const handleUpdateSeasonCard = (id: string, updates: Partial<{ name: string; description: string; image: string; alt: string }>) => {
+    setSeasonCards((prev) =>
+      prev.map((card) => (card.id === id ? { ...card, ...updates } : card))
+    );
+  };
+
+  const handleDeleteSeasonCard = (id: string) => {
+    if (!confirm('Are you sure you want to delete this seasonal card?')) return;
+    setSeasonCards((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const handleMoveSeasonCard = (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) ||
+      (direction === 'down' && index === seasonCards.length - 1)
+    ) {
+      return;
+    }
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const next = [...seasonCards];
+    const temp = next[index];
+    next[index] = next[targetIndex];
+    next[targetIndex] = temp;
+    setSeasonCards(next);
   };
 
   const handleSaveHero = async (e: React.FormEvent) => {
@@ -548,6 +725,8 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       <div className="flex border-b border-zinc-800 space-x-2 overflow-x-auto">
         {[
           { id: 'hero', label: 'Hero Banner' },
+          { id: 'campaigns', label: 'For Him / Her Banners' },
+          { id: 'seasons', label: 'Seasons Gallery' },
           { id: 'video', label: 'Video Showcase Cards' },
           { id: 'sections', label: 'Custom Product Sections' },
           { id: 'marquee', label: 'Marquee Ticker' },
@@ -646,6 +825,248 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving...' : 'Save Hero Section'}</span>
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Tab: Campaign Banners (For Him / For Her) */}
+      {activeTab === 'campaigns' && (
+        <form onSubmit={handleSaveCampaignBanners} className="bg-zinc-900 border border-zinc-800 p-6 space-y-6 text-xs text-zinc-300">
+          <div className="flex items-center gap-2 pb-3 border-b border-zinc-800 text-amber-300">
+            <Sparkles className="w-4 h-4" />
+            <h3 className="font-serif text-base text-white">FOR HIM | HER Campaign Banners</h3>
+          </div>
+
+          <div>
+            <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Section Title</label>
+            <input
+              type="text"
+              value={campaignForm.section_title}
+              onChange={(e) => setCampaignForm({ ...campaignForm, section_title: e.target.value })}
+              className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400 max-w-md"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* For Him Box */}
+            <div className="bg-zinc-950 border border-zinc-800 p-5 space-y-4">
+              <h4 className="font-serif text-sm text-amber-300 font-medium pb-2 border-b border-zinc-800">
+                For Him Banner
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={campaignForm.for_him_title}
+                    onChange={(e) => setCampaignForm({ ...campaignForm, for_him_title: e.target.value })}
+                    className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Button Label</label>
+                  <input
+                    type="text"
+                    value={campaignForm.for_him_button_text}
+                    onChange={(e) => setCampaignForm({ ...campaignForm, for_him_button_text: e.target.value })}
+                    className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              <ImageUploader
+                label="For Him Campaign Image"
+                value={campaignForm.for_him_image}
+                onChange={(url) => setCampaignForm({ ...campaignForm, for_him_image: url })}
+                csrfToken={csrfToken}
+              />
+            </div>
+
+            {/* For Her Box */}
+            <div className="bg-zinc-950 border border-zinc-800 p-5 space-y-4">
+              <h4 className="font-serif text-sm text-amber-300 font-medium pb-2 border-b border-zinc-800">
+                For Her Banner
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={campaignForm.for_her_title}
+                    onChange={(e) => setCampaignForm({ ...campaignForm, for_her_title: e.target.value })}
+                    className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Button Label</label>
+                  <input
+                    type="text"
+                    value={campaignForm.for_her_button_text}
+                    onChange={(e) => setCampaignForm({ ...campaignForm, for_her_button_text: e.target.value })}
+                    className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              <ImageUploader
+                label="For Her Campaign Image"
+                value={campaignForm.for_her_image}
+                onChange={(url) => setCampaignForm({ ...campaignForm, for_her_image: url })}
+                csrfToken={csrfToken}
+              />
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-zinc-800 flex justify-end">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
+            >
+              <Save className="w-4 h-4" />
+              <span>{saving ? 'Saving...' : 'Save For Him / Her Banners'}</span>
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Tab: Seasons Gallery */}
+      {activeTab === 'seasons' && (
+        <form onSubmit={handleSaveSeasonsGallery} className="bg-zinc-900 border border-zinc-800 p-6 space-y-6 text-xs text-zinc-300">
+          <div className="flex items-center gap-2 pb-3 border-b border-zinc-800 text-amber-300">
+            <Sparkles className="w-4 h-4" />
+            <h3 className="font-serif text-base text-white">Seasons Campaign Gallery</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-950 p-4 border border-zinc-800">
+            <div>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Section Title</label>
+              <input
+                type="text"
+                value={seasonsHeader.section_title}
+                onChange={(e) => setSeasonsHeader({ ...seasonsHeader, section_title: e.target.value })}
+                className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Section Subtitle</label>
+              <input
+                type="text"
+                value={seasonsHeader.section_subtitle}
+                onChange={(e) => setSeasonsHeader({ ...seasonsHeader, section_subtitle: e.target.value })}
+                className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+              />
+            </div>
+          </div>
+
+          {/* Season Cards Manager */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+              <h4 className="font-serif text-sm text-white font-normal">
+                Seasonal Cards ({seasonCards.length})
+              </h4>
+              <button
+                type="button"
+                onClick={handleAddSeasonCard}
+                className="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Season Card</span>
+              </button>
+            </div>
+
+            {seasonCards.length === 0 ? (
+              <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800">
+                No season cards configured. Click "Add Season Card" to create one.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {seasonCards.map((card, idx) => (
+                  <div
+                    key={card.id}
+                    className="bg-zinc-950 border border-zinc-800 p-4 space-y-4 relative transition-colors hover:border-zinc-700"
+                  >
+                    <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono text-xs font-bold text-amber-300">
+                          Season #{idx + 1}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            disabled={idx === 0}
+                            onClick={() => handleMoveSeasonCard(idx, 'up')}
+                            className="p-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 disabled:opacity-30 rounded cursor-pointer"
+                            title="Move Up"
+                          >
+                            <ArrowUp className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={idx === seasonCards.length - 1}
+                            onClick={() => handleMoveSeasonCard(idx, 'down')}
+                            className="p-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 disabled:opacity-30 rounded cursor-pointer"
+                            title="Move Down"
+                          >
+                            <ArrowDown className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSeasonCard(card.id)}
+                        className="p-1 text-zinc-500 hover:text-red-400 transition-colors"
+                        title="Delete Season Card"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Card Name</label>
+                        <input
+                          type="text"
+                          value={card.name}
+                          onChange={(e) => handleUpdateSeasonCard(card.id, { name: e.target.value })}
+                          className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Description / Scent Notes</label>
+                        <input
+                          type="text"
+                          value={card.description}
+                          onChange={(e) => handleUpdateSeasonCard(card.id, { description: e.target.value })}
+                          className="w-full bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-white focus:border-amber-400"
+                        />
+                      </div>
+
+                      <ImageUploader
+                        label="Seasonal Image"
+                        value={card.image}
+                        onChange={(url) => handleUpdateSeasonCard(card.id, { image: url })}
+                        csrfToken={csrfToken}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="pt-4 border-t border-zinc-800 flex justify-end">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
+            >
+              <Save className="w-4 h-4" />
+              <span>{saving ? 'Saving...' : 'Save Seasons Gallery'}</span>
             </button>
           </div>
         </form>

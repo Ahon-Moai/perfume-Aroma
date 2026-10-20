@@ -398,6 +398,61 @@ $homepageSections = [
     'display_order' => 2
   ],
   [
+    'section_key' => 'campaign_banners',
+    'title' => 'FOR HIM | HER',
+    'subtitle' => 'GENDER CATEGORY CAMPAIGNS',
+    'content_json' => json_encode([
+      'section_title' => 'FOR HIM | HER',
+      'for_him_title' => 'For Him',
+      'for_him_button_text' => 'SHOP DECANTS',
+      'for_him_image' => '/src/assets/images/campaign_for_him_1791908163466.jpg',
+      'for_her_title' => 'For Her',
+      'for_her_button_text' => 'SHOP DECANTS',
+      'for_her_image' => '/src/assets/images/campaign_for_her_1791908163547.jpg'
+    ]),
+    'display_order' => 2
+  ],
+  [
+    'section_key' => 'seasons_gallery',
+    'title' => 'SEASONS',
+    'subtitle' => 'CHOOSE YOURS',
+    'content_json' => json_encode([
+      'section_title' => 'SEASONS',
+      'section_subtitle' => 'CHOOSE YOURS',
+      'cards' => [
+        [
+          'id' => 'season-autumn',
+          'name' => 'Autumn Bloom',
+          'description' => 'Red sun dunes & smoked woods',
+          'image' => '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
+          'alt' => 'Autumn Dune with Blood Red Sun fragrance campaign'
+        ],
+        [
+          'id' => 'season-winter',
+          'name' => 'Architectural Winter',
+          'description' => 'Concrete geometry & crimson sillage',
+          'image' => '/src/assets/images/season_monochrome_street_1791908200992.jpg',
+          'alt' => 'Monochrome street architecture with crimson ribbon fragrance campaign'
+        ],
+        [
+          'id' => 'season-summer',
+          'name' => 'Midnight Rose',
+          'description' => 'Velvet petals & monochrome pedestal',
+          'image' => '/src/assets/images/season_sculptural_roses_1791908202058.jpg',
+          'alt' => 'Sculptural velvet roses on geometric pedestal campaign'
+        ],
+        [
+          'id' => 'season-spring',
+          'name' => 'Crimson Shadows',
+          'description' => 'Stark birch forest & damp moss',
+          'image' => '/src/assets/images/season_dark_forest_1791908203381.jpg',
+          'alt' => 'Dark birch forest with red branches fragrance campaign'
+        ]
+      ]
+    ]),
+    'display_order' => 3
+  ],
+  [
     'section_key' => 'video_showcase',
     'title' => 'AURA & SILLAGE IN MOTION',
     'subtitle' => 'Weightless liquid gold suspended in high-pressure glass atomizers. Experience the delicate art of artisanal decanting.',

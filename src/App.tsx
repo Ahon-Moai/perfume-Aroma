@@ -332,10 +332,15 @@ export default function App() {
             />
 
             {/* E. For Him / For Her editorial banners */}
-            <CampaignBanners onSelectCategory={handleSelectGenderCategory} />
+            <CampaignBanners
+              onSelectCategory={handleSelectGenderCategory}
+              campaignData={homepageData?.sections?.campaign_banners?.content}
+            />
 
             {/* F. Seasons campaign gallery */}
-            <SeasonsGallery />
+            <SeasonsGallery
+              seasonsData={homepageData?.sections?.seasons_gallery?.content}
+            />
 
             {/* G. Premium Video Product Showcase Carousel */}
             <VideoSection
