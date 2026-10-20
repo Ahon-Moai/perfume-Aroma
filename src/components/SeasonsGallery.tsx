@@ -1,37 +1,48 @@
 import React from 'react';
 import { IMAGES } from '../data/fragranceData';
+import { SeasonsGalleryData, SeasonCardData } from '../types';
 
-export const SeasonsGallery: React.FC = () => {
-  const seasonCards = [
-    {
-      id: 'season-autumn',
-      name: 'Autumn Bloom',
-      description: 'Red sun dunes & smoked woods',
-      image: IMAGES.seasons.autumnDune,
-      alt: 'Autumn Dune with Blood Red Sun fragrance campaign'
-    },
-    {
-      id: 'season-winter',
-      name: 'Architectural Winter',
-      description: 'Concrete geometry & crimson sillage',
-      image: IMAGES.seasons.winterStreet,
-      alt: 'Monochrome street architecture with crimson ribbon fragrance campaign'
-    },
-    {
-      id: 'season-summer',
-      name: 'Midnight Rose',
-      description: 'Velvet petals & monochrome pedestal',
-      image: IMAGES.seasons.summerRoses,
-      alt: 'Sculptural velvet roses on geometric pedestal campaign'
-    },
-    {
-      id: 'season-spring',
-      name: 'Crimson Shadows',
-      description: 'Stark birch forest & damp moss',
-      image: IMAGES.seasons.springForest,
-      alt: 'Dark birch forest with red branches fragrance campaign'
-    }
-  ];
+interface SeasonsGalleryProps {
+  seasonsData?: SeasonsGalleryData;
+}
+
+const defaultSeasonCards: SeasonCardData[] = [
+  {
+    id: 'season-autumn',
+    name: 'Autumn Bloom',
+    description: 'Red sun dunes & smoked woods',
+    image: IMAGES.seasons.autumnDune,
+    alt: 'Autumn Dune with Blood Red Sun fragrance campaign'
+  },
+  {
+    id: 'season-winter',
+    name: 'Architectural Winter',
+    description: 'Concrete geometry & crimson sillage',
+    image: IMAGES.seasons.winterStreet,
+    alt: 'Monochrome street architecture with crimson ribbon fragrance campaign'
+  },
+  {
+    id: 'season-summer',
+    name: 'Midnight Rose',
+    description: 'Velvet petals & monochrome pedestal',
+    image: IMAGES.seasons.summerRoses,
+    alt: 'Sculptural velvet roses on geometric pedestal campaign'
+  },
+  {
+    id: 'season-spring',
+    name: 'Crimson Shadows',
+    description: 'Stark birch forest & damp moss',
+    image: IMAGES.seasons.springForest,
+    alt: 'Dark birch forest with red branches fragrance campaign'
+  }
+];
+
+export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData }) => {
+  const sectionTitle = seasonsData?.section_title || 'SEASONS';
+  const sectionSubtitle = seasonsData?.section_subtitle || 'CHOOSE YOURS';
+  const seasonCards = seasonsData?.cards && seasonsData.cards.length > 0
+    ? seasonsData.cards
+    : defaultSeasonCards;
 
   return (
     <section id="seasons" className="w-full bg-white pt-6 pb-14 border-b border-zinc-100">
@@ -39,10 +50,10 @@ export const SeasonsGallery: React.FC = () => {
         {/* Right-aligned Section Header as in screenshot */}
         <div className="flex flex-col items-end mb-4 sm:mb-6">
           <h2 className="font-serif text-lg sm:text-2xl font-light tracking-[0.16em] text-zinc-950 uppercase">
-            SEASONS
+            {sectionTitle}
           </h2>
           <span className="text-[9px] sm:text-[10px] tracking-[0.22em] font-sans text-zinc-400 uppercase mt-0.5">
-            CHOOSE YOURS
+            {sectionSubtitle}
           </span>
         </div>
 

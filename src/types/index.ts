@@ -83,3 +83,27 @@ export interface VideoShowcaseSectionData {
   is_enabled?: boolean;
   cards?: VideoShowcaseCard[];
 }
+
+export interface CampaignBannersData {
+  section_title?: string;
+  for_him_title?: string;
+  for_him_button_text?: string;
+  for_him_image?: string;
+  for_her_title?: string;
+  for_her_button_text?: string;
+  for_her_image?: string;
+}
+
+export interface SeasonCardData {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  alt?: string;
+}
+
+export interface SeasonsGalleryData {
+  section_title?: string;
+  section_subtitle?: string;
+  cards?: SeasonCardData[];
+}
