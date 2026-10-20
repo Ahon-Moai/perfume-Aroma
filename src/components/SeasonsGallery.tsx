@@ -4,6 +4,7 @@ import { SeasonsGalleryData, SeasonCardData } from '../types';
 
 interface SeasonsGalleryProps {
   seasonsData?: SeasonsGalleryData;
+  onExploreClick?: () => void;
 }
 
 const defaultSeasonCards: SeasonCardData[] = [
@@ -37,7 +38,7 @@ const defaultSeasonCards: SeasonCardData[] = [
   }
 ];
 
-export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData }) => {
+export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData, onExploreClick }) => {
   const sectionTitle = seasonsData?.section_title || 'SEASONS';
   const sectionSubtitle = seasonsData?.section_subtitle || 'CHOOSE YOURS';
   const seasonCards = seasonsData?.cards && seasonsData.cards.length > 0
@@ -62,6 +63,7 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData }) =
           {seasonCards.map((card) => (
             <div
               key={card.id}
+              onClick={onExploreClick}
               className="flex-shrink-0 w-[240px] sm:w-auto relative group overflow-hidden bg-zinc-950 cursor-pointer aspect-[3/4] sm:aspect-[9/13]"
             >
               <img
@@ -72,14 +74,18 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData }) =
                 loading="lazy"
               />
 
-              {/* Subtle hover gradient info */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                <p className="font-serif text-white text-base font-normal tracking-wide">
+              {/* Always visible gradient & info */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 transition-all">
+                <p className="font-serif text-white text-base sm:text-lg font-normal tracking-wide">
                   {card.name}
                 </p>
                 <p className="text-[11px] text-zinc-300 font-sans tracking-wider mt-0.5">
                   {card.description}
                 </p>
+                <div className="mt-2.5 flex items-center gap-1.5 text-[11px] sm:text-xs font-sans font-semibold tracking-wider text-amber-300 group-hover:text-amber-200 transition-colors uppercase">
+                  <span className="underline underline-offset-4 decoration-amber-400/60 group-hover:decoration-amber-300">Explore Decants</span>
+                  <span className="text-sm transition-transform group-hover:translate-x-1">→</span>
+                </div>
               </div>
             </div>
           ))}

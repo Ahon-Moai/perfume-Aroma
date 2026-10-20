@@ -340,6 +340,7 @@ export default function App() {
             {/* F. Seasons campaign gallery */}
             <SeasonsGallery
               seasonsData={homepageData?.sections?.seasons_gallery?.content}
+              onExploreClick={handleExploreClick}
             />
 
             {/* G. Premium Video Product Showcase Carousel */}
