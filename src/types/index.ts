@@ -10,6 +10,25 @@ export interface FragranceAttribute {
   enabled: boolean;
 }
 
+export interface ScentProfile {
+  fragranceFamilies?: string[];
+  topNotes?: string[];
+  heartNotes?: string[];
+  baseNotes?: string[];
+  seasons?: string[];
+  occasions?: string[];
+  moods?: string[];
+  intensity?: string;
+  projection?: string;
+  longevity?: string;
+  concentration?: string;
+  genderPositioning?: string;
+  daytimeNighttime?: string[];
+  sweetness?: string;
+  scentDescription?: string;
+  recommendationExplanation?: string;
+}
+
 export interface FragranceProduct {
   id: string;
   brand: string;
@@ -26,6 +45,8 @@ export interface FragranceProduct {
   heartNotes?: string[];
   baseNotes?: string[];
   attributes?: FragranceAttribute[];
+  scentProfile?: ScentProfile;
+  scent_profile?: ScentProfile;
   sizes: DecantSize[];
   concentration?: string; // e.g. "Eau de Parfum", "Extrait de Parfum"
   shortDescription?: string;

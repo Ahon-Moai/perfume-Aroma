@@ -93,6 +93,27 @@ $products = [
       '/src/assets/images/studio_social_amber_spray_1791908204588.jpg'
     ],
     'notes' => json_encode(['Neroli Blossom', 'Madagascar Bourbon Vanilla', 'Golden Amber Crystals', 'Solar Dew']),
+    'top_notes' => json_encode(['Neroli Blossom', 'Solar Dew', 'Bergamot']),
+    'heart_notes' => json_encode(['Madagascar Bourbon Vanilla', 'Orange Blossom']),
+    'base_notes' => json_encode(['Golden Amber Crystals', 'White Musk']),
+    'scent_profile' => json_encode([
+      'fragranceFamilies' => ['Floral', 'Amber / Oriental'],
+      'topNotes' => ['Neroli Blossom', 'Solar Dew', 'Bergamot'],
+      'heartNotes' => ['Madagascar Bourbon Vanilla', 'Orange Blossom'],
+      'baseNotes' => ['Golden Amber Crystals', 'White Musk'],
+      'seasons' => ['Spring', 'Summer', 'Autumn', 'All Seasons'],
+      'occasions' => ['Daily / Casual', 'Office / Work', 'Special Occasions'],
+      'moods' => ['Elegant / Sophisticated', 'Clean / Refreshing', 'Warm / Cozy'],
+      'intensity' => 'Moderate',
+      'projection' => 'Moderate (Arm\'s length)',
+      'longevity' => 'Long-lasting (6-12 hrs)',
+      'concentration' => 'Extrait',
+      'genderPositioning' => 'Unisex',
+      'daytimeNighttime' => ['Daytime', 'Nighttime'],
+      'sweetness' => 'Subtle / Slightly Sweet',
+      'scentDescription' => 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity.',
+      'recommendationExplanation' => 'A versatile solar floral amber ideal for any season or occasion, offering weightless elegance.'
+    ]),
     'short_description' => 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber suspended in pure olfactory clarity.',
     'description' => 'Pure Portions is ARRINA ATELIER\'s hallmark decant edition. Encased in high-clarity Italian glass tubes with precision fine-mist dispersion nozzles.',
     'sizes' => [
@@ -116,6 +137,27 @@ $products = [
       '/src/assets/images/article_perfume_roses_water_1791908274460.jpg'
     ],
     'notes' => json_encode(['Damask Rose', 'Pink Peppercorn', 'Cashmeran', 'White Musk']),
+    'top_notes' => json_encode(['Pink Peppercorn', 'Damask Rose Petals']),
+    'heart_notes' => json_encode(['Velvet Damask Rose', 'Cashmeran']),
+    'base_notes' => json_encode(['White Musk', 'Cedarwood']),
+    'scent_profile' => json_encode([
+      'fragranceFamilies' => ['Floral', 'Musk'],
+      'topNotes' => ['Pink Peppercorn', 'Damask Rose Petals'],
+      'heartNotes' => ['Velvet Damask Rose', 'Cashmeran'],
+      'baseNotes' => ['White Musk', 'Cedarwood'],
+      'seasons' => ['Spring', 'Summer', 'Autumn'],
+      'occasions' => ['Daily / Casual', 'Evening / Date Night', 'Special Occasions'],
+      'moods' => ['Elegant / Sophisticated', 'Mysterious / Seductive'],
+      'intensity' => 'Moderate',
+      'projection' => 'Moderate (Arm\'s length)',
+      'longevity' => 'Long-lasting (6-12 hrs)',
+      'concentration' => 'EDP',
+      'genderPositioning' => 'Feminine',
+      'daytimeNighttime' => ['Daytime', 'Nighttime'],
+      'sweetness' => 'Subtle / Slightly Sweet',
+      'scentDescription' => 'A captivating bouquet of velvet damask roses wrapped in soft musk and pink peppercorn.',
+      'recommendationExplanation' => 'Perfect for lovers of soft, elegant floral roses seeking an enchanting date night sillage.'
+    ]),
     'short_description' => 'A captivating bouquet of velvet damask roses wrapped in soft musk.',
     'description' => 'Rose 01 by Swiss Arabian combines delicate pink peppercorns with luminous rose petals.',
     'sizes' => [
@@ -139,6 +181,27 @@ $products = [
       '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg'
     ],
     'notes' => json_encode(['Madagascar Bourbon Vanilla', 'Ambergris', 'Brown Sugar', 'Tonka']),
+    'top_notes' => json_encode(['Sun-cured Vanilla Bean', 'Brown Sugar']),
+    'heart_notes' => json_encode(['Madagascar Bourbon Vanilla', 'Tonka Bean']),
+    'base_notes' => json_encode(['Ambergris', 'Golden Musk']),
+    'scent_profile' => json_encode([
+      'fragranceFamilies' => ['Gourmand', 'Amber / Oriental'],
+      'topNotes' => ['Sun-cured Vanilla Bean', 'Brown Sugar'],
+      'heartNotes' => ['Madagascar Bourbon Vanilla', 'Tonka Bean'],
+      'baseNotes' => ['Ambergris', 'Golden Musk'],
+      'seasons' => ['Autumn', 'Winter'],
+      'occasions' => ['Evening / Date Night', 'Party / Nightout', 'Special Occasions'],
+      'moods' => ['Warm / Cozy', 'Mysterious / Seductive'],
+      'intensity' => 'Strong',
+      'projection' => 'Strong (Room filler)',
+      'longevity' => 'Long-lasting (6-12 hrs)',
+      'concentration' => 'EDP',
+      'genderPositioning' => 'Unisex',
+      'daytimeNighttime' => ['Nighttime'],
+      'sweetness' => 'Sweet',
+      'scentDescription' => 'Rich, sun-cured vanilla bean infused with golden ambergris and warm brown sugar.',
+      'recommendationExplanation' => 'An irresistible cozy gourmand for cold evenings when you desire warmth and comforting sweetness.'
+    ]),
     'short_description' => 'Rich, sun-cured vanilla bean infused with golden ambergris.',
     'description' => 'Warm, comforting and velvety dark vanilla blend crafted for lingering warmth.',
     'sizes' => [
@@ -162,6 +225,27 @@ $products = [
       '/src/assets/images/season_dark_forest_1791908203381.jpg'
     ],
     'notes' => json_encode(['Royal Oud', 'Saffron', 'Smoked Birch', 'Leather']),
+    'top_notes' => json_encode(['Spicy Saffron', 'Smoked Birch']),
+    'heart_notes' => json_encode(['Royal Oud', 'Incense']),
+    'base_notes' => json_encode(['Dark Leather', 'Amber']),
+    'scent_profile' => json_encode([
+      'fragranceFamilies' => ['Woody', 'Leather', 'Spicy'],
+      'topNotes' => ['Spicy Saffron', 'Smoked Birch'],
+      'heartNotes' => ['Royal Oud', 'Incense'],
+      'baseNotes' => ['Dark Leather', 'Amber'],
+      'seasons' => ['Autumn', 'Winter'],
+      'occasions' => ['Formal / Black Tie', 'Evening / Date Night', 'Special Occasions'],
+      'moods' => ['Bold / Powerful', 'Elegant / Sophisticated'],
+      'intensity' => 'Intensely Bold',
+      'projection' => 'Strong (Room filler)',
+      'longevity' => 'Eternal (12+ hrs)',
+      'concentration' => 'Extrait',
+      'genderPositioning' => 'Masculine',
+      'daytimeNighttime' => ['Nighttime'],
+      'sweetness' => 'Dry / Not Sweet',
+      'scentDescription' => 'Regal smoked oud laced with spicy saffron and dark leather.',
+      'recommendationExplanation' => 'A commanding masculine leather-oud scent crafted for formal galas and winter evenings.'
+    ]),
     'short_description' => 'Regal smoked oud laced with spicy saffron and dark leather.',
     'description' => 'Genesis Leo delivers intense projection and masculine luxury.',
     'sizes' => [
@@ -185,6 +269,27 @@ $products = [
       '/src/assets/images/studio_social_travertine_1791908203434.jpg'
     ],
     'notes' => json_encode(['Black Plum', 'Cardamom', 'Dark Tobacco', 'Incense']),
+    'top_notes' => json_encode(['Cardamom', 'Black Plum']),
+    'heart_notes' => json_encode(['Dark Tobacco Leaf', 'Nutmeg']),
+    'base_notes' => json_encode(['Incense', 'Smoky Woods']),
+    'scent_profile' => json_encode([
+      'fragranceFamilies' => ['Amber / Oriental', 'Spicy'],
+      'topNotes' => ['Cardamom', 'Black Plum'],
+      'heartNotes' => ['Dark Tobacco Leaf', 'Nutmeg'],
+      'baseNotes' => ['Incense', 'Smoky Woods'],
+      'seasons' => ['Autumn', 'Winter'],
+      'occasions' => ['Evening / Date Night', 'Party / Nightout'],
+      'moods' => ['Mysterious / Seductive', 'Bold / Powerful'],
+      'intensity' => 'Strong',
+      'projection' => 'Strong (Room filler)',
+      'longevity' => 'Long-lasting (6-12 hrs)',
+      'concentration' => 'EDP',
+      'genderPositioning' => 'Masculine',
+      'daytimeNighttime' => ['Nighttime'],
+      'sweetness' => 'Moderate',
+      'scentDescription' => 'Dark cardamom and sweet black plum over smoldering incense.',
+      'recommendationExplanation' => 'An alluring, smoky spicy scent built for nightlife and dramatic presence.'
+    ]),
     'short_description' => 'Dark cardamom and sweet black plum over smoldering incense.',
     'description' => 'An enigmatic evening fragrance designed for bold presence.',
     'sizes' => [
@@ -208,6 +313,27 @@ $products = [
       '/src/assets/images/hero_perfume_architectural_1791908158566.jpg'
     ],
     'notes' => json_encode(['Orange Blossom', 'Praline', 'White Jasmine', 'Sweet Vanilla']),
+    'top_notes' => json_encode(['Orange Blossom', 'Bergamot']),
+    'heart_notes' => json_encode(['White Jasmine', 'Praline Nectar']),
+    'base_notes' => json_encode(['Sweet Vanilla', 'Sandalwood']),
+    'scent_profile' => json_encode([
+      'fragranceFamilies' => ['Floral', 'Gourmand', 'Amber / Oriental'],
+      'topNotes' => ['Orange Blossom', 'Bergamot'],
+      'heartNotes' => ['White Jasmine', 'Praline Nectar'],
+      'baseNotes' => ['Sweet Vanilla', 'Sandalwood'],
+      'seasons' => ['Spring', 'Summer', 'Autumn', 'All Seasons'],
+      'occasions' => ['Daily / Casual', 'Party / Nightout', 'Special Occasions'],
+      'moods' => ['Playful / Youthful', 'Elegant / Sophisticated'],
+      'intensity' => 'Moderate',
+      'projection' => 'Moderate (Arm\'s length)',
+      'longevity' => 'Long-lasting (6-12 hrs)',
+      'concentration' => 'EDP',
+      'genderPositioning' => 'Feminine',
+      'daytimeNighttime' => ['Daytime', 'Nighttime'],
+      'sweetness' => 'Sweet',
+      'scentDescription' => 'Sweet orange blossom and praline drizzled with jasmine nectar.',
+      'recommendationExplanation' => 'A joyful, glowing floral gourmand for bright daytime wear and celebrations.'
+    ]),
     'short_description' => 'Sweet orange blossom and praline drizzled with jasmine nectar.',
     'description' => 'Raneen is a joyful floral amber fragrance with delicious gourmand facets.',
     'sizes' => [
@@ -219,7 +345,7 @@ $products = [
   ]
 ];
 
-$stmtProd = $db->prepare("INSERT INTO products (id, brand, name, slug, category, gender, concentration, starting_price, short_description, description, image, notes, status, inventory_qty, is_featured, is_new_arrival) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 100, 1, 1)");
+$stmtProd = $db->prepare("INSERT INTO products (id, brand, name, slug, category, gender, concentration, starting_price, short_description, description, image, notes, top_notes, heart_notes, base_notes, scent_profile_json, status, inventory_qty, is_featured, is_new_arrival) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 100, 1, 1)");
 $stmtVar = $db->prepare("INSERT INTO product_variants (id, product_id, size, price, stock_qty) VALUES (?, ?, ?, ?, 100)");
 $stmtImg = $db->prepare("INSERT INTO product_images (product_id, image_path, display_order, is_primary) VALUES (?, ?, ?, ?)");
 
@@ -241,7 +367,11 @@ foreach ($products as $p) {
         $p['short_description'],
         $p['description'],
         $p['image'],
-        $p['notes']
+        $p['notes'],
+        $p['top_notes'] ?? '[]',
+        $p['heart_notes'] ?? '[]',
+        $p['base_notes'] ?? '[]',
+        $p['scent_profile'] ?? '{}'
     ]);
 
     foreach ($p['sizes'] as $idx => $s) {

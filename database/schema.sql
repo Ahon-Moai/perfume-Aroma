@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `heart_notes` TEXT NULL,
   `base_notes` TEXT NULL,
   `attributes_json` LONGTEXT NULL,
+  `scent_profile_json` LONGTEXT NULL,
   `status` ENUM('draft', 'published', 'archived') DEFAULT 'published',
   `inventory_qty` INT DEFAULT 100,
   `low_stock_threshold` INT DEFAULT 5,

@@ -35,6 +35,16 @@ class Database {
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
+                // Auto-migrate missing columns if needed
+                $columnsToEnsure = ['top_notes', 'heart_notes', 'base_notes', 'attributes_json', 'scent_profile_json'];
+                foreach ($columnsToEnsure as $col) {
+                    try {
+                        self::$instance->exec("ALTER TABLE products ADD COLUMN {$col} TEXT NULL");
+                    } catch (\Exception $e) {
+                        // Column already exists or table not yet created
+                    }
+                }
+
             } catch (PDOException $e) {
                 // Return safe error message without leaking DB credentials
                 $msg = ($config['env'] === 'development') ? "Database connection error: " . $e->getMessage() : "Database connection failure";
