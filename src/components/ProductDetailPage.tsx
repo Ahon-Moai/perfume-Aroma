@@ -122,6 +122,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         { id: 'versatility', name: 'Versatility', value: 92, enabled: true }
       ];
 
+  const sp = product.scentProfile || product.scent_profile || {};
+
   // Related products (exclude current product)
   const relatedProducts = allProducts
     .filter((p) => p.id !== product.id)
@@ -429,9 +431,85 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   The Olfactory Story
                 </h3>
                 <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
-                  {product.description || product.shortDescription || 'Crafted with rare essences sourced directly from master perfumers. Every spray radiates pure elegance and uncompromised sillage.'}
+                  {sp.scentDescription || product.description || product.shortDescription || 'Crafted with rare essences sourced directly from master perfumers. Every spray radiates pure elegance and uncompromised sillage.'}
                 </p>
+
+                {sp.recommendationExplanation && (
+                  <div className="bg-amber-50/80 border border-amber-200/90 p-4 rounded-none space-y-1 mt-3">
+                    <span className="text-[10px] font-mono tracking-widest text-amber-900 uppercase font-bold block flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                      Find Your Scent Recommendation Note
+                    </span>
+                    <p className="text-xs text-amber-950 font-sans leading-relaxed">
+                      {sp.recommendationExplanation}
+                    </p>
+                  </div>
+                )}
               </div>
+
+              {/* Structured Scent Profile Badge Tags */}
+              {((sp.fragranceFamilies && sp.fragranceFamilies.length > 0) || (sp.seasons && sp.seasons.length > 0) || (sp.occasions && sp.occasions.length > 0) || (sp.moods && sp.moods.length > 0)) && (
+                <div className="bg-[#fcfbf9] border border-zinc-200 p-5 space-y-4">
+                  <h4 className="text-xs font-sans tracking-widest uppercase font-bold text-zinc-900 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-600" />
+                    <span>Curated Scent Recommendation Attributes</span>
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                    {sp.fragranceFamilies && sp.fragranceFamilies.length > 0 && (
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">FRAGRANCE FAMILIES</span>
+                        <div className="flex flex-wrap gap-1">
+                          {sp.fragranceFamilies.map((fam, idx) => (
+                            <span key={idx} className="bg-amber-100 text-amber-900 px-2 py-0.5 text-[11px] font-medium border border-amber-200">
+                              {fam}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {sp.seasons && sp.seasons.length > 0 && (
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">SUITABLE SEASONS</span>
+                        <div className="flex flex-wrap gap-1">
+                          {sp.seasons.map((s, idx) => (
+                            <span key={idx} className="bg-zinc-100 text-zinc-800 px-2 py-0.5 text-[11px] font-medium border border-zinc-200">
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {sp.occasions && sp.occasions.length > 0 && (
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">SUITABLE OCCASIONS</span>
+                        <div className="flex flex-wrap gap-1">
+                          {sp.occasions.map((o, idx) => (
+                            <span key={idx} className="bg-zinc-100 text-zinc-800 px-2 py-0.5 text-[11px] font-medium border border-zinc-200">
+                              {o}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {sp.moods && sp.moods.length > 0 && (
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">DESIRED MOOD / IMPRESSION</span>
+                        <div className="flex flex-wrap gap-1">
+                          {sp.moods.map((m, idx) => (
+                            <span key={idx} className="bg-zinc-100 text-zinc-800 px-2 py-0.5 text-[11px] font-medium border border-zinc-200">
+                              {m}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Fragrance Notes Pyramid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
@@ -540,12 +618,34 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
                 <div className="border border-zinc-200 p-4 space-y-1">
                   <span className="text-[10px] font-mono text-zinc-400 uppercase block">FRAGRANCE FAMILY</span>
-                  <span className="font-semibold text-zinc-900">{product.category}</span>
+                  <span className="font-semibold text-zinc-900">
+                    {sp.fragranceFamilies && sp.fragranceFamilies.length > 0 ? sp.fragranceFamilies.join(', ') : product.category}
+                  </span>
                 </div>
 
                 <div className="border border-zinc-200 p-4 space-y-1">
                   <span className="text-[10px] font-mono text-zinc-400 uppercase block">SUITABLE GENDER</span>
-                  <span className="font-semibold text-zinc-900">{product.gender || 'Unisex'}</span>
+                  <span className="font-semibold text-zinc-900">{sp.genderPositioning || product.gender || 'Unisex'}</span>
+                </div>
+
+                <div className="border border-zinc-200 p-4 space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">INTENSITY LEVEL</span>
+                  <span className="font-semibold text-zinc-900">{sp.intensity || 'Unknown'}</span>
+                </div>
+
+                <div className="border border-zinc-200 p-4 space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">PROJECTION & SILLAGE</span>
+                  <span className="font-semibold text-zinc-900">{sp.projection || 'Unknown'}</span>
+                </div>
+
+                <div className="border border-zinc-200 p-4 space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">SKIN LONGEVITY</span>
+                  <span className="font-semibold text-zinc-900">{sp.longevity || 'Unknown'}</span>
+                </div>
+
+                <div className="border border-zinc-200 p-4 space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">SWEETNESS LEVEL</span>
+                  <span className="font-semibold text-zinc-900">{sp.sweetness || 'Unknown'}</span>
                 </div>
 
                 <div className="border border-zinc-200 p-4 space-y-1">
