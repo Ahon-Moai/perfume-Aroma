@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Package, ShoppingBag, Users, LayoutDashboard, Settings, Image as ImageIcon, Sparkles, LogOut, ExternalLink } from 'lucide-react';
+import { Package, ShoppingBag, Users, LayoutDashboard, Settings, Image as ImageIcon, Sparkles, LogOut, ExternalLink, Layers } from 'lucide-react';
 import { ProductManager } from './ProductManager';
+import { CollectionManager } from './CollectionManager';
 import { OrderManager } from './OrderManager';
 import { CustomerManager } from './CustomerManager';
 import { HomepageCMS } from './HomepageCMS';
@@ -24,10 +25,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   onLogout,
   onSwitchToStorefront
 }) => {
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('products');
 
   const navItems = [
     { id: 'products', label: 'Products & Variants', icon: Package },
+    { id: 'collections', label: 'Collections Manager', icon: Layers },
     { id: 'orders', label: 'Orders & Invoice', icon: ShoppingBag },
     { id: 'customers', label: 'Customer Records', icon: Users },
     { id: 'homepage', label: 'Homepage Builder', icon: LayoutDashboard },
@@ -129,6 +131,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         {/* Workspace Content View */}
         <main className="flex-1">
           {activeTab === 'products' && <ProductManager csrfToken={csrfToken} />}
+          {activeTab === 'collections' && <CollectionManager csrfToken={csrfToken} />}
           {activeTab === 'orders' && <OrderManager csrfToken={csrfToken} />}
           {activeTab === 'customers' && <CustomerManager csrfToken={csrfToken} />}
           {activeTab === 'homepage' && <HomepageCMS csrfToken={csrfToken} />}

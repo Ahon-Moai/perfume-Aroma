@@ -7,6 +7,7 @@ interface HeaderProps {
   onOpenSearch: () => void;
   onOpenWishlist: () => void;
   onNavigateHome?: () => void;
+  onNavigateToCollection?: (slug: string) => void;
   storeSettings?: any;
 }
 
@@ -16,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
   onOpenWishlist,
   onNavigateHome,
+  onNavigateToCollection,
   storeSettings
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,6 +46,15 @@ export const Header: React.FC<HeaderProps> = ({
     setAnnouncementIndex((prev) => (prev - 1 + announcements.length) % announcements.length);
   };
 
+  const handleCollectionClick = (slug: string) => {
+    setMobileMenuOpen(false);
+    if (onNavigateToCollection) {
+      onNavigateToCollection(slug);
+    } else {
+      window.location.href = `/collections/${slug}`;
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full bg-white transition-all duration-200">
       {/* Top Black Announcement Strip */}
@@ -69,15 +80,49 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Main Navbar */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between border-b border-zinc-100">
-        {/* Left: Mobile & Desktop Menu Trigger */}
-        <div className="flex items-center">
+        {/* Left: Mobile & Desktop Navigation */}
+        <div className="flex items-center gap-6">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-zinc-900 hover:text-zinc-600 transition-colors focus:outline-none"
+            className="p-2 text-zinc-900 hover:text-zinc-600 transition-colors focus:outline-none cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
+
+          {/* Desktop Collections Quick Links */}
+          <nav className="hidden lg:flex items-center gap-5 text-xs uppercase font-sans tracking-widest font-medium text-zinc-700">
+            <button
+              onClick={() => handleCollectionClick('all')}
+              className="hover:text-amber-800 transition-colors cursor-pointer"
+            >
+              All Fragrances
+            </button>
+            <button
+              onClick={() => handleCollectionClick('forhim')}
+              className="hover:text-amber-800 transition-colors cursor-pointer"
+            >
+              For Him
+            </button>
+            <button
+              onClick={() => handleCollectionClick('forher')}
+              className="hover:text-amber-800 transition-colors cursor-pointer"
+            >
+              For Her
+            </button>
+            <button
+              onClick={() => handleCollectionClick('unisex')}
+              className="hover:text-amber-800 transition-colors cursor-pointer"
+            >
+              Unisex
+            </button>
+            <button
+              onClick={() => handleCollectionClick('best-sellers')}
+              className="hover:text-amber-800 transition-colors cursor-pointer text-amber-900 font-semibold"
+            >
+              Best Sellers
+            </button>
+          </nav>
         </div>
 
         {/* Center: Brand Wordmark */}
@@ -148,18 +193,30 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="border-b border-zinc-100 pb-4">
                 <p className="text-[10px] tracking-widest uppercase text-zinc-400 font-medium">Explore Decants</p>
                 <div className="mt-4 flex flex-col space-y-3 font-serif text-lg text-zinc-900">
-                  <a href="#new-arrivals" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
+                  <button onClick={() => handleCollectionClick('all')} className="text-left hover:text-amber-800 transition-colors font-semibold">
+                    Explore All Decants
+                  </button>
+                  <button onClick={() => handleCollectionClick('forhim')} className="text-left hover:text-amber-800 transition-colors">
+                    For Him
+                  </button>
+                  <button onClick={() => handleCollectionClick('forher')} className="text-left hover:text-amber-800 transition-colors">
+                    For Her
+                  </button>
+                  <button onClick={() => handleCollectionClick('unisex')} className="text-left hover:text-amber-800 transition-colors">
+                    Unisex
+                  </button>
+                  <button onClick={() => handleCollectionClick('best-sellers')} className="text-left hover:text-amber-800 transition-colors">
+                    Best Sellers
+                  </button>
+                  <button onClick={() => handleCollectionClick('new-arrivals')} className="text-left hover:text-amber-800 transition-colors">
                     New Arrivals
-                  </a>
-                  <a href="#for-him-her" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
-                    For Him / For Her
-                  </a>
-                  <a href="#seasons" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
-                    Seasons Campaign
-                  </a>
-                  <a href="#brands" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
-                    Brands Directory
-                  </a>
+                  </button>
+                  <button onClick={() => handleCollectionClick('woody')} className="text-left hover:text-amber-800 transition-colors text-sm">
+                    Woody & Oud Collection
+                  </button>
+                  <button onClick={() => handleCollectionClick('gourmand')} className="text-left hover:text-amber-800 transition-colors text-sm">
+                    Gourmand & Vanilla Collection
+                  </button>
                   <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
                     Frequently Asked Questions
                   </a>

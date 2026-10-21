@@ -21,6 +21,28 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `collections` (
+  `id` VARCHAR(64) PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `slug` VARCHAR(191) NOT NULL UNIQUE,
+  `description` TEXT NULL,
+  `image` VARCHAR(255) NULL,
+  `rule_type` VARCHAR(50) DEFAULT 'manual',
+  `rule_value` VARCHAR(100) NULL,
+  `display_order` INT DEFAULT 0,
+  `is_enabled` TINYINT(1) DEFAULT 1,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `collection_products` (
+  `collection_id` VARCHAR(64) NOT NULL,
+  `product_id` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`collection_id`, `product_id`),
+  FOREIGN KEY (`collection_id`) REFERENCES `collections`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `brands` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(100) NOT NULL,

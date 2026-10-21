@@ -5,6 +5,7 @@ import { SeasonsGalleryData, SeasonCardData } from '../types';
 interface SeasonsGalleryProps {
   seasonsData?: SeasonsGalleryData;
   onExploreClick?: () => void;
+  onNavigateToCollection?: (slug: string) => void;
 }
 
 const defaultSeasonCards: SeasonCardData[] = [
@@ -38,7 +39,7 @@ const defaultSeasonCards: SeasonCardData[] = [
   }
 ];
 
-export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData, onExploreClick }) => {
+export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData, onExploreClick, onNavigateToCollection }) => {
   const sectionTitle = seasonsData?.section_title || 'SEASONS';
   const sectionSubtitle = seasonsData?.section_subtitle || 'CHOOSE YOURS';
   const seasonCards = seasonsData?.cards && seasonsData.cards.length > 0
@@ -60,10 +61,12 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData, onE
 
         {/* 4 Tall Editorial Cards - Horizontal scroll on mobile, 4-col on desktop */}
         <div className="flex sm:grid sm:grid-cols-4 gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar pb-3 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-          {seasonCards.map((card) => (
+          {seasonCards.map((card) => {
+            const seasonSlug = card.id.replace('season-', '').toLowerCase();
+            return (
             <div
               key={card.id}
-              onClick={onExploreClick}
+              onClick={() => onNavigateToCollection ? onNavigateToCollection(seasonSlug) : onExploreClick?.()}
               className="flex-shrink-0 w-[240px] sm:w-auto relative group overflow-hidden bg-zinc-950 cursor-pointer aspect-[3/4] sm:aspect-[9/13]"
             >
               <img
@@ -88,7 +91,7 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({ seasonsData, onE
                 </div>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       </div>
     </section>

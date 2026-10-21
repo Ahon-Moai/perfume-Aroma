@@ -700,4 +700,24 @@ try {
     // Ignore duplicate
 }
 
-echo "7. Database Seeding Completed Successfully!\n";
+$collections = [
+  ['col-all', 'All Fragrances', 'all', 'Explore our complete catalogue of authentic luxury decants extracted directly from brand flacons.', '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg', 'all', '', 1],
+  ['col-forhim', 'For Him', 'forhim', 'Bold smoked woods, spicy saffron, regal oud, and dark masculine resins.', '/src/assets/images/campaign_for_him_1791908163466.jpg', 'gender', 'Him', 2],
+  ['col-forher', 'For Her', 'forher', 'Luminous damask rose, velvet petals, white musk, and enchanting gourmand sillage.', '/src/assets/images/campaign_for_her_1791908163547.jpg', 'gender', 'Her', 3],
+  ['col-unisex', 'Unisex Decants', 'unisex', 'Versatile solar amber, cured Madagascar vanilla, and balanced artisanal fragrances designed for everyone.', '/src/assets/images/element_pure_portions_bottle_1791911761812.jpg', 'gender', 'Unisex', 4],
+  ['col-bestsellers', 'Best Sellers', 'best-sellers', 'Our most sought-after signature decants and viral fragrance allocations.', '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg', 'featured', '', 5],
+  ['col-newarrivals', 'New Arrivals', 'new-arrivals', 'Freshly decanted atelier releases and latest Middle Eastern & European arrivals.', '/src/assets/images/perfume_rose01_1791908158391.jpg', 'new_arrival', '', 6],
+  ['col-solar-floral', 'Solar Floral Amber', 'solar-floral-amber', 'Radiant neroli blossom, solar dew, and warm golden amber crystals.', '/src/assets/images/element_vanilla_neroli_1791911761343.jpg', 'category', 'Solar Floral Amber', 7],
+  ['col-floral', 'Floral Essences', 'floral', 'Captivating bouquets of velvet damask rose and white jasmine.', '/src/assets/images/season_sculptural_roses_1791908202058.jpg', 'category', 'Floral', 8],
+  ['col-gourmand', 'Gourmand & Vanilla', 'gourmand', 'Sun-cured Madagascar vanilla, brown sugar, and toasted tonka bean.', '/src/assets/images/perfume_vanilla01_1791908158466.jpg', 'category', 'Gourmand', 9],
+  ['col-woody', 'Woody & Oud', 'woody', 'Regal smoked oud, dark leather, saffron, and damp birch forest.', '/src/assets/images/season_dark_forest_1791908203381.jpg', 'category', 'Woody Oriental', 10],
+  ['col-spicy', 'Spicy & Amber', 'spicy', 'Black plum, cardamom, dark tobacco leaf, and smoldering incense.', '/src/assets/images/season_dune_red_sun_1791908201156.jpg', 'category', 'Spicy Amber', 11]
+];
+
+$db->exec("DELETE FROM collections");
+$stmtCol = $db->prepare("INSERT INTO collections (id, title, slug, description, image, rule_type, rule_value, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+foreach ($collections as $c) {
+    $stmtCol->execute($c);
+}
+
+echo "7. Collections Seeded Successfully!\n";
