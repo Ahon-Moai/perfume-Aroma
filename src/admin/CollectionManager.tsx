@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, X, Check, Layers, Tag } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, Layers, Eye, EyeOff } from 'lucide-react';
 import { getErrorMessage } from '../services/api';
 import { ImageUploader } from './ImageUploader';
 import { Collection, FragranceProduct } from '../types';
@@ -131,95 +131,100 @@ export const CollectionManager: React.FC<CollectionManagerProps> = ({ csrfToken 
   return (
     <div className="space-y-6 font-sans">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-zinc-900 border border-zinc-800 p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-[#EAEAEA] p-6 rounded">
         <div>
-          <h2 className="font-serif text-xl text-white font-normal">Collections Manager</h2>
-          <p className="text-xs text-zinc-400 font-sans mt-0.5">
-            Create, edit, and organize dedicated category and campaign collections for the storefront
+          <h2 className="text-lg font-bold text-[#111111] tracking-tight">Collections & Categories</h2>
+          <p className="text-xs text-[#737373] mt-0.5">
+            Organize store taxonomy, create landing collections, and assign matching rules
           </p>
         </div>
         <button
           onClick={handleOpenCreate}
-          className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 bg-[#111111] hover:bg-black text-white text-xs font-semibold px-4 py-2 rounded transition-all shadow-2xs cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>Add New Collection</span>
+          <span>New Collection</span>
         </button>
       </div>
 
       {/* Filter / Search Bar */}
       <div className="relative">
-        <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-zinc-500" />
+        <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-[#737373]" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search collections by title, slug, or description..."
-          className="w-full bg-zinc-900 border border-zinc-800 pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-400"
+          placeholder="Search collections by title, route, or description..."
+          className="w-full bg-white border border-[#EAEAEA] rounded pl-10 pr-4 py-2.5 text-xs text-[#111111] placeholder-[#737373] focus:outline-none focus:border-[#111111]"
         />
       </div>
 
       {/* Collection Table */}
-      <div className="bg-zinc-900 border border-zinc-800 overflow-x-auto">
-        <table className="w-full text-left text-xs text-zinc-300">
-          <thead className="bg-zinc-950 text-zinc-400 uppercase tracking-wider text-[10px] border-b border-zinc-800">
+      <div className="bg-white border border-[#EAEAEA] rounded overflow-hidden shadow-2xs">
+        <table className="w-full text-left text-xs text-[#111111]">
+          <thead className="bg-[#F8F8F8] text-[#737373] uppercase tracking-wider text-[10px] font-semibold border-b border-[#EAEAEA]">
             <tr>
-              <th className="py-3.5 px-4">Collection Title</th>
-              <th className="py-3.5 px-4">URL Route</th>
-              <th className="py-3.5 px-4">Rule Assignment</th>
-              <th className="py-3.5 px-4">Order</th>
-              <th className="py-3.5 px-4">Status</th>
-              <th className="py-3.5 px-4 text-right">Actions</th>
+              <th className="py-3 px-4">Collection Title</th>
+              <th className="py-3 px-4">URL Route</th>
+              <th className="py-3 px-4">Rule Assignment</th>
+              <th className="py-3 px-4">Order</th>
+              <th className="py-3 px-4">Status</th>
+              <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-800/60 font-sans">
+          <tbody className="divide-y divide-[#EAEAEA]">
             {loading ? (
               <tr>
-                <td colSpan={6} className="py-8 text-center text-zinc-500">
-                  Loading collections from database...
+                <td colSpan={6} className="py-8 text-center text-[#737373]">
+                  Loading collection records...
                 </td>
               </tr>
             ) : filteredCollections.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-8 text-center text-zinc-500">
-                  No collections found.
+                <td colSpan={6} className="py-8 text-center text-[#737373]">
+                  No collections matched search query.
                 </td>
               </tr>
             ) : (
               filteredCollections.map((col) => (
-                <tr key={col.id} className="hover:bg-zinc-800/40 transition-colors">
-                  <td className="py-3.5 px-4 flex items-center gap-3">
+                <tr key={col.id} className="hover:bg-[#F8F8F8] transition-colors">
+                  <td className="py-3 px-4 flex items-center gap-3">
                     {col.image && (
-                      <div className="w-10 h-10 bg-zinc-950 border border-zinc-800 p-0.5 shrink-0 flex items-center justify-center overflow-hidden">
-                        <img src={col.image} alt={col.title} className="max-h-full max-w-full object-cover" />
+                      <div className="w-9 h-9 bg-[#F4F4F4] border border-[#EAEAEA] rounded overflow-hidden shrink-0 flex items-center justify-center">
+                        <img src={col.image} alt={col.title} className="w-full h-full object-cover" />
                       </div>
                     )}
                     <div>
-                      <p className="font-serif text-sm text-white font-normal">{col.title}</p>
-                      <p className="text-[10px] text-zinc-500 font-mono">{col.id}</p>
+                      <p className="font-semibold text-[#111111]">{col.title}</p>
+                      <p className="text-[10px] text-[#737373] font-mono">{col.id}</p>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-amber-300">/collections/{col.slug}</td>
-                  <td className="py-3.5 px-4 uppercase text-[10px] text-zinc-400 font-mono">
-                    {col.rule_type}: {col.rule_value || 'all'}
+                  <td className="py-3 px-4 font-mono text-xs text-[#111111]">/collections/{col.slug}</td>
+                  <td className="py-3 px-4 font-mono text-[11px] text-[#737373] uppercase">
+                    {col.rule_type}: <span className="text-[#111111] font-semibold">{col.rule_value || 'all'}</span>
                   </td>
-                  <td className="py-3.5 px-4 font-mono">{col.display_order}</td>
-                  <td className="py-3.5 px-4">
-                    <span className={`px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold ${col.is_enabled ? 'text-emerald-400 bg-emerald-950/60 border border-emerald-800' : 'text-zinc-500 bg-zinc-800'}`}>
-                      {col.is_enabled ? 'Active' : 'Disabled'}
+                  <td className="py-3 px-4 font-mono text-[#737373]">{col.display_order}</td>
+                  <td className="py-3 px-4">
+                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider ${
+                      col.is_enabled
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        : 'bg-[#F4F4F4] text-[#737373] border border-[#EAEAEA]'
+                    }`}>
+                      {col.is_enabled ? <Eye className="w-3 h-3 text-emerald-600" /> : <EyeOff className="w-3 h-3 text-[#737373]" />}
+                      {col.is_enabled ? 'Active' : 'Hidden'}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 text-right space-x-2">
+                  <td className="py-3 px-4 text-right space-x-1">
                     <button
                       onClick={() => handleOpenEdit(col)}
-                      className="p-1.5 text-zinc-400 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition-colors cursor-pointer"
+                      className="p-1.5 text-[#737373] hover:text-[#111111] hover:bg-[#F4F4F4] rounded transition-colors"
                       title="Edit Collection"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDelete(col.id)}
-                      className="p-1.5 text-zinc-400 hover:text-red-400 bg-zinc-800 hover:bg-red-950 transition-colors cursor-pointer"
+                      className="p-1.5 text-[#737373] hover:text-red-600 hover:bg-red-50 rounded transition-colors"
                       title="Delete Collection"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -234,133 +239,132 @@ export const CollectionManager: React.FC<CollectionManagerProps> = ({ csrfToken 
 
       {/* Edit / Create Collection Modal */}
       {isModalOpen && editingCol && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
-          <div className="relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 shadow-2xl flex flex-col text-white my-auto rounded-none">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="relative w-full max-w-xl bg-white border border-[#EAEAEA] shadow-xl rounded-lg flex flex-col text-[#111111] my-auto">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4 bg-zinc-900">
-              <h3 className="font-serif text-xl font-normal text-white">
-                {collections.some((c) => c.id === editingCol.id) ? 'Edit Collection' : 'Create New Collection'}
+            <div className="flex items-center justify-between border-b border-[#EAEAEA] px-6 py-4">
+              <h3 className="font-bold text-sm uppercase tracking-wider text-[#111111]">
+                {collections.some((c) => c.id === editingCol.id) ? 'Edit Collection' : 'Create Collection'}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="p-1 text-[#737373] hover:text-[#111111] rounded"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSave} className="p-6 space-y-4">
+            <form onSubmit={handleSave} className="p-6 space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Collection Title *</label>
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-[#737373] mb-1">Collection Title *</label>
                   <input
                     type="text"
                     value={editingCol.title || ''}
                     onChange={(e) => setEditingCol({ ...editingCol, title: e.target.value })}
                     required
-                    className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                    className="w-full bg-white border border-[#EAEAEA] rounded px-3 py-2 text-xs text-[#111111] focus:border-[#111111] focus:outline-none"
                     placeholder="e.g. Woody & Oud"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">URL Slug</label>
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-[#737373] mb-1">URL Slug</label>
                   <input
                     type="text"
                     value={editingCol.slug || ''}
                     onChange={(e) => setEditingCol({ ...editingCol, slug: e.target.value })}
-                    className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white font-mono focus:border-amber-400"
+                    className="w-full bg-white border border-[#EAEAEA] rounded px-3 py-2 text-xs text-[#111111] font-mono focus:border-[#111111] focus:outline-none"
                     placeholder="e.g. woody"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Description / Subtitle</label>
+                <label className="block text-[10px] uppercase tracking-wider font-semibold text-[#737373] mb-1">Description / Subtitle</label>
                 <textarea
                   value={editingCol.description || ''}
                   onChange={(e) => setEditingCol({ ...editingCol, description: e.target.value })}
                   rows={2}
-                  className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                  className="w-full bg-white border border-[#EAEAEA] rounded px-3 py-2 text-xs text-[#111111] focus:border-[#111111] focus:outline-none"
                   placeholder="Short description displayed at the top of the collection page..."
                 />
               </div>
 
               <ImageUploader
-                label="Collection Banner / Cover Image"
+                label="Collection Banner / Header Image"
                 value={editingCol.image || ''}
                 onChange={(url) => setEditingCol({ ...editingCol, image: url })}
                 csrfToken={csrfToken}
               />
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-zinc-800">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-[#EAEAEA]">
                 <div>
-                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Rule Assignment Type</label>
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-[#737373] mb-1">Rule Assignment</label>
                   <select
                     value={editingCol.rule_type || 'category'}
                     onChange={(e) => setEditingCol({ ...editingCol, rule_type: e.target.value as any })}
-                    className="w-full bg-zinc-950 border border-zinc-700 px-2.5 py-2 text-xs text-white focus:border-amber-400"
+                    className="w-full bg-white border border-[#EAEAEA] rounded px-2.5 py-2 text-xs text-[#111111] focus:border-[#111111] focus:outline-none"
                   >
                     <option value="all">All Products</option>
-                    <option value="gender">Gender (Him / Her / Unisex)</option>
+                    <option value="gender">Gender (Him/Her/Unisex)</option>
                     <option value="category">Category / Family</option>
-                    <option value="featured">Best Sellers / Featured</option>
+                    <option value="featured">Best Sellers</option>
                     <option value="new_arrival">New Arrivals</option>
                     <option value="manual">Manual Mapping</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Rule Matching Value</label>
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-[#737373] mb-1">Matching Value</label>
                   <input
                     type="text"
                     value={editingCol.rule_value || ''}
                     onChange={(e) => setEditingCol({ ...editingCol, rule_value: e.target.value })}
-                    className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400"
+                    className="w-full bg-white border border-[#EAEAEA] rounded px-3 py-2 text-xs text-[#111111] focus:border-[#111111] focus:outline-none"
                     placeholder="e.g. Him, Woody, Gourmand"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] tracking-widest text-zinc-400 uppercase mb-1">Display Order</label>
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-[#737373] mb-1">Display Order</label>
                   <input
                     type="number"
                     value={editingCol.display_order || 0}
                     onChange={(e) => setEditingCol({ ...editingCol, display_order: Number(e.target.value) })}
-                    className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white font-mono focus:border-amber-400"
+                    className="w-full bg-white border border-[#EAEAEA] rounded px-3 py-2 text-xs text-[#111111] font-mono focus:border-[#111111] focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Status Toggle */}
               <div className="flex items-center gap-2 pt-2">
-                <label className="inline-flex items-center cursor-pointer gap-2 text-xs text-zinc-300">
+                <label className="inline-flex items-center gap-2 text-xs text-[#111111] cursor-pointer">
                   <input
                     type="checkbox"
                     checked={editingCol.is_enabled ?? true}
                     onChange={(e) => setEditingCol({ ...editingCol, is_enabled: e.target.checked })}
-                    className="sr-only peer"
+                    className="rounded border-[#EAEAEA] text-[#111111] focus:ring-0"
                   />
-                  <div className="w-8 h-4 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400 relative" />
-                  <span>Collection Active & Visible on Storefront</span>
+                  <span>Collection visible on storefront navigation</span>
                 </label>
               </div>
 
               {/* Modal Footer */}
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-zinc-800">
+              <div className="pt-4 flex items-center justify-end gap-3 border-t border-[#EAEAEA]">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                  className="px-4 py-2 border border-[#EAEAEA] text-[#111111] rounded text-xs hover:bg-[#F4F4F4]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+                  className="px-5 py-2 bg-[#111111] hover:bg-black text-white rounded text-xs font-semibold shadow-2xs"
                 >
                   {saving ? 'Saving...' : 'Save Collection'}
                 </button>

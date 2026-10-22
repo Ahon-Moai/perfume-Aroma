@@ -98,15 +98,15 @@ export const MediaManager: React.FC<MediaManagerProps> = ({ csrfToken }) => {
 
   return (
     <div className="space-y-6 font-sans">
-      <div className="bg-zinc-900 border border-zinc-800 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-[#EAEAEA] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="font-serif text-xl text-white font-normal">Media & Asset Library</h2>
-          <p className="text-xs text-zinc-400 mt-0.5">
+          <h2 className="font-serif text-xl text-[#111111] font-normal">Media & Asset Library</h2>
+          <p className="text-xs text-[#737373] mt-0.5">
             Persistent local filesystem uploads for products, campaign banners, and journal articles
           </p>
         </div>
 
-        <label className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer">
+        <label className="inline-flex items-center gap-2 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer">
           <Upload className="w-4 h-4" />
           <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
           <input
@@ -119,36 +119,36 @@ export const MediaManager: React.FC<MediaManagerProps> = ({ csrfToken }) => {
         </label>
       </div>
 
-      <div className="bg-zinc-900 border border-zinc-800 p-6">
+      <div className="bg-white border border-[#EAEAEA] p-6">
         {loading ? (
-          <p className="text-xs text-zinc-500 py-8 text-center">Loading media library...</p>
+          <p className="text-xs text-[#737373] py-8 text-center">Loading media library...</p>
         ) : mediaList.length === 0 ? (
           <div className="text-center py-12 space-y-3">
             <ImageIcon className="w-8 h-8 text-zinc-600 mx-auto" />
-            <p className="text-xs text-zinc-400">No media files uploaded yet.</p>
+            <p className="text-xs text-[#737373]">No media files uploaded yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {mediaList.map((m) => (
-              <div key={m.id} className="bg-zinc-950 border border-zinc-800 p-2 space-y-2 group relative">
-                <div className="aspect-square bg-zinc-900 overflow-hidden flex items-center justify-center p-2">
+              <div key={m.id} className="bg-[#F8F8F8] border border-[#EAEAEA] p-2 space-y-2 group relative">
+                <div className="aspect-square bg-white overflow-hidden flex items-center justify-center p-2">
                   <img src={m.file_path} alt={m.original_name} className="max-h-full max-w-full object-contain" />
                 </div>
                 <div className="text-[10px]">
-                  <p className="font-medium text-white truncate" title={m.original_name}>{m.original_name}</p>
-                  <p className="text-zinc-500 font-mono">{(m.file_size / 1024).toFixed(1)} KB</p>
+                  <p className="font-medium text-[#111111] truncate" title={m.original_name}>{m.original_name}</p>
+                  <p className="text-[#737373] font-mono">{(m.file_size / 1024).toFixed(1)} KB</p>
                 </div>
-                <div className="flex items-center justify-between pt-1 border-t border-zinc-800/80 text-[10px]">
+                <div className="flex items-center justify-between pt-1 border-t border-[#EAEAEA]/80 text-[10px]">
                   <button
                     onClick={() => copyToClipboard(m.file_path, m.id)}
-                    className="inline-flex items-center gap-1 text-amber-300 hover:text-amber-200"
+                    className="inline-flex items-center gap-1 text-[#111111] hover:text-amber-200"
                   >
                     {copiedId === m.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedId === m.id ? 'Copied!' : 'Copy URL'}</span>
                   </button>
                   <button
                     onClick={() => handleDelete(m.id)}
-                    className="text-zinc-500 hover:text-red-400"
+                    className="text-[#737373] hover:text-red-400"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

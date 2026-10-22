@@ -59,14 +59,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <div className={`space-y-2 ${className}`}>
       {label && (
-        <label className="block text-[10px] tracking-widest text-zinc-400 uppercase">
+        <label className="block text-[10px] tracking-widest text-[#737373] uppercase">
           {label}
         </label>
       )}
 
       <div className="flex items-start gap-3">
         {/* Preview Container */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 bg-zinc-950 border border-zinc-800 p-0.5 flex items-center justify-center relative group overflow-hidden">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 bg-[#F8F8F8] border border-[#EAEAEA] p-0.5 flex items-center justify-center relative group overflow-hidden">
           {value ? (
             <img
               src={value}
@@ -90,10 +90,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 min-w-0 bg-zinc-950 border border-zinc-700 px-2.5 py-1.5 text-xs text-white focus:border-amber-400 font-mono truncate"
+              className="flex-1 min-w-0 bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111] font-mono truncate"
             />
 
-            <label className="inline-flex items-center justify-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-black text-[11px] font-semibold uppercase tracking-wider px-3 py-1.5 cursor-pointer shrink-0 transition-colors">
+            <label className="inline-flex items-center justify-center gap-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-[11px] font-semibold uppercase tracking-wider px-3 py-1.5 cursor-pointer shrink-0 transition-colors">
               {uploading ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
