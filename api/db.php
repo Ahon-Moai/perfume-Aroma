@@ -45,6 +45,30 @@ class Database {
                     }
                 }
 
+                // Auto-create collections tables if missing
+                try {
+                    self::$instance->exec("CREATE TABLE IF NOT EXISTS collections (
+                        id VARCHAR(64) PRIMARY KEY,
+                        title VARCHAR(255) NOT NULL,
+                        slug VARCHAR(191) NOT NULL UNIQUE,
+                        description TEXT NULL,
+                        image VARCHAR(255) NULL,
+                        rule_type VARCHAR(50) DEFAULT 'manual',
+                        rule_value VARCHAR(100) NULL,
+                        display_order INT DEFAULT 0,
+                        is_enabled TINYINT(1) DEFAULT 1,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    )");
+                    self::$instance->exec("CREATE TABLE IF NOT EXISTS collection_products (
+                        collection_id VARCHAR(64) NOT NULL,
+                        product_id VARCHAR(64) NOT NULL,
+                        PRIMARY KEY (collection_id, product_id)
+                    )");
+                } catch (\Exception $e) {
+                    // Ignore migration errors
+                }
+
             } catch (PDOException $e) {
                 // Return safe error message without leaking DB credentials
                 $msg = ($config['env'] === 'development') ? "Database connection error: " . $e->getMessage() : "Database connection failure";

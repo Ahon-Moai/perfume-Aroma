@@ -3,6 +3,7 @@ import React from 'react';
 interface HeroProps {
   onExploreClick: () => void;
   onOrderProduct?: () => void;
+  onNavigateToCollection?: (slug: string) => void;
   heroData?: {
     headline?: string;
     tagline?: string;
@@ -14,7 +15,7 @@ interface HeroProps {
   };
 }
 
-export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, heroData }) => {
+export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, onNavigateToCollection, heroData }) => {
   const videoSource = heroData?.video_url || 'https://ik.imagekit.io/t1q0n1ovm/pchero%20vid.mp4';
   const specifier = heroData?.specifier || 'PURE PORTIONS BY ARRINA';
   const headline = heroData?.headline || 'COLLECTION IS LIVE';
@@ -54,7 +55,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, hero
           {/* Subtext CTA Links (Ref layout with underlines) */}
           <div className="pt-2 sm:pt-4 flex flex-col items-start gap-2.5 sm:gap-3 text-base sm:text-lg font-semibold tracking-wide text-white">
             <button
-              onClick={onExploreClick}
+              onClick={() => onNavigateToCollection ? onNavigateToCollection('all') : onExploreClick()}
               className="group inline-flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer text-left"
             >
               <span className="underline underline-offset-4 sm:underline-offset-8 decoration-2 decoration-white font-medium">

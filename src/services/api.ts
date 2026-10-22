@@ -25,9 +25,20 @@ export function getErrorMessage(err: any, fallbackMessage: string = 'An error oc
   return fallbackMessage;
 }
 
-export async function fetchPublicProducts(): Promise<FragranceProduct[]> {
+export async function fetchPublicProducts(queryParams?: Record<string, string>): Promise<FragranceProduct[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/products.php`);
+    let url = `${API_BASE_URL}/products.php`;
+    if (queryParams) {
+      const params = new URLSearchParams();
+      Object.entries(queryParams).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== '') {
+          params.append(k, v);
+        }
+      });
+      const str = params.toString();
+      if (str) url += `?${str}`;
+    }
+    const res = await fetch(url);
     const data = await res.json();
     if (data.success && Array.isArray(data.data)) {
       return data.data;
@@ -36,6 +47,32 @@ export async function fetchPublicProducts(): Promise<FragranceProduct[]> {
     console.warn('API connection failed, using local product catalog', err);
   }
   return [];
+}
+
+export async function fetchPublicCollections(): Promise<any[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/collections.php`);
+    const data = await res.json();
+    if (data.success && Array.isArray(data.data)) {
+      return data.data;
+    }
+  } catch (err) {
+    console.warn('API collections fetch failed', err);
+  }
+  return [];
+}
+
+export async function fetchCollectionBySlug(slug: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/collections.php?slug=${encodeURIComponent(slug)}`);
+    const data = await res.json();
+    if (data.success && data.data) {
+      return data.data;
+    }
+  } catch (err) {
+    console.warn('API collection fetch by slug failed', err);
+  }
+  return null;
 }
 
 export async function fetchHomepageData() {

@@ -2,9 +2,10 @@ import React from 'react';
 
 interface CategoryMarqueeProps {
   items?: string[];
+  onNavigateToCollection?: (slug: string) => void;
 }
 
-export const CategoryMarquee: React.FC<CategoryMarqueeProps> = ({ items }) => {
+export const CategoryMarquee: React.FC<CategoryMarqueeProps> = ({ items, onNavigateToCollection }) => {
   const defaultItems = [
     'CURATE',
     'JUDGE',
@@ -25,9 +26,16 @@ export const CategoryMarquee: React.FC<CategoryMarqueeProps> = ({ items }) => {
         <div className="animate-marquee-smooth flex items-center gap-12 sm:gap-20 whitespace-nowrap">
           {marqueeItems.concat(marqueeItems).map((word, idx) => (
             <div key={idx} className="flex items-center gap-12 sm:gap-20">
-              <span className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-[0.18em] text-[#0d3b2e] uppercase transition-colors">
+              <button
+                type="button"
+                onClick={() => {
+                  const slug = word.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                  if (onNavigateToCollection) onNavigateToCollection(slug || 'all');
+                }}
+                className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal tracking-[0.18em] text-[#0d3b2e] uppercase transition-colors hover:text-amber-800 cursor-pointer"
+              >
                 {word}
-              </span>
+              </button>
               <span className="text-[#0d3b2e]/60 text-2xl sm:text-3xl font-serif">
                 —
               </span>

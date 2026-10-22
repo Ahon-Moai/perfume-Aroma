@@ -4,10 +4,11 @@ import { CampaignBannersData } from '../types';
 
 interface CampaignBannersProps {
   onSelectCategory: (gender: 'Him' | 'Her') => void;
+  onNavigateToCollection?: (slug: string) => void;
   campaignData?: CampaignBannersData;
 }
 
-export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCategory, campaignData }) => {
+export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCategory, onNavigateToCollection, campaignData }) => {
   const sectionTitle = campaignData?.section_title || 'FOR HIM | HER';
   const forHimTitle = campaignData?.for_him_title || 'For Him';
   const forHimButtonText = campaignData?.for_him_button_text || 'SHOP DECANTS';
@@ -31,7 +32,7 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           {/* For Him Card */}
           <div
-            onClick={() => onSelectCategory('Him')}
+            onClick={() => onNavigateToCollection ? onNavigateToCollection('forhim') : onSelectCategory('Him')}
             className="group relative cursor-pointer overflow-hidden flex flex-col bg-zinc-950"
           >
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
@@ -57,7 +58,7 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
 
           {/* For Her Card */}
           <div
-            onClick={() => onSelectCategory('Her')}
+            onClick={() => onNavigateToCollection ? onNavigateToCollection('forher') : onSelectCategory('Her')}
             className="group relative cursor-pointer overflow-hidden flex flex-col bg-zinc-950"
           >
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">

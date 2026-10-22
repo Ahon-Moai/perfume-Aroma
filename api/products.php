@@ -98,33 +98,215 @@ if ($id || $slug) {
 $where = ["status = 'published'"];
 $params = [];
 
+$collection = sanitizeString($_GET['collection'] ?? $_GET['collection_slug'] ?? null);
+$family = sanitizeString($_GET['family'] ?? null);
+$season = sanitizeString($_GET['season'] ?? null);
+$occasion = sanitizeString($_GET['occasion'] ?? null);
+$size = sanitizeString($_GET['size'] ?? null);
+$concentration = sanitizeString($_GET['concentration'] ?? null);
+$minPrice = isset($_GET['min_price']) && $_GET['min_price'] !== '' ? (float)$_GET['min_price'] : null;
+$maxPrice = isset($_GET['max_price']) && $_GET['max_price'] !== '' ? (float)$_GET['max_price'] : null;
+$newArrival = isset($_GET['new_arrival']) ? (int)$_GET['new_arrival'] : null;
+$sort = sanitizeString($_GET['sort'] ?? 'featured');
+
+// Collection Rule Handling
+if ($collection && $collection !== 'all') {
+    $cleanCol = strtolower(trim($collection));
+    if (in_array($cleanCol, ['forhim', 'for-him', 'him', 'men'])) {
+        $where[] = "gender = 'Him'";
+    } elseif (in_array($cleanCol, ['forher', 'for-her', 'her', 'women'])) {
+        $where[] = "gender = 'Her'";
+    } elseif (in_array($cleanCol, ['unisex', 'shared'])) {
+        $where[] = "gender = 'Unisex'";
+    } elseif (in_array($cleanCol, ['best-sellers', 'bestsellers', 'best-seller', 'popular'])) {
+        $where[] = "is_featured = 1";
+    } elseif (in_array($cleanCol, ['new-arrivals', 'newarrivals', 'new-arrival', 'new'])) {
+        $where[] = "is_new_arrival = 1";
+    } else {
+        // Query database collections table rule
+        $colStmt = $db->prepare("SELECT * FROM collections WHERE (slug = ? OR LOWER(title) = ?) AND is_enabled = 1 LIMIT 1");
+        $colStmt->execute([$cleanCol, str_replace('-', ' ', $cleanCol)]);
+        $colRow = $colStmt->fetch();
+
+        if ($colRow) {
+            if ($colRow['rule_type'] === 'gender' && !empty($colRow['rule_value'])) {
+                $where[] = "gender = ?";
+                $params[] = $colRow['rule_value'];
+            } elseif ($colRow['rule_type'] === 'category' && !empty($colRow['rule_value'])) {
+                $where[] = "(LOWER(category) LIKE ? OR LOWER(scent_profile_json) LIKE ?)";
+                $params[] = '%' . strtolower($colRow['rule_value']) . '%';
+                $params[] = '%' . strtolower($colRow['rule_value']) . '%';
+            } elseif ($colRow['rule_type'] === 'featured') {
+                $where[] = "is_featured = 1";
+            } elseif ($colRow['rule_type'] === 'new_arrival') {
+                $where[] = "is_new_arrival = 1";
+            } elseif ($colRow['rule_type'] === 'manual') {
+                $mapStmt = $db->prepare("SELECT product_id FROM collection_products WHERE collection_id = ?");
+                $mapStmt->execute([$colRow['id']]);
+                $mappedIds = array_column($mapStmt->fetchAll(), 'product_id');
+                if (!empty($mappedIds)) {
+                    $inM = implode(',', array_fill(0, count($mappedIds), '?'));
+                    $where[] = "id IN ($inM)";
+                    foreach ($mappedIds as $mId) $params[] = $mId;
+                }
+            }
+        } else {
+            // General category fallback
+            $where[] = "(LOWER(category) LIKE ? OR LOWER(scent_profile_json) LIKE ?)";
+            $params[] = '%' . str_replace('-', ' ', $cleanCol) . '%';
+            $params[] = '%' . str_replace('-', ' ', $cleanCol) . '%';
+        }
+    }
+}
+
 if ($category) {
-    $where[] = "LOWER(category) LIKE ?";
+    $where[] = "(LOWER(category) LIKE ? OR LOWER(scent_profile_json) LIKE ?)";
+    $params[] = '%' . strtolower($category) . '%';
     $params[] = '%' . strtolower($category) . '%';
 }
+
+if ($family) {
+    $families = explode(',', $family);
+    $familyClauses = [];
+    foreach ($families as $f) {
+        if (!empty(trim($f))) {
+            $familyClauses[] = "(LOWER(category) LIKE ? OR LOWER(scent_profile_json) LIKE ?)";
+            $params[] = '%' . strtolower(trim($f)) . '%';
+            $params[] = '%' . strtolower(trim($f)) . '%';
+        }
+    }
+    if (!empty($familyClauses)) {
+        $where[] = '(' . implode(' OR ', $familyClauses) . ')';
+    }
+}
+
 if ($brand) {
-    $where[] = "LOWER(brand) = ?";
-    $params[] = strtolower($brand);
+    $brands = explode(',', $brand);
+    $brandClauses = [];
+    foreach ($brands as $b) {
+        if (!empty(trim($b))) {
+            $brandClauses[] = "LOWER(brand) = ?";
+            $params[] = strtolower(trim($b));
+        }
+    }
+    if (!empty($brandClauses)) {
+        $where[] = '(' . implode(' OR ', $brandClauses) . ')';
+    }
 }
+
 if ($gender) {
-    $where[] = "gender = ?";
-    $params[] = $gender;
+    $genders = explode(',', $gender);
+    $genderClauses = [];
+    foreach ($genders as $g) {
+        if (!empty(trim($g))) {
+            $genderClauses[] = "LOWER(gender) = ? OR LOWER(scent_profile_json) LIKE ?";
+            $params[] = strtolower(trim($g));
+            $params[] = '%' . strtolower(trim($g)) . '%';
+        }
+    }
+    if (!empty($genderClauses)) {
+        $where[] = '(' . implode(' OR ', $genderClauses) . ')';
+    }
 }
+
+if ($season) {
+    $seasons = explode(',', $season);
+    $seasonClauses = [];
+    foreach ($seasons as $s) {
+        if (!empty(trim($s))) {
+            $seasonClauses[] = "LOWER(scent_profile_json) LIKE ?";
+            $params[] = '%' . strtolower(trim($s)) . '%';
+        }
+    }
+    if (!empty($seasonClauses)) {
+        $where[] = '(' . implode(' OR ', $seasonClauses) . ')';
+    }
+}
+
+if ($occasion) {
+    $occasions = explode(',', $occasion);
+    $occClauses = [];
+    foreach ($occasions as $o) {
+        if (!empty(trim($o))) {
+            $occClauses[] = "LOWER(scent_profile_json) LIKE ?";
+            $params[] = '%' . strtolower(trim($o)) . '%';
+        }
+    }
+    if (!empty($occClauses)) {
+        $where[] = '(' . implode(' OR ', $occClauses) . ')';
+    }
+}
+
+if ($concentration) {
+    $where[] = "(LOWER(concentration) LIKE ? OR LOWER(scent_profile_json) LIKE ?)";
+    $params[] = '%' . strtolower($concentration) . '%';
+    $params[] = '%' . strtolower($concentration) . '%';
+}
+
+if ($minPrice !== null) {
+    $where[] = "starting_price >= ?";
+    $params[] = $minPrice;
+}
+
+if ($maxPrice !== null) {
+    $where[] = "starting_price <= ?";
+    $params[] = $maxPrice;
+}
+
 if ($featured !== null) {
     $where[] = "is_featured = ?";
     $params[] = $featured;
 }
+
+if ($newArrival !== null) {
+    $where[] = "is_new_arrival = ?";
+    $params[] = $newArrival;
+}
+
 if ($search) {
-    $where[] = "(LOWER(name) LIKE ? OR LOWER(brand) LIKE ? OR LOWER(category) LIKE ? OR LOWER(notes) LIKE ?)";
+    $where[] = "(LOWER(name) LIKE ? OR LOWER(brand) LIKE ? OR LOWER(category) LIKE ? OR LOWER(notes) LIKE ? OR LOWER(scent_profile_json) LIKE ?)";
     $term = '%' . strtolower($search) . '%';
+    $params[] = $term;
     $params[] = $term;
     $params[] = $term;
     $params[] = $term;
     $params[] = $term;
 }
 
+// Sorting logic
+$orderBy = "is_featured DESC, created_at DESC";
+switch (strtolower($sort)) {
+    case 'price-asc':
+    case 'price_low_high':
+    case 'price_asc':
+        $orderBy = "starting_price ASC, name ASC";
+        break;
+    case 'price-desc':
+    case 'price_high_low':
+    case 'price_desc':
+        $orderBy = "starting_price DESC, name ASC";
+        break;
+    case 'newest':
+    case 'new':
+        $orderBy = "created_at DESC";
+        break;
+    case 'name-asc':
+    case 'a_z':
+    case 'title':
+        $orderBy = "name ASC";
+        break;
+    case 'best-selling':
+    case 'bestselling':
+        $orderBy = "is_featured DESC, starting_price DESC";
+        break;
+    case 'featured':
+    default:
+        $orderBy = "is_featured DESC, created_at DESC";
+        break;
+}
+
 $whereClause = implode(' AND ', $where);
-$sql = "SELECT * FROM products WHERE $whereClause ORDER BY is_featured DESC, created_at DESC";
+$sql = "SELECT * FROM products WHERE $whereClause ORDER BY $orderBy";
 
 $stmt = $db->prepare($sql);
 $stmt->execute($params);

@@ -19,6 +19,7 @@ import { StudioSection } from './components/StudioSection';
 import { JournalSection } from './components/JournalSection';
 import { Footer } from './components/Footer';
 import { ProductDetailPage } from './components/ProductDetailPage';
+import { CollectionPage } from './components/CollectionPage';
 import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { AdminLogin } from './admin/AdminLogin';
@@ -35,8 +36,8 @@ export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Routing State: 'home' | 'product' | 'admin'
-  const [route, setRoute] = useState<{ path: 'home' | 'product' | 'admin'; productSlugOrId?: string }>({ path: 'home' });
+  // Routing State: 'home' | 'product' | 'collection' | 'admin'
+  const [route, setRoute] = useState<{ path: 'home' | 'product' | 'collection' | 'admin'; productSlugOrId?: string; collectionSlug?: string }>({ path: 'home' });
 
   // Admin View State
   const [viewMode, setViewMode] = useState<'storefront' | 'admin'>('storefront');
@@ -72,6 +73,14 @@ export default function App() {
         const slugOrId = pathname.replace(/^\/(products|product)\//, '').split('/')[0];
         if (slugOrId) {
           setRoute({ path: 'product', productSlugOrId: slugOrId });
+          return;
+        }
+      }
+
+      if (pathname.startsWith('/collections/') || pathname.startsWith('/collection/')) {
+        const colSlug = pathname.replace(/^\/(collections|collection)\//, '').split('/')[0];
+        if (colSlug) {
+          setRoute({ path: 'collection', collectionSlug: colSlug });
           return;
         }
       }
@@ -134,6 +143,15 @@ export default function App() {
       window.history.pushState({}, '', targetUrl);
     }
     setRoute({ path: 'product', productSlugOrId: slugOrId });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToCollection = (slug: string) => {
+    const targetUrl = `/collections/${slug}`;
+    if (window.location.pathname !== targetUrl) {
+      window.history.pushState({}, '', targetUrl);
+    }
+    setRoute({ path: 'collection', collectionSlug: slug });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -291,11 +309,23 @@ export default function App() {
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenWishlist={() => showToast('Wishlist: 3 items saved')}
         onNavigateHome={navigateToHome}
+        onNavigateToCollection={navigateToCollection}
         storeSettings={storeSettings}
       />
 
       <main className="flex-1">
-        {route.path === 'product' ? (
+        {route.path === 'collection' && route.collectionSlug ? (
+          /* Dedicated Collection / Category Filter Page */
+          <CollectionPage
+            collectionSlug={route.collectionSlug}
+            allProducts={products}
+            onNavigateHome={navigateToHome}
+            onNavigateToCollection={navigateToCollection}
+            onNavigateToProduct={navigateToProduct}
+            onAddToCart={(p, size, price, qty) => handleAddToCart(p, size, price, qty)}
+            showToast={showToast}
+          />
+        ) : route.path === 'product' ? (
           /* Dedicated Product Detail Page */
           <ProductDetailPage
             product={currentProduct}
@@ -316,12 +346,14 @@ export default function App() {
                 const purePortions = products.find((p) => p.id === 'prod-pure-portions') || products[0];
                 if (purePortions) navigateToProduct(purePortions);
               }}
+              onNavigateToCollection={navigateToCollection}
               heroData={homepageData?.sections?.hero?.content}
             />
 
             {/* C. Oversized category marquee */}
             <CategoryMarquee
               items={homepageData?.sections?.category_marquee?.content?.items}
+              onNavigateToCollection={navigateToCollection}
             />
 
             {/* D. New Arrivals product carousel */}
@@ -334,6 +366,7 @@ export default function App() {
             {/* E. For Him / For Her editorial banners */}
             <CampaignBanners
               onSelectCategory={handleSelectGenderCategory}
+              onNavigateToCollection={navigateToCollection}
               campaignData={homepageData?.sections?.campaign_banners?.content}
             />
 
@@ -341,6 +374,7 @@ export default function App() {
             <SeasonsGallery
               seasonsData={homepageData?.sections?.seasons_gallery?.content}
               onExploreClick={handleExploreClick}
+              onNavigateToCollection={navigateToCollection}
             />
 
             {/* G. Premium Video Product Showcase Carousel */}

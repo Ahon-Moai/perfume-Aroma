@@ -128,3 +128,32 @@ export interface SeasonsGalleryData {
   section_subtitle?: string;
   cards?: SeasonCardData[];
 }
+
+export interface Collection {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  image?: string;
+  rule_type?: 'manual' | 'gender' | 'category' | 'featured' | 'new_arrival' | 'all';
+  rule_value?: string;
+  display_order?: number;
+  is_enabled?: boolean;
+  mapped_product_ids?: string[];
+}
+
+export interface FilterState {
+  gender: string[];
+  family: string[];
+  season: string[];
+  occasion: string[];
+  brand: string[];
+  size: string[];
+  concentration: string[];
+  minPrice: string;
+  maxPrice: string;
+  featured: boolean;
+  newArrival: boolean;
+  sort: string;
+  search: string;
+}
