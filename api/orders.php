@@ -176,8 +176,8 @@ if ($method === 'GET') {
 
         // 4. Insert Order Items & Deduct Stock
         $itemIns = $db->prepare("INSERT INTO order_items (order_id, product_id, product_name, brand_name, selected_size, quantity, unit_price, line_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stockDeductVar = $db->prepare("UPDATE product_variants SET stock_qty = MAX(0, stock_qty - ?) WHERE id = ?");
-        $stockDeductProd = $db->prepare("UPDATE products SET inventory_qty = MAX(0, inventory_qty - ?) WHERE id = ?");
+        $stockDeductVar = $db->prepare("UPDATE product_variants SET stock_qty = CASE WHEN stock_qty >= ? THEN stock_qty - ? ELSE 0 END WHERE id = ?");
+        $stockDeductProd = $db->prepare("UPDATE products SET inventory_qty = CASE WHEN inventory_qty >= ? THEN inventory_qty - ? ELSE 0 END WHERE id = ?");
         $logIns = $db->prepare("INSERT INTO inventory_logs (product_id, variant_id, change_qty, previous_qty, new_qty, reason, created_by) VALUES (?, ?, ?, 0, 0, 'order_placed', 'customer')");
 
         foreach ($validatedItems as $vItem) {
@@ -193,8 +193,8 @@ if ($method === 'GET') {
             ]);
 
             // Deduct variant and main product stock
-            $stockDeductVar->execute([$vItem['quantity'], $vItem['variant_id']]);
-            $stockDeductProd->execute([$vItem['quantity'], $vItem['product_id']]);
+            $stockDeductVar->execute([$vItem['quantity'], $vItem['quantity'], $vItem['variant_id']]);
+            $stockDeductProd->execute([$vItem['quantity'], $vItem['quantity'], $vItem['product_id']]);
             $logIns->execute([$vItem['product_id'], $vItem['variant_id'], -$vItem['quantity']]);
         }
 
