@@ -66,14 +66,14 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
   return (
     <div className={`space-y-2 ${className}`}>
       {label && (
-        <label className="block text-[10px] tracking-widest text-zinc-400 uppercase">
+        <label className="block text-[10px] tracking-widest text-[#737373] uppercase">
           {label}
         </label>
       )}
 
       <div className="flex flex-col sm:flex-row items-stretch gap-3">
         {/* Preview Box */}
-        <div className="w-20 h-20 shrink-0 bg-zinc-950 border border-zinc-800 p-1 flex items-center justify-center relative overflow-hidden">
+        <div className="w-20 h-20 shrink-0 bg-[#F8F8F8] border border-[#EAEAEA] p-1 flex items-center justify-center relative overflow-hidden">
           {value ? (
             <video
               src={value}
@@ -94,10 +94,10 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 bg-zinc-950 border border-zinc-700 px-3 py-2 text-xs text-white focus:border-amber-400 font-mono"
+              className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111] font-mono"
             />
 
-            <label className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-3.5 py-2 cursor-pointer shrink-0 transition-colors">
+            <label className="inline-flex items-center gap-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-3.5 py-2 cursor-pointer shrink-0 transition-colors">
               {uploading ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />

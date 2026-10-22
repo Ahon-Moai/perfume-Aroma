@@ -1,5 +1,22 @@
 import React, { useState } from 'react';
-import { Package, ShoppingBag, Users, LayoutDashboard, Settings, Image as ImageIcon, Sparkles, LogOut, ExternalLink, Layers } from 'lucide-react';
+import {
+  BarChart3,
+  Package,
+  ShoppingBag,
+  Users,
+  LayoutDashboard,
+  Settings,
+  Image as ImageIcon,
+  LogOut,
+  ExternalLink,
+  Layers,
+  Menu,
+  X,
+  User,
+  ShieldCheck,
+  ChevronRight
+} from 'lucide-react';
+import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { ProductManager } from './ProductManager';
 import { CollectionManager } from './CollectionManager';
 import { OrderManager } from './OrderManager';
@@ -25,111 +42,236 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   onLogout,
   onSwitchToStorefront
 }) => {
-  const [activeTab, setActiveTab] = useState<'products' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('products');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('analytics');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'products', label: 'Products & Variants', icon: Package },
-    { id: 'collections', label: 'Collections Manager', icon: Layers },
-    { id: 'orders', label: 'Orders & Invoice', icon: ShoppingBag },
-    { id: 'customers', label: 'Customer Records', icon: Users },
-    { id: 'homepage', label: 'Homepage Builder', icon: LayoutDashboard },
-    { id: 'settings', label: 'Store Settings', icon: Settings },
-    { id: 'media', label: 'Media Library', icon: ImageIcon }
+    { id: 'analytics', label: 'Analytics & Insights', icon: BarChart3, desc: 'Sales performance & metrics' },
+    { id: 'products', label: 'Products & Inventory', icon: Package, desc: 'Manage catalogue & stock' },
+    { id: 'collections', label: 'Collections & Categories', icon: Layers, desc: 'Organize store taxonomy' },
+    { id: 'orders', label: 'Orders & Invoices', icon: ShoppingBag, desc: 'Track customer orders' },
+    { id: 'customers', label: 'Customer Directory', icon: Users, desc: 'Customer accounts & contact' },
+    { id: 'homepage', label: 'Website Content', icon: LayoutDashboard, desc: 'Homepage sections & banners' },
+    { id: 'settings', label: 'Store Settings', icon: Settings, desc: 'Preferences & configurations' },
+    { id: 'media', label: 'Media Library', icon: ImageIcon, desc: 'Uploaded images & media' }
   ] as const;
 
-  return (
-    <div className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-amber-400 selection:text-black flex flex-col">
-      {/* Top Admin Navigation Header */}
-      <header className="bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 sticky top-0 z-40">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-gradient-to-r from-amber-400 to-amber-500 text-black text-[10px] font-bold tracking-widest uppercase rounded shadow-sm">
-              <Sparkles className="w-3 h-3 text-black" />
-              <span>ATELIER CMS</span>
-            </div>
-            <div>
-              <h1 className="font-serif text-lg font-normal tracking-wide text-white flex items-center gap-2">
-                <span>AROMATICA ONE</span>
-                <span className="text-[10px] font-mono text-amber-400 bg-amber-400/10 border border-amber-400/20 px-1.5 py-0.2 rounded uppercase">v2.4</span>
-              </h1>
-              <p className="text-[10px] text-zinc-400 tracking-wider uppercase hidden sm:block">Luxury Decant Management Suite</p>
-            </div>
-          </div>
+  const activeNavItem = navItems.find(item => item.id === activeTab);
 
+  return (
+    <div className="min-h-screen bg-[#FBFBFB] text-[#111111] font-sans antialiased flex flex-col">
+      {/* Top Admin Navigation Bar */}
+      <header className="bg-white border-b border-[#EAEAEA] sticky top-0 z-40">
+        <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+          {/* Brand Logo & Section Title */}
           <div className="flex items-center gap-4">
             <button
-              onClick={onSwitchToStorefront}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-xs font-sans uppercase tracking-wider transition-all cursor-pointer border border-zinc-700/60 shadow-sm hover:border-amber-400/40"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 -ml-2 text-[#737373] hover:text-[#111111] lg:hidden rounded-md hover:bg-[#F4F4F4]"
+              aria-label="Toggle menu"
             >
-              <ExternalLink className="w-3.5 h-3.5 text-amber-300" />
-              <span>View Storefront</span>
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <div className="h-4 w-[1px] bg-zinc-800 hidden sm:block" />
-
-            <div className="hidden sm:flex items-center gap-2 text-xs">
-              <span className="text-zinc-500">Master User:</span>
-              <span className="font-mono font-semibold text-amber-300">
-                {typeof user?.username === 'string' ? user.username : 'Admin'}
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-[#111111] text-white flex items-center justify-center font-bold tracking-tighter text-sm rounded">
+                A1
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-bold tracking-widest uppercase text-[#111111]">
+                  AROMATICA <span className="font-light text-[#737373]">ATELIER</span>
+                </span>
+                <span className="text-[10px] text-[#737373] tracking-wider uppercase hidden sm:block">
+                  Admin Control Suite
+                </span>
+              </div>
             </div>
 
-            <button
-              onClick={onLogout}
-              className="p-2 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
-              title="Sign Out"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+            <div className="h-4 w-[1px] bg-[#EAEAEA] hidden md:block" />
+
+            {/* Current Page Title */}
+            <div className="hidden md:flex items-center gap-2 text-xs font-medium text-[#737373]">
+              <span>Console</span>
+              <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
+              <span className="text-[#111111] font-semibold">{activeNavItem?.label}</span>
+            </div>
           </div>
+
+          {/* Right Header Actions */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onSwitchToStorefront}
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-[#F4F4F4] text-[#111111] text-xs font-medium border border-[#EAEAEA] rounded transition-all shadow-2xs hover:border-[#111111]"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-[#737373]" />
+              <span className="hidden sm:inline">View Storefront</span>
+            </button>
+
+            <div className="h-4 w-[1px] bg-[#EAEAEA]" />
+
+            {/* User Profile Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-2.5 p-1.5 hover:bg-[#F4F4F4] rounded transition-colors"
+              >
+                <div className="w-7 h-7 bg-[#111111] text-white rounded-full flex items-center justify-center text-xs font-mono font-medium">
+                  {typeof user?.username === 'string' ? user.username.charAt(0).toUpperCase() : 'A'}
+                </div>
+                <div className="hidden sm:flex flex-col text-left leading-tight">
+                  <span className="text-xs font-semibold text-[#111111]">
+                    {typeof user?.username === 'string' ? user.username : 'Admin'}
+                  </span>
+                  <span className="text-[10px] text-[#737373] uppercase font-mono">
+                    {user?.role || 'Administrator'}
+                  </span>
+                </div>
+              </button>
+
+              {/* User Dropdown */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-[#EAEAEA] rounded shadow-lg py-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                  <div className="px-3 py-2 border-b border-[#EAEAEA]">
+                    <p className="text-xs font-semibold text-[#111111]">{user?.username}</p>
+                    <p className="text-[11px] text-[#737373] truncate">{user?.email || 'admin@aromatica.one'}</p>
+                  </div>
+
+                  <div className="px-3 py-2 text-[11px] text-[#737373] flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Session: CSRF Authenticated</span>
+                  </div>
+
+                  <div className="border-t border-[#EAEAEA] pt-1">
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-600 hover:bg-red-50 text-left transition-colors font-medium cursor-pointer"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
       </header>
 
-      {/* Overview Stat Ribbon */}
-      <div className="bg-zinc-950/60 border-b border-zinc-800/60 py-3">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-[11px] text-zinc-400 font-mono overflow-x-auto gap-6">
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>STORE STATUS: <strong className="text-white font-sans font-semibold">LIVE ONLINE</strong></span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span>CURRENCY: <strong className="text-amber-300 font-sans font-semibold">BDT (৳)</strong></span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span>DATABASE: <strong className="text-white font-sans font-semibold">AUTHENTICATED PDO</strong></span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <span>SECURITY: <strong className="text-emerald-400 font-sans font-semibold">CSRF PROTECTED</strong></span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Admin Workspace */}
-      <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
-        {/* Sidebar Nav */}
-        <aside className="w-full md:w-64 shrink-0 space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-xs tracking-wider uppercase font-sans font-medium transition-all text-left cursor-pointer border-l-2 ${
-                  isActive
-                    ? 'bg-zinc-900 text-amber-300 border-amber-400 font-semibold'
-                    : 'bg-zinc-950 text-zinc-400 hover:text-white border-transparent hover:bg-zinc-900/50'
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-zinc-500'}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+      <div className="flex-1 max-w-[1536px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-8">
+
+        {/* Desktop Sidebar */}
+        <aside className="hidden lg:block w-64 shrink-0 space-y-1">
+          <div className="px-3 py-2 mb-2">
+            <span className="text-[10px] font-semibold tracking-wider text-[#737373] uppercase">
+              Management Suite
+            </span>
+          </div>
+
+          <nav className="space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-medium rounded transition-all text-left cursor-pointer ${
+                    isActive
+                      ? 'bg-[#111111] text-white shadow-2xs'
+                      : 'text-[#737373] hover:text-[#111111] hover:bg-[#F4F4F4]'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#737373]'}`} />
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{item.label}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="pt-6 border-t border-[#EAEAEA] mt-6 px-3">
+            <div className="p-3 bg-[#F8F8F8] border border-[#EAEAEA] rounded text-[11px] text-[#737373]">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="font-semibold text-[#111111]">System Healthy</span>
+              </div>
+              <p className="text-[10px]">Connected to MariaDB/SQLite PDO engine.</p>
+            </div>
+          </div>
         </aside>
 
-        {/* Workspace Content View */}
-        <main className="flex-1">
+        {/* Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden flex">
+            <div
+              className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            <div className="relative w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col p-6 z-10 border-r border-[#EAEAEA]">
+              <div className="flex items-center justify-between pb-4 border-b border-[#EAEAEA]">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 bg-[#111111] text-white flex items-center justify-center font-bold text-xs rounded">
+                    A1
+                  </div>
+                  <span className="font-semibold text-xs tracking-wider uppercase">Menu Navigation</span>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-1 text-[#737373] hover:text-[#111111]"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="py-4 space-y-1 flex-1 overflow-y-auto">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 text-xs font-medium rounded transition-all text-left ${
+                        isActive
+                          ? 'bg-[#111111] text-white'
+                          : 'text-[#737373] hover:bg-[#F4F4F4]'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="pt-4 border-t border-[#EAEAEA]">
+                <button
+                  onClick={onLogout}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded text-xs font-medium"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Workspace Main Content */}
+        <main className="flex-1 min-w-0">
+          {activeTab === 'analytics' && <AnalyticsDashboard csrfToken={csrfToken} />}
           {activeTab === 'products' && <ProductManager csrfToken={csrfToken} />}
           {activeTab === 'collections' && <CollectionManager csrfToken={csrfToken} />}
           {activeTab === 'orders' && <OrderManager csrfToken={csrfToken} />}
