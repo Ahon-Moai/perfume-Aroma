@@ -82,7 +82,7 @@ export const SettingsCMS: React.FC<SettingsCMSProps> = ({ csrfToken }) => {
         <button
           type="submit"
           disabled={saving}
-          className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+          className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
         >
           <Save className="w-4 h-4" />
           <span>{saving ? 'Saving...' : 'Save All Settings'}</span>

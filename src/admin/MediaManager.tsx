@@ -106,7 +106,7 @@ export const MediaManager: React.FC<MediaManagerProps> = ({ csrfToken }) => {
           </p>
         </div>
 
-        <label className="inline-flex items-center gap-2 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer">
+        <label className="inline-flex items-center gap-2 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer">
           <Upload className="w-4 h-4" />
           <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
           <input

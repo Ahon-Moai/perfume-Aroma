@@ -97,7 +97,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
               className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111] font-mono"
             />
 
-            <label className="inline-flex items-center gap-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-3.5 py-2 cursor-pointer shrink-0 transition-colors">
+            <label className="inline-flex items-center gap-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider px-3.5 py-2 cursor-pointer shrink-0 transition-colors">
               {uploading ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />

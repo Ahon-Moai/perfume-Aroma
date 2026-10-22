@@ -821,7 +821,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving...' : 'Save Hero Section'}</span>
@@ -922,7 +922,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
+              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving...' : 'Save For Him / Her Banners'}</span>
@@ -970,7 +970,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
               <button
                 type="button"
                 onClick={handleAddSeasonCard}
-                className="px-3.5 py-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Season Card</span>
@@ -1063,7 +1063,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
+              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving...' : 'Save Seasons Gallery'}</span>
@@ -1132,7 +1132,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
               <button
                 type="button"
                 onClick={handleAddCard}
-                className="px-3.5 py-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Video Card</span>
@@ -1268,7 +1268,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
+              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg"
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving...' : 'Save Video Showcase Changes'}</span>
@@ -1360,7 +1360,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                           <label
                             key={p.id}
                             className={`flex items-center justify-between p-1.5 text-[11px] rounded cursor-pointer transition-colors ${
-                              isSelected ? 'bg-[#111111] text-white/20 text-[#111111]' : 'text-[#737373] hover:bg-[#F4F4F4]'
+                              isSelected ? 'bg-[#111111] text-white' : 'text-[#737373] hover:bg-[#F4F4F4]'
                             }`}
                           >
                             <span>
@@ -1391,7 +1391,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                       type="button"
                       disabled={saving}
                       onClick={() => handleSaveCustomSection(secKey)}
-                      className="px-4 py-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+                      className="px-4 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
                     >
                       <Save className="w-3.5 h-3.5" />
                       <span>Save Section #{idx + 1}</span>
@@ -1432,7 +1432,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>{saving ? 'Saving...' : 'Save Marquee Ticker'}</span>
@@ -1456,7 +1456,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                   rating: 5
                 })
               }
-              className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add New Review</span>
@@ -1517,7 +1517,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                 </button>
                 <button
                   onClick={() => handleSaveReview(editingReview)}
-                  className="px-4 py-1 bg-[#111111] text-white text-black font-semibold text-xs"
+                  className="px-4 py-1 bg-[#111111] text-white font-semibold text-xs"
                 >
                   Save Review
                 </button>
@@ -1569,7 +1569,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                   answer: 'Detailed answer response explaining order or decant policies.'
                 })
               }
-              className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add New FAQ</span>
@@ -1608,7 +1608,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                 </button>
                 <button
                   onClick={() => handleSaveFaq(editingFaq)}
-                  className="px-4 py-1 bg-[#111111] text-white text-black font-semibold text-xs"
+                  className="px-4 py-1 bg-[#111111] text-white font-semibold text-xs"
                 >
                   Save FAQ
                 </button>
@@ -1661,7 +1661,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                   image: '/src/assets/images/article_decant_buyers_guide_1791908274237.jpg'
                 })
               }
-              className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add New Article</span>
@@ -1726,7 +1726,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                 </button>
                 <button
                   onClick={() => handleSaveArticle(editingArticle)}
-                  className="px-4 py-1 bg-[#111111] text-white text-black font-semibold text-xs"
+                  className="px-4 py-1 bg-[#111111] text-white font-semibold text-xs"
                 >
                   Save Article
                 </button>

@@ -346,14 +346,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-[#EAEAEA] p-6">
         <div>
-          <h2 className="font-serif text-xl text-white font-normal">Fragrance Product Catalog</h2>
+          <h2 className="font-serif text-xl text-[#111111] font-normal">Fragrance Product Catalog</h2>
           <p className="text-xs text-[#737373] font-sans mt-0.5">
             Manage decants, full bottles, sizes, prices, and structured scent attributes
           </p>
         </div>
         <button
           onClick={handleOpenCreate}
-          className="inline-flex items-center gap-2 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 bg-[#111111] text-white hover:bg-amber-300 text-xs font-semibold uppercase tracking-wider px-5 py-2.5 transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Product</span>
@@ -368,7 +368,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search products by brand, name, category or scent notes..."
-          className="w-full bg-white border border-[#EAEAEA] pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#111111]"
+          className="w-full bg-white border border-[#EAEAEA] pl-10 pr-4 py-2.5 text-xs text-[#111111] placeholder-zinc-500 focus:outline-none focus:border-[#111111]"
         />
       </div>
 
@@ -407,13 +407,13 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                       <img src={p.image} alt={p.name} className="max-h-full max-w-full object-contain" />
                     </div>
                     <div>
-                      <p className="font-serif text-sm text-white font-normal">{p.name}</p>
+                      <p className="font-serif text-sm text-[#111111] font-normal">{p.name}</p>
                       <p className="text-[10px] text-[#737373] font-mono">{p.id}</p>
                     </div>
                   </td>
                   <td className="py-3.5 px-4 text-[#111111] font-medium">{p.brand}</td>
                   <td className="py-3.5 px-4 text-[#737373]">{p.category}</td>
-                  <td className="py-3.5 px-4 font-mono font-semibold text-white">৳ {p.starting_price}</td>
+                  <td className="py-3.5 px-4 font-mono font-semibold text-[#111111]">৳ {p.starting_price}</td>
                   <td className="py-3.5 px-4">
                     <span className={`px-2 py-0.5 text-[10px] font-mono rounded ${p.inventory_qty < 10 ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-[#F4F4F4] text-[#111111]'}`}>
                       {p.inventory_qty} in stock
@@ -450,11 +450,11 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       {/* Edit / Create Product Modal */}
       {isModalOpen && editingProduct && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
-          <div className="relative w-full max-w-4xl bg-white border border-[#EAEAEA] shadow-2xl flex flex-col max-h-[92vh] text-white my-auto rounded-none">
+          <div className="relative w-full max-w-4xl bg-white border border-[#EAEAEA] shadow-2xl flex flex-col max-h-[92vh] text-[#111111] my-auto rounded-none">
             {/* Modal Header - Fixed */}
             <div className="flex items-center justify-between border-b border-[#EAEAEA] px-6 py-4 shrink-0 bg-white">
               <div>
-                <h3 className="font-serif text-xl font-normal text-white">
+                <h3 className="font-serif text-xl font-normal text-[#111111]">
                   {products.some(p => p.id === editingProduct.id) ? 'Edit Fragrance Product' : 'Create New Fragrance Product'}
                 </h3>
                 <p className="text-[10px] text-[#111111] font-mono mt-0.5">
@@ -489,7 +489,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         value={editingProduct.brand || ''}
                         onChange={e => setEditingProduct({ ...editingProduct, brand: e.target.value })}
                         required
-                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111]"
+                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]"
                         placeholder="e.g. ARRINA, SWISS ARABIAN"
                       />
                     </div>
@@ -500,7 +500,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         value={editingProduct.name || ''}
                         onChange={e => setEditingProduct({ ...editingProduct, name: e.target.value })}
                         required
-                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111]"
+                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]"
                         placeholder="e.g. Pure Portions"
                       />
                     </div>
@@ -511,7 +511,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         value={editingProduct.category || ''}
                         onChange={e => setEditingProduct({ ...editingProduct, category: e.target.value })}
                         required
-                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111]"
+                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]"
                         placeholder="e.g. Solar Floral Amber, Woody Oriental"
                       />
                     </div>
@@ -520,7 +520,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                       <select
                         value={editingProduct.gender || 'Unisex'}
                         onChange={e => setEditingProduct({ ...editingProduct, gender: e.target.value as any })}
-                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111]"
+                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]"
                       >
                         <option value="Unisex">Unisex</option>
                         <option value="Him">For Him</option>
@@ -533,7 +533,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         type="text"
                         value={editingProduct.concentration || ''}
                         onChange={e => setEditingProduct({ ...editingProduct, concentration: e.target.value })}
-                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111]"
+                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]"
                         placeholder="Eau de Parfum / Extrait de Parfum"
                       />
                     </div>
@@ -544,7 +544,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         value={editingProduct.starting_price || 0}
                         onChange={e => setEditingProduct({ ...editingProduct, starting_price: Number(e.target.value) })}
                         required
-                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111] font-mono"
+                        className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111] font-mono"
                       />
                     </div>
                   </div>
@@ -608,7 +608,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                       value={editingProduct.short_description || ''}
                       onChange={e => setEditingProduct({ ...editingProduct, short_description: e.target.value })}
                       rows={2}
-                      className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111]"
+                      className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]"
                       placeholder="Brief fragrance hook for cards and previews..."
                     />
                   </div>
@@ -641,11 +641,11 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             onClick={() => toggleMultiSelectOption('fragranceFamilies', fam)}
                             className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
                               isSelected
-                                ? 'bg-[#111111] text-white text-black border-[#111111] font-semibold shadow-xs'
+                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
                                 : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
                             }`}
                           >
-                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                             <span>{fam}</span>
                           </button>
                         );
@@ -676,7 +676,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               }
                             }}
                             placeholder="Add top note..."
-                            className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-white focus:border-[#111111]"
+                            className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] focus:border-[#111111]"
                           />
                           <button
                             type="button"
@@ -684,14 +684,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               addNoteTag('topNotes', topNoteInput);
                               setTopNoteInput('');
                             }}
-                            className="px-2 py-1 bg-[#111111] text-white text-black text-xs font-semibold uppercase cursor-pointer"
+                            className="px-2 py-1 bg-[#111111] text-white text-xs font-semibold uppercase cursor-pointer"
                           >
                             +
                           </button>
                         </div>
                         <div className="flex flex-wrap gap-1.5 min-h-[32px] pt-1">
                           {(activeScentProfile.topNotes || []).map((note, idx) => (
-                            <span key={idx} className="inline-flex items-center gap-1 bg-[#F4F4F4] border border-[#EAEAEA] text-amber-200 px-2 py-0.5 text-[11px] rounded-none">
+                            <span key={idx} className="inline-flex items-center gap-1 bg-[#F4F4F4] border border-[#EAEAEA] text-[#111111] px-2 py-0.5 text-[11px] rounded-none">
                               {note}
                               <button
                                 type="button"
@@ -724,7 +724,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               }
                             }}
                             placeholder="Add heart note..."
-                            className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-white focus:border-[#111111]"
+                            className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] focus:border-[#111111]"
                           />
                           <button
                             type="button"
@@ -732,14 +732,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               addNoteTag('heartNotes', heartNoteInput);
                               setHeartNoteInput('');
                             }}
-                            className="px-2 py-1 bg-[#111111] text-white text-black text-xs font-semibold uppercase cursor-pointer"
+                            className="px-2 py-1 bg-[#111111] text-white text-xs font-semibold uppercase cursor-pointer"
                           >
                             +
                           </button>
                         </div>
                         <div className="flex flex-wrap gap-1.5 min-h-[32px] pt-1">
                           {(activeScentProfile.heartNotes || []).map((note, idx) => (
-                            <span key={idx} className="inline-flex items-center gap-1 bg-[#F4F4F4] border border-[#EAEAEA] text-amber-200 px-2 py-0.5 text-[11px] rounded-none">
+                            <span key={idx} className="inline-flex items-center gap-1 bg-[#F4F4F4] border border-[#EAEAEA] text-[#111111] px-2 py-0.5 text-[11px] rounded-none">
                               {note}
                               <button
                                 type="button"
@@ -772,7 +772,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               }
                             }}
                             placeholder="Add base note..."
-                            className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-white focus:border-[#111111]"
+                            className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] focus:border-[#111111]"
                           />
                           <button
                             type="button"
@@ -780,14 +780,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               addNoteTag('baseNotes', baseNoteInput);
                               setBaseNoteInput('');
                             }}
-                            className="px-2 py-1 bg-[#111111] text-white text-black text-xs font-semibold uppercase cursor-pointer"
+                            className="px-2 py-1 bg-[#111111] text-white text-xs font-semibold uppercase cursor-pointer"
                           >
                             +
                           </button>
                         </div>
                         <div className="flex flex-wrap gap-1.5 min-h-[32px] pt-1">
                           {(activeScentProfile.baseNotes || []).map((note, idx) => (
-                            <span key={idx} className="inline-flex items-center gap-1 bg-[#F4F4F4] border border-[#EAEAEA] text-amber-200 px-2 py-0.5 text-[11px] rounded-none">
+                            <span key={idx} className="inline-flex items-center gap-1 bg-[#F4F4F4] border border-[#EAEAEA] text-[#111111] px-2 py-0.5 text-[11px] rounded-none">
                               {note}
                               <button
                                 type="button"
@@ -822,11 +822,11 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             onClick={() => toggleMultiSelectOption('seasons', season)}
                             className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
                               isSelected
-                                ? 'bg-[#111111] text-white text-black border-[#111111] font-semibold shadow-xs'
+                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
                                 : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
                             }`}
                           >
-                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                             <span>{season}</span>
                           </button>
                         );
@@ -849,11 +849,11 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             onClick={() => toggleMultiSelectOption('occasions', occ)}
                             className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
                               isSelected
-                                ? 'bg-[#111111] text-white text-black border-[#111111] font-semibold shadow-xs'
+                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
                                 : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
                             }`}
                           >
-                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                             <span>{occ}</span>
                           </button>
                         );
@@ -876,11 +876,11 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             onClick={() => toggleMultiSelectOption('moods', mood)}
                             className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
                               isSelected
-                                ? 'bg-[#111111] text-white text-black border-[#111111] font-semibold shadow-xs'
+                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
                                 : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
                             }`}
                           >
-                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                             <span>{mood}</span>
                           </button>
                         );
@@ -902,7 +902,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <select
                           value={activeScentProfile.intensity || 'Unknown'}
                           onChange={e => updateScentProfile('intensity', e.target.value)}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-white focus:border-[#111111]"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
                         >
                           {INTENSITY_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -916,7 +916,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <select
                           value={activeScentProfile.projection || 'Unknown'}
                           onChange={e => updateScentProfile('projection', e.target.value)}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-white focus:border-[#111111]"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
                         >
                           {PROJECTION_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -930,7 +930,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <select
                           value={activeScentProfile.longevity || 'Unknown'}
                           onChange={e => updateScentProfile('longevity', e.target.value)}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-white focus:border-[#111111]"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
                         >
                           {LONGEVITY_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -944,7 +944,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <select
                           value={activeScentProfile.concentration || 'Unknown'}
                           onChange={e => updateScentProfile('concentration', e.target.value)}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-white focus:border-[#111111]"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
                         >
                           {CONCENTRATION_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -958,7 +958,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <select
                           value={activeScentProfile.genderPositioning || 'Unknown'}
                           onChange={e => updateScentProfile('genderPositioning', e.target.value)}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-white focus:border-[#111111]"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
                         >
                           {GENDER_POSITIONING_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -972,7 +972,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <select
                           value={activeScentProfile.sweetness || 'Unknown'}
                           onChange={e => updateScentProfile('sweetness', e.target.value)}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-white focus:border-[#111111]"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
                         >
                           {SWEETNESS_OPTIONS.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
@@ -998,11 +998,11 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             onClick={() => toggleMultiSelectOption('daytimeNighttime', dn)}
                             className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
                               isSelected
-                                ? 'bg-[#111111] text-white text-black border-[#111111] font-semibold shadow-xs'
+                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
                                 : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
                             }`}
                           >
-                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                             <span>{dn}</span>
                           </button>
                         );
@@ -1024,7 +1024,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                           value={activeScentProfile.scentDescription || ''}
                           onChange={e => updateScentProfile('scentDescription', e.target.value)}
                           rows={3}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111] font-sans"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111] font-sans"
                           placeholder="Rich, detailed description of how the scent evolves on skin..."
                         />
                       </div>
@@ -1034,7 +1034,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                           value={activeScentProfile.recommendationExplanation || ''}
                           onChange={e => updateScentProfile('recommendationExplanation', e.target.value)}
                           rows={3}
-                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-white focus:border-[#111111] font-sans"
+                          className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111] font-sans"
                           placeholder="Why this fragrance is recommended for the selected answers/profiles..."
                         />
                       </div>
@@ -1074,7 +1074,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                               attrs[idx].name = e.target.value;
                               setEditingProduct({ ...editingProduct, attributes: attrs });
                             }}
-                            className="bg-transparent text-xs font-medium text-white border-b border-[#EAEAEA] focus:border-[#111111] px-1 py-0.5"
+                            className="bg-transparent text-xs font-medium text-[#111111] border-b border-[#EAEAEA] focus:border-[#111111] px-1 py-0.5"
                           />
                           <div className="flex items-center gap-2">
                             <span className="text-[11px] font-mono font-bold text-[#111111]">{attr.value}%</span>
@@ -1143,7 +1143,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             vars[idx].size = e.target.value;
                             setEditingProduct({ ...editingProduct, variants: vars });
                           }}
-                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-white"
+                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111]"
                         />
                         <input
                           type="number"
@@ -1154,7 +1154,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             vars[idx].price = Number(e.target.value);
                             setEditingProduct({ ...editingProduct, variants: vars });
                           }}
-                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-white font-mono"
+                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] font-mono"
                         />
                         <input
                           type="number"
@@ -1165,7 +1165,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                             vars[idx].stock_qty = Number(e.target.value);
                             setEditingProduct({ ...editingProduct, variants: vars });
                           }}
-                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-white font-mono"
+                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] font-mono"
                         />
                         <button
                           type="button"
@@ -1189,14 +1189,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 bg-[#F4F4F4] hover:bg-zinc-700 text-white text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-[#F4F4F4] hover:bg-[#EAEAEA] text-[#111111] text-xs uppercase tracking-wider transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+                  className="px-6 py-2.5 bg-[#111111] text-white hover:bg-amber-300 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
                 >
                   {saving ? 'Saving...' : 'Save Product'}
                 </button>

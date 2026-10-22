@@ -112,7 +112,7 @@ export const OrderManager: React.FC<OrderManagerProps> = ({ csrfToken }) => {
   };
 
   const statusBadges: Record<string, string> = {
-    pending: 'bg-amber-950/80 text-[#111111] border-amber-800',
+    pending: 'bg-amber-100 text-amber-900 border-amber-300',
     confirmed: 'bg-cyan-950/80 text-cyan-300 border-cyan-800',
     processing: 'bg-blue-950/80 text-blue-300 border-blue-800',
     shipped: 'bg-indigo-950/80 text-indigo-300 border-indigo-800',
@@ -138,7 +138,7 @@ export const OrderManager: React.FC<OrderManagerProps> = ({ csrfToken }) => {
               onClick={() => setStatusFilter(st)}
               className={`px-3 py-1.5 text-[10px] uppercase font-sans tracking-wider border transition-colors cursor-pointer ${
                 statusFilter === st
-                  ? 'bg-[#111111] text-white text-black border-[#111111] font-semibold'
+                  ? 'bg-[#111111] text-white border-[#111111] font-semibold'
                   : 'bg-[#F8F8F8] text-[#737373] border-[#EAEAEA] hover:text-[#111111]'
               }`}
             >
@@ -287,7 +287,7 @@ export const OrderManager: React.FC<OrderManagerProps> = ({ csrfToken }) => {
             <div className="flex items-center justify-between pt-4 border-t border-[#EAEAEA]">
               <button
                 onClick={() => setPrintableOrder(selectedOrder)}
-                className="px-4 py-2 bg-[#111111] text-white hover:bg-amber-300 text-black text-xs font-semibold uppercase tracking-wider flex items-center gap-2"
+                className="px-4 py-2 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider flex items-center gap-2"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print Invoice</span>
@@ -365,7 +365,7 @@ export const OrderManager: React.FC<OrderManagerProps> = ({ csrfToken }) => {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-zinc-200 text-xs">
-              <button onClick={() => window.print()} className="px-4 py-2 bg-black text-[#111111] text-xs font-semibold uppercase tracking-wider">
+              <button onClick={() => window.print()} className="px-4 py-2 bg-[#111111] text-white hover:bg-amber-300 hover:text-[#111111] text-xs font-semibold uppercase tracking-wider cursor-pointer">
                 Print Official Copy
               </button>
               <button onClick={() => setPrintableOrder(null)} className="px-4 py-2 bg-zinc-200 text-zinc-800 text-xs uppercase">

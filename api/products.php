@@ -148,6 +148,8 @@ if ($collection && $collection !== 'all') {
                     $inM = implode(',', array_fill(0, count($mappedIds), '?'));
                     $where[] = "id IN ($inM)";
                     foreach ($mappedIds as $mId) $params[] = $mId;
+                } else {
+                    $where[] = "1 = 0";
                 }
             }
         } else {
