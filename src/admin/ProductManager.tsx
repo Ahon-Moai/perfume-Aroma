@@ -9,6 +9,7 @@ interface ProductVariant {
   size: string;
   price: number;
   stock_qty: number;
+  image?: string;
 }
 
 interface AttributeItem {
@@ -173,12 +174,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       inventory_qty: 100,
       is_featured: true,
       is_new_arrival: true,
-      variants: [
-        { size: '3ml', price: 350, stock_qty: 100 },
-        { size: '5ml', price: 490, stock_qty: 100 },
-        { size: '9ml', price: 850, stock_qty: 100 },
-        { size: '15ml', price: 1350, stock_qty: 100 }
-      ]
+      variants: []
     });
     setFamilyInput('');
     setOccasionInput('');
@@ -1432,52 +1428,66 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                     </button>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {(editingProduct.variants || []).map((v, idx) => (
-                      <div key={idx} className="flex items-center gap-2 bg-[#F8F8F8] p-2 border border-[#EAEAEA]">
-                        <input
-                          type="text"
-                          value={v.size}
-                          placeholder="Size (e.g. 5ml)"
-                          onChange={e => {
+                      <div key={idx} className="bg-[#F8F8F8] p-3 border border-[#EAEAEA] space-y-2">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={v.size}
+                            placeholder="Size Label (e.g. 1.5ML TESTER, 3ML, 5ML, 15ML)"
+                            onChange={e => {
+                              const vars = [...(editingProduct.variants || [])];
+                              vars[idx].size = e.target.value;
+                              setEditingProduct({ ...editingProduct, variants: vars });
+                            }}
+                            className="flex-1 bg-white border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111]"
+                          />
+                          <input
+                            type="number"
+                            value={v.price}
+                            placeholder="Price (৳)"
+                            onChange={e => {
+                              const vars = [...(editingProduct.variants || [])];
+                              vars[idx].price = Number(e.target.value);
+                              setEditingProduct({ ...editingProduct, variants: vars });
+                            }}
+                            className="w-28 bg-white border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] font-mono"
+                          />
+                          <input
+                            type="number"
+                            value={v.stock_qty}
+                            placeholder="Stock Qty"
+                            onChange={e => {
+                              const vars = [...(editingProduct.variants || [])];
+                              vars[idx].stock_qty = Number(e.target.value);
+                              setEditingProduct({ ...editingProduct, variants: vars });
+                            }}
+                            className="w-24 bg-white border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] font-mono"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const vars = (editingProduct.variants || []).filter((_, i) => i !== idx);
+                              setEditingProduct({ ...editingProduct, variants: vars });
+                            }}
+                            className="p-1.5 text-red-400 hover:text-red-300 cursor-pointer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Variant Picture Upload */}
+                        <ImageUploader
+                          label={`Size Picture / Bottle Image (${v.size || 'Variant ' + (idx + 1)})`}
+                          value={v.image || ''}
+                          onChange={url => {
                             const vars = [...(editingProduct.variants || [])];
-                            vars[idx].size = e.target.value;
+                            vars[idx].image = url;
                             setEditingProduct({ ...editingProduct, variants: vars });
                           }}
-                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111]"
+                          csrfToken={csrfToken}
                         />
-                        <input
-                          type="number"
-                          value={v.price}
-                          placeholder="Price (৳)"
-                          onChange={e => {
-                            const vars = [...(editingProduct.variants || [])];
-                            vars[idx].price = Number(e.target.value);
-                            setEditingProduct({ ...editingProduct, variants: vars });
-                          }}
-                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] font-mono"
-                        />
-                        <input
-                          type="number"
-                          value={v.stock_qty}
-                          placeholder="Stock Qty"
-                          onChange={e => {
-                            const vars = [...(editingProduct.variants || [])];
-                            vars[idx].stock_qty = Number(e.target.value);
-                            setEditingProduct({ ...editingProduct, variants: vars });
-                          }}
-                          className="w-1/3 bg-white border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111] font-mono"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const vars = (editingProduct.variants || []).filter((_, i) => i !== idx);
-                            setEditingProduct({ ...editingProduct, variants: vars });
-                          }}
-                          className="text-red-400 p-1 hover:text-red-300 cursor-pointer"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
                       </div>
                     ))}
                   </div>

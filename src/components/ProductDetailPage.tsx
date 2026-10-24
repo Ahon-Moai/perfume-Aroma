@@ -169,7 +169,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
 
           {/* A. PRODUCT GALLERY (Columns 1 to 7 on desktop) */}
-          <div className="lg:col-span-7 flex flex-col gap-4 sticky top-24">
+          <div className="lg:col-span-7 flex flex-col gap-4">
             {/* Main Image Stage */}
             <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square bg-white border border-zinc-200/90 shadow-xs flex items-center justify-center p-6 sm:p-10 overflow-hidden group">
               <img
@@ -282,35 +282,60 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </p>
               )}
 
-              {/* Decant Volume / Size Option Selector */}
-              <div className="space-y-2 pt-2 border-t border-zinc-150">
-                <div className="flex items-center justify-between text-xs text-zinc-700 font-sans">
-                  <span className="font-semibold tracking-wide uppercase text-[11px]">
-                    Select Decant Volume:
+              {/* Decant Volume / Size Option Visual Cards Selector */}
+              <div className="space-y-3 pt-3 border-t border-zinc-150">
+                <div className="flex items-center justify-between text-xs text-zinc-800 font-sans">
+                  <span className="font-bold tracking-widest uppercase text-amber-900 text-xs">
+                    SELECT SIZE
                   </span>
-                  <span className="text-zinc-400 text-[10px] uppercase font-mono">
-                    High-Pressure Atomizer
+                  <span className="text-xs text-zinc-600 font-medium">
+                    Selected: <span className="font-bold text-zinc-950">{currentSize.size}</span>
                   </span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {product.sizes.map((s, idx) => (
-                    <button
-                      key={s.size}
-                      onClick={() => setSelectedSizeIndex(idx)}
-                      className={`py-3 px-2 text-center border transition-all cursor-pointer flex flex-col items-center justify-center ${
-                        selectedSizeIndex === idx
-                          ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                          : 'border-zinc-200 bg-[#fafafa] text-zinc-800 hover:border-zinc-400'
-                      }`}
-                    >
-                      <span className="text-xs font-sans tracking-wider uppercase font-semibold">
-                        {s.size}
-                      </span>
-                      <span className={`text-[10px] font-mono mt-0.5 ${selectedSizeIndex === idx ? 'text-amber-300' : 'text-zinc-500'}`}>
-                        ৳ {s.price}
-                      </span>
-                    </button>
-                  ))}
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {product.sizes.map((s, idx) => {
+                    const isSelected = selectedSizeIndex === idx;
+                    const sizeImage = s.image || activeImage;
+
+                    return (
+                      <button
+                        key={s.size || idx}
+                        onClick={() => setSelectedSizeIndex(idx)}
+                        className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-200 text-left cursor-pointer ${
+                          isSelected
+                            ? 'border-amber-600 ring-2 ring-amber-600/40 shadow-lg scale-[1.02]'
+                            : 'border-zinc-200 hover:border-zinc-400 bg-white'
+                        }`}
+                      >
+                        {/* Variant Picture Container */}
+                        <div className="w-full aspect-square bg-[#f8f7f4] p-3 flex items-center justify-center overflow-hidden">
+                          <img
+                            src={sizeImage}
+                            alt={s.size}
+                            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+
+                        {/* Dark/Gold Label Banner */}
+                        <div
+                          className={`w-full py-2 px-2 text-center transition-colors ${
+                            isSelected
+                              ? 'bg-amber-700 text-white'
+                              : 'bg-zinc-900 text-white group-hover:bg-zinc-800'
+                          }`}
+                        >
+                          <span className="text-xs font-bold font-sans tracking-wide uppercase block">
+                            {s.size}
+                          </span>
+                          <span className="text-[11px] font-mono font-medium block opacity-90 mt-0.5">
+                            ৳ {s.price}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
