@@ -14,7 +14,7 @@ import {
   PackageCheck,
   Flame
 } from 'lucide-react';
-import { FragranceProduct, DecantSize } from '../types';
+import { FragranceProduct, DecantSize, MainAccord } from '../types';
 
 interface ProductDetailPageProps {
   product: FragranceProduct | null;
@@ -123,6 +123,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       ];
 
   const sp = product.scentProfile || product.scent_profile || {};
+  const accordsList: MainAccord[] = Array.isArray(sp.accords) && sp.accords.length > 0
+    ? sp.accords
+    : (Array.isArray(product.accords) && product.accords.length > 0 ? product.accords : []);
 
   // Related products (exclude current product)
   const relatedProducts = allProducts
@@ -511,64 +514,99 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               )}
 
-              {/* Fragrance Notes Pyramid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-                {/* Top Notes */}
-                <div className="bg-[#fafaf8] border border-zinc-200 p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
-                    <Sparkles className="w-4 h-4 text-amber-600" />
-                    <span>Top Notes</span>
-                  </div>
-                  <p className="text-[11px] font-mono text-zinc-400 uppercase">
-                    FIRST 15 MINUTES
-                  </p>
-                  <div className="text-xs text-zinc-800 font-sans space-y-1.5 pt-1">
-                    {(product.topNotes && product.topNotes.length > 0 ? product.topNotes : product.notes || ['Neroli', 'Bergamot']).map((note, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                        <span>{note}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Fragrantica-style Main Accords Stack */}
+              <div className="space-y-4 pt-2">
+                <div className="flex items-center justify-between border-b border-zinc-200 pb-2">
+                  <h4 className="text-xs font-sans tracking-widest uppercase font-bold text-zinc-900 flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-amber-700" />
+                    <span>Main Accords</span>
+                  </h4>
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase">
+                    Scent Progression & Intensity
+                  </span>
                 </div>
 
-                {/* Heart Notes */}
-                <div className="bg-[#fafaf8] border border-zinc-200 p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
-                    <Droplets className="w-4 h-4 text-amber-600" />
-                    <span>Heart Notes</span>
-                  </div>
-                  <p className="text-[11px] font-mono text-zinc-400 uppercase">
-                    1 TO 4 HOURS
-                  </p>
-                  <div className="text-xs text-zinc-800 font-sans space-y-1.5 pt-1">
-                    {(product.heartNotes && product.heartNotes.length > 0 ? product.heartNotes : ['Madagascar Vanilla', 'Jasmin Blossom']).map((note, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
-                        <span>{note}</span>
+                {accordsList.length > 0 ? (
+                  <div className="space-y-1.5 max-w-lg pt-1">
+                    {accordsList.map((acc, idx) => (
+                      <div
+                        key={acc.id || idx}
+                        style={{
+                          width: `${Math.max(15, Math.min(100, acc.intensity))}%`,
+                          backgroundColor: acc.color || '#a288e3'
+                        }}
+                        className="h-8 rounded-r-md flex items-center justify-start px-3 text-xs font-sans font-medium text-black shadow-xs transition-all duration-300 hover:opacity-95"
+                      >
+                        <span className="truncate drop-shadow-xs tracking-wide">
+                          {acc.name}
+                        </span>
                       </div>
                     ))}
                   </div>
-                </div>
+                ) : (
+                  <p className="text-xs text-zinc-500 italic py-2">
+                    No main accords specified for this fragrance.
+                  </p>
+                )}
 
-                {/* Base Notes */}
-                <div className="bg-[#fafaf8] border border-zinc-200 p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
-                    <Flame className="w-4 h-4 text-amber-600" />
-                    <span>Base Notes</span>
-                  </div>
-                  <p className="text-[11px] font-mono text-zinc-400 uppercase">
-                    4 TO 12+ HOURS
-                  </p>
-                  <div className="text-xs text-zinc-800 font-sans space-y-1.5 pt-1">
-                    {(product.baseNotes && product.baseNotes.length > 0 ? product.baseNotes : ['Golden Amber', 'Cashmeran', 'Sandalwood']).map((note, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-900" />
-                        <span>{note}</span>
+                {/* Olfactory Pyramid Notes (If configured by admin) */}
+                {((sp.topNotes && sp.topNotes.length > 0) || (sp.heartNotes && sp.heartNotes.length > 0) || (sp.baseNotes && sp.baseNotes.length > 0)) && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-zinc-150">
+                    {/* Top Notes */}
+                    {sp.topNotes && sp.topNotes.length > 0 && (
+                      <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
+                        <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Top Notes</span>
+                        </div>
+                        <div className="text-xs text-zinc-800 font-sans space-y-1 pt-1">
+                          {sp.topNotes.map((note, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                              <span>{note}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    ))}
+                    )}
+
+                    {/* Heart Notes */}
+                    {sp.heartNotes && sp.heartNotes.length > 0 && (
+                      <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
+                        <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
+                          <Droplets className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Heart Notes</span>
+                        </div>
+                        <div className="text-xs text-zinc-800 font-sans space-y-1 pt-1">
+                          {sp.heartNotes.map((note, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                              <span>{note}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Base Notes */}
+                    {sp.baseNotes && sp.baseNotes.length > 0 && (
+                      <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
+                        <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
+                          <Flame className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Base Notes</span>
+                        </div>
+                        <div className="text-xs text-zinc-800 font-sans space-y-1 pt-1">
+                          {sp.baseNotes.map((note, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-zinc-900" />
+                              <span>{note}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Intensity & Performance Attribute Sliders */}
