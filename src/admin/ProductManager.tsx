@@ -1419,7 +1419,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         const curr = editingProduct.variants || [];
                         setEditingProduct({
                           ...editingProduct,
-                          variants: [...curr, { size: '5ml', price: 490, stock_qty: 100 }]
+                          variants: [...curr, { size: '', price: '' as any, stock_qty: '' as any }]
                         });
                       }}
                       className="text-[10px] bg-[#F4F4F4] hover:bg-zinc-700 px-2 py-1 text-[#111111] uppercase cursor-pointer"
@@ -1434,7 +1434,7 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                         <div className="flex items-center gap-2">
                           <input
                             type="text"
-                            value={v.size}
+                            value={v.size || ''}
                             placeholder="Size Label (e.g. 1.5ML TESTER, 3ML, 5ML, 15ML)"
                             onChange={e => {
                               const vars = [...(editingProduct.variants || [])];
@@ -1445,22 +1445,22 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                           />
                           <input
                             type="number"
-                            value={v.price}
+                            value={v.price === 0 || v.price ? v.price : ''}
                             placeholder="Price (৳)"
                             onChange={e => {
                               const vars = [...(editingProduct.variants || [])];
-                              vars[idx].price = Number(e.target.value);
+                              vars[idx].price = e.target.value === '' ? ('' as any) : Number(e.target.value);
                               setEditingProduct({ ...editingProduct, variants: vars });
                             }}
                             className="w-28 bg-white border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] font-mono"
                           />
                           <input
                             type="number"
-                            value={v.stock_qty}
+                            value={v.stock_qty === 0 || v.stock_qty ? v.stock_qty : ''}
                             placeholder="Stock Qty"
                             onChange={e => {
                               const vars = [...(editingProduct.variants || [])];
-                              vars[idx].stock_qty = Number(e.target.value);
+                              vars[idx].stock_qty = e.target.value === '' ? ('' as any) : Number(e.target.value);
                               setEditingProduct({ ...editingProduct, variants: vars });
                             }}
                             className="w-24 bg-white border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] font-mono"
