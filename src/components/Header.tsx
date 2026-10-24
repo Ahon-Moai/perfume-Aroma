@@ -145,7 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-1 sm:gap-2 text-zinc-900">
           <button
             onClick={onOpenSearch}
-            className="p-2 hover:text-zinc-600 transition-colors"
+            className="p-2 hover:text-zinc-600 transition-colors hidden md:block"
             aria-label="Search fragrances"
           >
             <Search className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
@@ -156,7 +156,7 @@ export const Header: React.FC<HeaderProps> = ({
               const el = document.getElementById('account-section');
               el?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="p-2 hover:text-zinc-600 transition-colors hidden xs:block"
+            className="p-2 hover:text-zinc-600 transition-colors hidden md:block"
             aria-label="Account"
           >
             <User className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
@@ -164,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={onOpenWishlist}
-            className="p-2 hover:text-zinc-600 transition-colors relative"
+            className="p-2 hover:text-zinc-600 transition-colors relative hidden md:block"
             aria-label="Wishlist"
           >
             <Heart className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
