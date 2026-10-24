@@ -169,7 +169,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
 
           {/* A. PRODUCT GALLERY (Columns 1 to 7 on desktop) */}
-          <div className="lg:col-span-7 flex flex-col gap-4 sticky top-24">
+          <div className="lg:col-span-7 flex flex-col gap-4">
             {/* Main Image Stage */}
             <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square bg-white border border-zinc-200/90 shadow-xs flex items-center justify-center p-6 sm:p-10 overflow-hidden group">
               <img
