@@ -10,6 +10,13 @@ export interface FragranceAttribute {
   enabled: boolean;
 }
 
+export interface MainAccord {
+  id?: string;
+  name: string; // e.g. "iris", "woody", "powdery"
+  color: string; // Hex color code e.g. "#b4a3db"
+  intensity: number; // 0 to 100 percentage bar length
+}
+
 export interface ScentProfile {
   fragranceFamilies?: string[];
   topNotes?: string[];
@@ -27,6 +34,7 @@ export interface ScentProfile {
   sweetness?: string;
   scentDescription?: string;
   recommendationExplanation?: string;
+  accords?: MainAccord[];
 }
 
 export interface FragranceProduct {
@@ -45,6 +53,7 @@ export interface FragranceProduct {
   heartNotes?: string[];
   baseNotes?: string[];
   attributes?: FragranceAttribute[];
+  accords?: MainAccord[];
   scentProfile?: ScentProfile;
   scent_profile?: ScentProfile;
   sizes: DecantSize[];

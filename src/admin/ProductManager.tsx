@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Search, Check, X, Tag, Sparkles, Sliders, Info, Calendar, Clock, Sun } from 'lucide-react';
 import { getErrorMessage } from '../services/api';
 import { ImageUploader } from './ImageUploader';
-import { ScentProfile } from '../types';
+import { ScentProfile, MainAccord } from '../types';
 
 interface ProductVariant {
   id?: string;
@@ -34,6 +34,7 @@ interface Product {
   heart_notes?: string[];
   base_notes?: string[];
   attributes?: AttributeItem[];
+  accords?: MainAccord[];
   scent_profile?: ScentProfile;
   scentProfile?: ScentProfile;
   status: 'draft' | 'published' | 'archived';
@@ -50,23 +51,7 @@ interface ProductManagerProps {
 }
 
 // Preset option constants for Find Your Scent recommendation attributes
-const FRAGRANCE_FAMILIES_OPTIONS = [
-  'Floral', 'Woody', 'Amber / Oriental', 'Fresh / Citrus', 'Gourmand',
-  'Aquatic / Marine', 'Aromatic / Herbal', 'Leather', 'Chypre', 'Fougère',
-  'Fruity', 'Spicy', 'Green', 'Musk'
-];
-
 const SEASONS_OPTIONS = ['Spring', 'Summer', 'Autumn', 'Winter', 'All Seasons'];
-
-const OCCASIONS_OPTIONS = [
-  'Daily / Casual', 'Office / Work', 'Evening / Date Night',
-  'Formal / Black Tie', 'Party / Nightout', 'Gym / Sport', 'Special Occasions'
-];
-
-const MOODS_OPTIONS = [
-  'Elegant / Sophisticated', 'Mysterious / Seductive', 'Clean / Refreshing',
-  'Warm / Cozy', 'Bold / Powerful', 'Playful / Youthful', 'Relaxing / Calming'
-];
 
 const DAY_NIGHT_OPTIONS = ['Daytime', 'Nighttime', 'All-Day / Any'];
 
@@ -95,6 +80,16 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
   const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Dynamic Option Inputs State (Fragrance Families, Occasions, Moods)
+  const [familyInput, setFamilyInput] = useState('');
+  const [occasionInput, setOccasionInput] = useState('');
+  const [moodInput, setMoodInput] = useState('');
+
+  // Main Accord Creation State
+  const [accordNameInput, setAccordNameInput] = useState('');
+  const [accordColorInput, setAccordColorInput] = useState('#a288e3');
+  const [accordIntensityInput, setAccordIntensityInput] = useState(85);
 
   // Note Tag Inputs State
   const [topNoteInput, setTopNoteInput] = useState('');
@@ -129,6 +124,14 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
   ];
 
   const handleOpenCreate = () => {
+    const defaultAccords: MainAccord[] = [
+      { id: 'acc-1', name: 'iris', color: '#b4a3db', intensity: 100 },
+      { id: 'acc-2', name: 'woody', color: '#7a4e28', intensity: 85 },
+      { id: 'acc-3', name: 'powdery', color: '#c8c2b5', intensity: 75 },
+      { id: 'acc-4', name: 'earthy', color: '#4a4438', intensity: 62 },
+      { id: 'acc-5', name: 'aromatic', color: '#2b7863', intensity: 55 }
+    ];
+
     const defaultScentProfile: ScentProfile = {
       fragranceFamilies: ['Floral'],
       topNotes: ['Neroli Blossom', 'Bergamot'],
@@ -145,7 +148,8 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       daytimeNighttime: ['Daytime', 'Nighttime'],
       sweetness: 'Subtle / Slightly Sweet',
       scentDescription: 'Weightless neroli blossom, cured Madagascar bourbon vanilla, and radiant golden amber.',
-      recommendationExplanation: 'A versatile solar floral amber ideal for discovery and everyday signature wear.'
+      recommendationExplanation: 'A versatile solar floral amber ideal for discovery and everyday signature wear.',
+      accords: defaultAccords
     };
 
     setEditingProduct({
@@ -176,6 +180,9 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
         { size: '15ml', price: 1350, stock_qty: 100 }
       ]
     });
+    setFamilyInput('');
+    setOccasionInput('');
+    setMoodInput('');
     setTopNoteInput('');
     setHeartNoteInput('');
     setBaseNoteInput('');
@@ -204,7 +211,8 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
       daytimeNighttime: Array.isArray(sp.daytimeNighttime) ? sp.daytimeNighttime : [],
       sweetness: sp.sweetness || 'Unknown',
       scentDescription: sp.scentDescription || p.short_description || '',
-      recommendationExplanation: sp.recommendationExplanation || ''
+      recommendationExplanation: sp.recommendationExplanation || '',
+      accords: Array.isArray(sp.accords) ? sp.accords : (Array.isArray(p.accords) ? p.accords : [])
     };
 
     setEditingProduct({
@@ -626,30 +634,241 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                     </p>
                   </div>
 
-                  {/* B1. Fragrance Families (Multi-Select) */}
+                  {/* B1. Fragrance Families (Custom Dynamic Multi-Select) */}
                   <div className="space-y-2">
                     <label className="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider">
-                      1. Fragrance Families <span className="text-[10px] text-[#737373] font-normal lowercase">(multi-select)</span>
+                      1. Fragrance Families <span className="text-[10px] text-[#737373] font-normal lowercase">(create custom options)</span>
                     </label>
-                    <div className="flex flex-wrap gap-2">
-                      {FRAGRANCE_FAMILIES_OPTIONS.map(fam => {
-                        const isSelected = (activeScentProfile.fragranceFamilies || []).includes(fam);
-                        return (
+                    <div className="flex items-center gap-2 max-w-md">
+                      <input
+                        type="text"
+                        value={familyInput}
+                        onChange={e => setFamilyInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const val = familyInput.trim();
+                            if (val) {
+                              const curr = activeScentProfile.fragranceFamilies || [];
+                              if (!curr.includes(val)) {
+                                updateScentProfile('fragranceFamilies', [...curr, val]);
+                              }
+                              setFamilyInput('');
+                            }
+                          }
+                        }}
+                        placeholder="Type fragrance family (e.g. Floral, Woody, Gourmand)..."
+                        className="flex-1 bg-white border border-[#EAEAEA] px-3 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = familyInput.trim();
+                          if (val) {
+                            const curr = activeScentProfile.fragranceFamilies || [];
+                            if (!curr.includes(val)) {
+                              updateScentProfile('fragranceFamilies', [...curr, val]);
+                            }
+                            setFamilyInput('');
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-black text-xs font-semibold uppercase cursor-pointer"
+                      >
+                        + Add
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {(activeScentProfile.fragranceFamilies || []).map((fam, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1.5 bg-[#111111] text-white px-3 py-1 text-xs font-medium border border-[#111111]"
+                        >
+                          <span>{fam}</span>
                           <button
-                            key={fam}
                             type="button"
-                            onClick={() => toggleMultiSelectOption('fragranceFamilies', fam)}
-                            className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
-                              isSelected
-                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
-                                : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
-                            }`}
+                            onClick={() => {
+                              const curr = activeScentProfile.fragranceFamilies || [];
+                              updateScentProfile('fragranceFamilies', curr.filter((_, i) => i !== idx));
+                            }}
+                            className="text-zinc-400 hover:text-red-300 cursor-pointer ml-1"
                           >
-                            {isSelected && <Check className="w-3 h-3 text-white" />}
-                            <span>{fam}</span>
+                            &times;
                           </button>
-                        );
-                      })}
+                        </span>
+                      ))}
+                      {(activeScentProfile.fragranceFamilies || []).length === 0 && (
+                        <span className="text-[11px] text-[#737373] italic">No fragrance families added yet. Create one above.</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* B1.5 Main Accords Bar List Editor (Fragrantica Style) */}
+                  <div className="space-y-3 pt-2 border-t border-[#EAEAEA]">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider">
+                        Main Accords & Intensity Bars <span className="text-[10px] text-[#737373] font-normal lowercase">(Fragrantica style colored bars)</span>
+                      </label>
+                    </div>
+
+                    {/* New Accord Form Row */}
+                    <div className="bg-white p-3 border border-[#EAEAEA] space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                        <div className="sm:col-span-4">
+                          <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Accord / Note Name</label>
+                          <input
+                            type="text"
+                            value={accordNameInput}
+                            onChange={e => setAccordNameInput(e.target.value)}
+                            placeholder="e.g. iris, woody, powdery, spicy"
+                            className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-2.5 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-3">
+                          <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Color (Hex / Picker)</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="color"
+                              value={accordColorInput}
+                              onChange={e => setAccordColorInput(e.target.value)}
+                              className="w-8 h-8 p-0.5 border border-[#EAEAEA] cursor-pointer bg-white"
+                            />
+                            <input
+                              type="text"
+                              value={accordColorInput}
+                              onChange={e => setAccordColorInput(e.target.value)}
+                              className="flex-1 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1.5 text-xs font-mono text-[#111111] uppercase"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
+                          <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Bar Length ({accordIntensityInput}%)</label>
+                          <input
+                            type="range"
+                            min="10"
+                            max="100"
+                            value={accordIntensityInput}
+                            onChange={e => setAccordIntensityInput(Number(e.target.value))}
+                            className="w-full h-2 bg-zinc-200 rounded-none cursor-pointer accent-[#111111]"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const name = accordNameInput.trim();
+                              if (!name) return;
+                              const currentAccords = activeScentProfile.accords || [];
+                              const newAccord: MainAccord = {
+                                id: 'acc-' + Date.now(),
+                                name,
+                                color: accordColorInput,
+                                intensity: accordIntensityInput
+                              };
+                              updateScentProfile('accords', [...currentAccords, newAccord]);
+                              setAccordNameInput('');
+                            }}
+                            className="w-full py-2 bg-[#111111] hover:bg-amber-300 hover:text-black text-white text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+                          >
+                            + Add Accord
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Live Bar Preview */}
+                      {accordNameInput.trim() && (
+                        <div className="pt-2 border-t border-[#EAEAEA]/60">
+                          <span className="text-[10px] text-[#737373] uppercase tracking-widest block mb-1">Live Accord Bar Preview:</span>
+                          <div
+                            style={{
+                              width: `${accordIntensityInput}%`,
+                              backgroundColor: accordColorInput
+                            }}
+                            className="h-7 rounded-r-md flex items-center justify-center px-3 shadow-xs transition-all"
+                          >
+                            <span className="text-xs font-medium font-sans text-black drop-shadow-xs truncate">
+                              {accordNameInput} ({accordColorInput})
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Existing Main Accords List */}
+                    <div className="space-y-2">
+                      {(activeScentProfile.accords || []).map((acc, idx) => (
+                        <div key={acc.id || idx} className="flex items-center gap-3 bg-white p-2.5 border border-[#EAEAEA]">
+                          <input
+                            type="color"
+                            value={acc.color || '#a288e3'}
+                            onChange={e => {
+                              const updated = [...(activeScentProfile.accords || [])];
+                              updated[idx].color = e.target.value;
+                              updateScentProfile('accords', updated);
+                            }}
+                            className="w-7 h-7 p-0.5 border border-[#EAEAEA] cursor-pointer shrink-0"
+                          />
+
+                          <input
+                            type="text"
+                            value={acc.name}
+                            onChange={e => {
+                              const updated = [...(activeScentProfile.accords || [])];
+                              updated[idx].name = e.target.value;
+                              updateScentProfile('accords', updated);
+                            }}
+                            className="w-28 sm:w-36 bg-[#F8F8F8] border border-[#EAEAEA] px-2 py-1 text-xs text-[#111111]"
+                          />
+
+                          {/* Visual Bar inside editor */}
+                          <div className="flex-1 bg-zinc-100 h-7 rounded-r-md overflow-hidden relative border border-[#EAEAEA]">
+                            <div
+                              style={{
+                                width: `${acc.intensity}%`,
+                                backgroundColor: acc.color
+                              }}
+                              className="h-full rounded-r-md flex items-center justify-center px-2 transition-all"
+                            >
+                              <span className="text-xs font-semibold text-black drop-shadow-xs truncate">
+                                {acc.name} ({acc.color})
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            <input
+                              type="range"
+                              min="10"
+                              max="100"
+                              value={acc.intensity}
+                              onChange={e => {
+                                const updated = [...(activeScentProfile.accords || [])];
+                                updated[idx].intensity = Number(e.target.value);
+                                updateScentProfile('accords', updated);
+                              }}
+                              className="w-16 sm:w-20 h-2 bg-zinc-200 cursor-pointer accent-[#111111]"
+                            />
+                            <span className="text-[10px] font-mono text-[#737373] w-8 text-right">{acc.intensity}%</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (activeScentProfile.accords || []).filter((_, i) => i !== idx);
+                              updateScentProfile('accords', updated);
+                            }}
+                            className="p-1 text-red-400 hover:text-red-300 cursor-pointer shrink-0"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+
+                      {(activeScentProfile.accords || []).length === 0 && (
+                        <p className="text-[11px] text-[#737373] italic">No main accords added yet. Create accords above with custom colors and bar lengths.</p>
+                      )}
                     </div>
                   </div>
 
@@ -834,57 +1053,139 @@ export const ProductManager: React.FC<ProductManagerProps> = ({ csrfToken }) => 
                     </div>
                   </div>
 
-                  {/* B4. Suitable Occasions (Multi-Select) */}
+                  {/* B4. Suitable Occasions (Custom Dynamic Multi-Select) */}
                   <div className="space-y-2 pt-1">
                     <label className="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider">
-                      4. Suitable Occasions <span className="text-[10px] text-[#737373] font-normal lowercase">(multi-select)</span>
+                      4. Suitable Occasions <span className="text-[10px] text-[#737373] font-normal lowercase">(create custom options)</span>
                     </label>
-                    <div className="flex flex-wrap gap-2">
-                      {OCCASIONS_OPTIONS.map(occ => {
-                        const isSelected = (activeScentProfile.occasions || []).includes(occ);
-                        return (
+                    <div className="flex items-center gap-2 max-w-md">
+                      <input
+                        type="text"
+                        value={occasionInput}
+                        onChange={e => setOccasionInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const val = occasionInput.trim();
+                            if (val) {
+                              const curr = activeScentProfile.occasions || [];
+                              if (!curr.includes(val)) {
+                                updateScentProfile('occasions', [...curr, val]);
+                              }
+                              setOccasionInput('');
+                            }
+                          }
+                        }}
+                        placeholder="Type occasion (e.g. Evening / Date Night, Office)..."
+                        className="flex-1 bg-white border border-[#EAEAEA] px-3 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = occasionInput.trim();
+                          if (val) {
+                            const curr = activeScentProfile.occasions || [];
+                            if (!curr.includes(val)) {
+                              updateScentProfile('occasions', [...curr, val]);
+                            }
+                            setOccasionInput('');
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-black text-xs font-semibold uppercase cursor-pointer"
+                      >
+                        + Add
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {(activeScentProfile.occasions || []).map((occ, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1.5 bg-[#111111] text-white px-3 py-1 text-xs font-medium border border-[#111111]"
+                        >
+                          <span>{occ}</span>
                           <button
-                            key={occ}
                             type="button"
-                            onClick={() => toggleMultiSelectOption('occasions', occ)}
-                            className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
-                              isSelected
-                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
-                                : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
-                            }`}
+                            onClick={() => {
+                              const curr = activeScentProfile.occasions || [];
+                              updateScentProfile('occasions', curr.filter((_, i) => i !== idx));
+                            }}
+                            className="text-zinc-400 hover:text-red-300 cursor-pointer ml-1"
                           >
-                            {isSelected && <Check className="w-3 h-3 text-white" />}
-                            <span>{occ}</span>
+                            &times;
                           </button>
-                        );
-                      })}
+                        </span>
+                      ))}
+                      {(activeScentProfile.occasions || []).length === 0 && (
+                        <span className="text-[11px] text-[#737373] italic">No occasions added yet. Create one above.</span>
+                      )}
                     </div>
                   </div>
 
-                  {/* B5. Desired Impression / Mood (Multi-Select) */}
+                  {/* B5. Desired Impression / Mood (Custom Dynamic Multi-Select) */}
                   <div className="space-y-2 pt-1">
                     <label className="block text-[11px] font-semibold text-[#111111] uppercase tracking-wider">
-                      5. Desired Impression / Mood <span className="text-[10px] text-[#737373] font-normal lowercase">(multi-select)</span>
+                      5. Desired Impression / Mood <span className="text-[10px] text-[#737373] font-normal lowercase">(create custom options)</span>
                     </label>
-                    <div className="flex flex-wrap gap-2">
-                      {MOODS_OPTIONS.map(mood => {
-                        const isSelected = (activeScentProfile.moods || []).includes(mood);
-                        return (
+                    <div className="flex items-center gap-2 max-w-md">
+                      <input
+                        type="text"
+                        value={moodInput}
+                        onChange={e => setMoodInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const val = moodInput.trim();
+                            if (val) {
+                              const curr = activeScentProfile.moods || [];
+                              if (!curr.includes(val)) {
+                                updateScentProfile('moods', [...curr, val]);
+                              }
+                              setMoodInput('');
+                            }
+                          }
+                        }}
+                        placeholder="Type mood / impression (e.g. Elegant, Bold, Mysterious)..."
+                        className="flex-1 bg-white border border-[#EAEAEA] px-3 py-1.5 text-xs text-[#111111] focus:border-[#111111]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = moodInput.trim();
+                          if (val) {
+                            const curr = activeScentProfile.moods || [];
+                            if (!curr.includes(val)) {
+                              updateScentProfile('moods', [...curr, val]);
+                            }
+                            setMoodInput('');
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-[#111111] text-white hover:bg-amber-300 hover:text-black text-xs font-semibold uppercase cursor-pointer"
+                      >
+                        + Add
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {(activeScentProfile.moods || []).map((m, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1.5 bg-[#111111] text-white px-3 py-1 text-xs font-medium border border-[#111111]"
+                        >
+                          <span>{m}</span>
                           <button
-                            key={mood}
                             type="button"
-                            onClick={() => toggleMultiSelectOption('moods', mood)}
-                            className={`px-3 py-1.5 text-xs border transition-all cursor-pointer flex items-center gap-1.5 ${
-                              isSelected
-                                ? 'bg-[#111111] text-white border-[#111111] font-semibold shadow-xs'
-                                : 'bg-white text-[#737373] border-[#EAEAEA] hover:border-zinc-600 hover:text-[#111111]'
-                            }`}
+                            onClick={() => {
+                              const curr = activeScentProfile.moods || [];
+                              updateScentProfile('moods', curr.filter((_, i) => i !== idx));
+                            }}
+                            className="text-zinc-400 hover:text-red-300 cursor-pointer ml-1"
                           >
-                            {isSelected && <Check className="w-3 h-3 text-white" />}
-                            <span>{mood}</span>
+                            &times;
                           </button>
-                        );
-                      })}
+                        </span>
+                      ))}
+                      {(activeScentProfile.moods || []).length === 0 && (
+                        <span className="text-[11px] text-[#737373] italic">No moods/impressions added yet. Create one above.</span>
+                      )}
                     </div>
                   </div>
 
