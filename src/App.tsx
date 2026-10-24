@@ -22,6 +22,7 @@ import { ProductDetailPage } from './components/ProductDetailPage';
 import { CollectionPage } from './components/CollectionPage';
 import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminLayout } from './admin/AdminLayout';
 import { NEW_ARRIVALS } from './data/fragranceData';
@@ -416,6 +417,27 @@ export default function App() {
 
       {/* M. Oversized AROMATICA brand footer */}
       <Footer storeSettings={storeSettings} />
+
+      {/* N. Premium Mobile Floating Bottom Navigation */}
+      <MobileBottomNav
+        activeTab={
+          isSearchOpen
+            ? 'search'
+            : isCartOpen
+            ? 'bag'
+            : route.path === 'collection'
+            ? 'shop'
+            : route.path === 'home'
+            ? 'home'
+            : 'home'
+        }
+        cartCount={totalCartCount}
+        onNavigateHome={navigateToHome}
+        onNavigateShop={() => navigateToCollection('all')}
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenCart={() => setIsCartOpen(true)}
+        onSelectAI={() => showToast('AromaAI Concierge: Scent recommendation engine ready')}
+      />
 
       {/* Interactive Drawers & Search Modal */}
       <CartDrawer
