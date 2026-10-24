@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `product_variants` (
   `cost_price` DECIMAL(10,2) DEFAULT 0.00,
   `sku` VARCHAR(100) NULL,
   `stock_qty` INT DEFAULT 100,
+  `image` VARCHAR(255) NULL,
   `is_available` TINYINT(1) DEFAULT 1,
   FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

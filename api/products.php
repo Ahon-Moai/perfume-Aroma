@@ -39,7 +39,7 @@ if ($id || $slug) {
     }
 
     // Fetch variants
-    $varStmt = $db->prepare("SELECT id, size, price, cost_price, sku, stock_qty, is_available FROM product_variants WHERE product_id = ? AND is_available = 1 ORDER BY price ASC");
+    $varStmt = $db->prepare("SELECT id, size, price, cost_price, sku, stock_qty, image, is_available FROM product_variants WHERE product_id = ? AND is_available = 1 ORDER BY price ASC");
     $varStmt->execute([$product['id']]);
     $variants = $varStmt->fetchAll();
 
@@ -48,7 +48,8 @@ if ($id || $slug) {
             'id' => $v['id'],
             'size' => $v['size'],
             'price' => (float)$v['price'],
-            'stock_qty' => (int)$v['stock_qty']
+            'stock_qty' => (int)$v['stock_qty'],
+            'image' => $v['image'] ?? null
         ];
     }, $variants);
 
@@ -321,7 +322,7 @@ $imagesByProduct = [];
 
 if (!empty($productIds)) {
     $inClause = implode(',', array_fill(0, count($productIds), '?'));
-    $varStmt = $db->prepare("SELECT id, product_id, size, price, stock_qty FROM product_variants WHERE product_id IN ($inClause) AND is_available = 1 ORDER BY price ASC");
+    $varStmt = $db->prepare("SELECT id, product_id, size, price, stock_qty, image FROM product_variants WHERE product_id IN ($inClause) AND is_available = 1 ORDER BY price ASC");
     $varStmt->execute($productIds);
     $allVariants = $varStmt->fetchAll();
 
@@ -330,7 +331,8 @@ if (!empty($productIds)) {
             'id' => $v['id'],
             'size' => $v['size'],
             'price' => (float)$v['price'],
-            'stock_qty' => (int)$v['stock_qty']
+            'stock_qty' => (int)$v['stock_qty'],
+            'image' => $v['image'] ?? null
         ];
     }
 
