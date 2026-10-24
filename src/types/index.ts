@@ -1,6 +1,7 @@
 export interface DecantSize {
   size: string; // e.g. "3ml", "5ml", "9ml", "15ml"
   price: number; // in BDT (৳)
+  image?: string; // custom size/bottle image URL
 }
 
 export interface FragranceAttribute {
