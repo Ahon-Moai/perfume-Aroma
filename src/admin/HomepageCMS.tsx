@@ -22,7 +22,8 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
     specifier: '5 ML ( 75+ SPRAYS )',
     primary_cta_text: 'ORDER PURE PORTIONS · ৳ 490',
     secondary_cta_text: 'EXPLORE ALL DECANTS',
-    image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg'
+    image: '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg',
+    video_url: 'https://ik.imagekit.io/t1q0n1ovm/pchero%20vid.mp4'
   });
 
   // Campaign Banners Form (For Him / For Her)
@@ -810,12 +811,22 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
             </div>
           </div>
 
-          <ImageUploader
-            label="Hero Backdrop Image"
-            value={heroForm.image}
-            onChange={(url) => setHeroForm({ ...heroForm, image: url })}
-            csrfToken={csrfToken}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ImageUploader
+              label="Hero Backdrop Image (Fallback or Image Mode)"
+              value={heroForm.image}
+              onChange={(url) => setHeroForm({ ...heroForm, image: url })}
+              csrfToken={csrfToken}
+            />
+
+            <VideoUploader
+              label="Hero Background Video (.mp4 / .webm)"
+              value={heroForm.video_url || ''}
+              onChange={(url) => setHeroForm({ ...heroForm, video_url: url })}
+              csrfToken={csrfToken}
+              placeholder="e.g. /uploads/hero_video.mp4"
+            />
+          </div>
 
           <div className="pt-4 border-t border-[#EAEAEA] flex justify-end">
             <button

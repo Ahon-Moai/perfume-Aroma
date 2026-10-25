@@ -634,28 +634,56 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 )}
               </div>
 
-              {/* Intensity & Performance Attribute Sliders */}
-              <div className="space-y-4 pt-6 border-t border-zinc-150">
+              {/* Intensity & Performance Attribute Cards */}
+              <div className="space-y-6 pt-6 border-t border-zinc-150">
                 <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-zinc-900 uppercase font-bold">
-                  <Layers className="w-4 h-4 text-zinc-600" />
+                  <Layers className="w-4 h-4 text-amber-700" />
                   <span>Scent Intensity & Performance Profile</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {attributes.map((attr) => (
-                    <div key={attr.id || attr.name} className="bg-[#fcfbf9] border border-zinc-200 p-4 space-y-2">
-                      <div className="flex justify-between text-xs font-sans text-zinc-700">
-                        <span className="font-medium">{attr.name}</span>
-                        <span className="font-mono font-bold text-zinc-950">{attr.value}%</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {attributes.map((attr) => {
+                    const score = ((attr.value / 100) * 10).toFixed(1);
+                    return (
+                      <div
+                        key={attr.id || attr.name}
+                        className="bg-[#fcfbfb] border border-zinc-200/90 rounded-[24px] p-5 flex flex-col justify-between space-y-3 shadow-2xs hover:border-zinc-300 transition-all"
+                      >
+                        <span className="text-[11px] font-sans tracking-widest text-zinc-500 uppercase font-semibold">
+                          {attr.name}
+                        </span>
+
+                        <div className="flex items-baseline gap-0.5">
+                          <span className="text-2xl font-sans text-zinc-950 font-medium tracking-tight">
+                            {score}
+                          </span>
+                          <span className="text-sm font-sans text-zinc-400 font-normal">
+                            /10
+                          </span>
+                        </div>
+
+                        <div className="w-full h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-zinc-950 rounded-full transition-all duration-500"
+                            style={{ width: `${attr.value}%` }}
+                          />
+                        </div>
+
+                        <span className="text-[10px] font-sans font-bold tracking-widest text-zinc-400 uppercase pt-0.5">
+                          1 VOTE
+                        </span>
                       </div>
-                      <div className="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-amber-500 to-zinc-950 transition-all duration-700"
-                          style={{ width: `${attr.value}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    onClick={() => showToast('Performance vote submitted!')}
+                    className="w-full border border-zinc-300/80 hover:border-zinc-950 bg-white hover:bg-zinc-950 text-zinc-800 hover:text-white py-3.5 px-6 rounded-full text-xs font-sans font-bold tracking-widest uppercase transition-all shadow-2xs cursor-pointer text-center"
+                  >
+                    VOTE FOR PERFORMANCE
+                  </button>
                 </div>
               </div>
             </div>
