@@ -124,16 +124,17 @@ if ($method === 'GET') {
         // Variants
         $variants = $input['variants'] ?? $input['sizes'] ?? [];
         if (!empty($variants) && is_array($variants)) {
-            $vStmt = $db->prepare("INSERT INTO product_variants (id, product_id, size, price, cost_price, sku, stock_qty) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $vStmt = $db->prepare("INSERT INTO product_variants (id, product_id, size, price, cost_price, sku, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             foreach ($variants as $idx => $v) {
                 $vSize = sanitizeString($v['size'] ?? '5ml');
                 $vPrice = (float)($v['price'] ?? $startingPrice);
                 $vCost = (float)($v['cost_price'] ?? 0.00);
                 $vSku = sanitizeString($v['sku'] ?? ($id . '-' . $vSize));
                 $vStock = (int)($v['stock_qty'] ?? $inventoryQty);
+                $vImg = sanitizeString($v['image'] ?? $v['img_url'] ?? '');
                 $varId = $id . '-var-' . ($idx + 1);
 
-                $vStmt->execute([$varId, $id, $vSize, $vPrice, $vCost, $vSku, $vStock]);
+                $vStmt->execute([$varId, $id, $vSize, $vPrice, $vCost, $vSku, $vStock, $vImg]);
             }
         }
 
@@ -213,16 +214,17 @@ if ($method === 'GET') {
         $variants = $input['variants'] ?? $input['sizes'] ?? [];
         if (!empty($variants) && is_array($variants)) {
             $db->exec("DELETE FROM product_variants WHERE product_id = " . $db->quote($id));
-            $vStmt = $db->prepare("INSERT INTO product_variants (id, product_id, size, price, cost_price, sku, stock_qty) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $vStmt = $db->prepare("INSERT INTO product_variants (id, product_id, size, price, cost_price, sku, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             foreach ($variants as $idx => $v) {
                 $vSize = sanitizeString($v['size'] ?? '5ml');
                 $vPrice = (float)($v['price'] ?? $startingPrice);
                 $vCost = (float)($v['cost_price'] ?? 0.00);
                 $vSku = sanitizeString($v['sku'] ?? ($id . '-' . $vSize));
                 $vStock = (int)($v['stock_qty'] ?? $inventoryQty);
+                $vImg = sanitizeString($v['image'] ?? $v['img_url'] ?? '');
                 $varId = $id . '-var-' . ($idx + 1);
 
-                $vStmt->execute([$varId, $id, $vSize, $vPrice, $vCost, $vSku, $vStock]);
+                $vStmt->execute([$varId, $id, $vSize, $vPrice, $vCost, $vSku, $vStock, $vImg]);
             }
         }
 
