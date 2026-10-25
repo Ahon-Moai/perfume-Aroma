@@ -16,7 +16,8 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, onNavigateToCollection, heroData }) => {
-  const videoSource = heroData?.video_url || 'https://ik.imagekit.io/t1q0n1ovm/pchero%20vid.mp4';
+  const videoSource = heroData?.video_url;
+  const imageSource = heroData?.image || '/src/assets/images/hero_pure_portions_arrina_1791911761493.jpg';
   const specifier = heroData?.specifier || 'PURE PORTIONS BY ARRINA';
   const headline = heroData?.headline || 'COLLECTION IS LIVE';
   const primaryCta = heroData?.primary_cta_text || 'Explore Decants';
@@ -24,17 +25,27 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onOrderProduct, onNa
 
   return (
     <section className="relative w-full h-[82vh] min-h-[540px] max-h-[880px] bg-black text-white overflow-hidden flex items-end">
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src={videoSource} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Background Media: Video or Image */}
+      {videoSource ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={imageSource}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={videoSource} type="video/mp4" />
+          <source src={videoSource} type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <img
+          src={imageSource}
+          alt={headline}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
 
       {/* Dark Overlay Gradient for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/15 pointer-events-none" />
