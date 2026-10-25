@@ -274,6 +274,17 @@ if ($search) {
     $params[] = $term;
     $params[] = $term;
     $params[] = $term;
+
+    // Record normalized search analytics term if non-empty
+    $cleanSearch = trim(strtolower($search));
+    if (strlen($cleanSearch) >= 2) {
+        try {
+            $auditStmt = $db->prepare("INSERT INTO audit_logs (action, entity, details) VALUES ('search_query', 'search', ?)");
+            $auditStmt->execute([$cleanSearch]);
+        } catch (\Exception $e) {
+            // Non-blocking log recording
+        }
+    }
 }
 
 // Sorting logic
