@@ -23,6 +23,7 @@ import { CollectionPage } from './components/CollectionPage';
 import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { IntroSequence } from './components/IntroSequence';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminLayout } from './admin/AdminLayout';
 import { NEW_ARRIVALS } from './data/fragranceData';
@@ -31,6 +32,14 @@ import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMes
 import { Shield } from 'lucide-react';
 
 export default function App() {
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    try {
+      return !sessionStorage.getItem('hasSeenIntro');
+    } catch (e) {
+      return true;
+    }
+  });
+
   const [products, setProducts] = useState<FragranceProduct[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -282,6 +291,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans flex flex-col selection:bg-zinc-900 selection:text-white relative">
+      {/* Editorial OUTFIT-style opening intro sequence */}
+      {showIntro && (
+        <IntroSequence onComplete={() => setShowIntro(false)} />
+      )}
+
       {/* Admin Quick Switch floating button for store manager */}
       <button
         onClick={() => {
