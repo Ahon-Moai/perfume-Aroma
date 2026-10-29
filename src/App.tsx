@@ -32,13 +32,7 @@ import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMes
 import { Shield } from 'lucide-react';
 
 export default function App() {
-  const [showIntro, setShowIntro] = useState<boolean>(() => {
-    try {
-      return !sessionStorage.getItem('hasSeenIntro');
-    } catch (e) {
-      return true;
-    }
-  });
+  const [showIntro, setShowIntro] = useState<boolean>(true);
 
   const [products, setProducts] = useState<FragranceProduct[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
