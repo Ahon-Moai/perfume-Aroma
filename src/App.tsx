@@ -285,7 +285,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans flex flex-col selection:bg-zinc-900 selection:text-white relative">
-      {/* Editorial OUTFIT-style opening intro sequence */}
+      {/* Editorial Pure Portions opening intro sequence */}
       {showIntro && (
         <IntroSequence onComplete={() => setShowIntro(false)} />
       )}

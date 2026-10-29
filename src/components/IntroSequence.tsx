@@ -58,13 +58,20 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
 
   // Letters array for staggered sequence animation
   const letters = [
-    { char: 'O', delay: 0.30 },
-    { char: 'U', delay: 0.36 },
-    { char: 'T', delay: 0.42 },
-    { char: 'F', delay: 0.48 },
-    { char: 'I', delay: 0.54 },
-    { char: 'T', delay: 0.60 },
-    { char: '.', delay: 0.66 },
+    { char: 'P', delay: 0.25 },
+    { char: 'U', delay: 0.28 },
+    { char: 'R', delay: 0.31 },
+    { char: 'E', delay: 0.34 },
+    { char: '\u00A0', delay: 0.37 },
+    { char: 'P', delay: 0.40 },
+    { char: 'O', delay: 0.43 },
+    { char: 'R', delay: 0.46 },
+    { char: 'T', delay: 0.49 },
+    { char: 'I', delay: 0.52 },
+    { char: 'O', delay: 0.55 },
+    { char: 'N', delay: 0.58 },
+    { char: 'S', delay: 0.61 },
+    { char: '.', delay: 0.64 },
   ];
 
   return (
@@ -156,7 +163,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
                 <div className="relative w-full h-full overflow-hidden bg-[#e8e4dc]">
                   <img
                     src={portraitImg}
-                    alt="OUTFIT Main Editorial Cutout"
+                    alt="Pure Portions Main Editorial Cutout"
                     className="w-full h-full object-cover object-center filter contrast-115 brightness-105"
                   />
                   {/* Subtle ++ fashion mark matching reference screenshot */}
@@ -168,9 +175,9 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
 
             </motion.div>
 
-            {/* Oversized OUTFIT. Typography with blend mode negative effect and staggered entrance/exit */}
+            {/* Oversized PURE PORTIONS. Typography with blend mode negative effect and staggered entrance/exit */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 mix-blend-difference">
-              <h1 className="text-white font-black uppercase tracking-tighter text-[22vw] sm:text-[18vw] md:text-[17vw] lg:text-[18vw] leading-none flex items-baseline font-sans">
+              <h1 className="text-white font-black uppercase tracking-tighter text-[11vw] sm:text-[9.5vw] md:text-[8.5vw] lg:text-[9vw] leading-none flex items-baseline font-sans whitespace-nowrap">
                 {letters.map((item, idx) => (
                   <motion.span
                     key={idx}
