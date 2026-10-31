@@ -348,12 +348,13 @@ export default function App() {
         ) : (
           /* Storefront Homepage */
           <>
-            {/* B. Full-width luxury hero showcasing Pure Portions by ARRINA */}
+            {/* B. Editorial OUTFIT Hero Section */}
             <Hero
+              products={products}
+              onSelectProduct={(p) => navigateToProduct(p)}
               onExploreClick={handleExploreClick}
               onOrderProduct={() => {
-                const purePortions = products.find((p) => p.id === 'prod-pure-portions') || products[0];
-                if (purePortions) navigateToProduct(purePortions);
+                if (products.length > 0) navigateToProduct(products[0]);
               }}
               onNavigateToCollection={navigateToCollection}
               heroData={homepageData?.sections?.hero?.content}
