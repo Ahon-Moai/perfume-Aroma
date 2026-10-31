@@ -51,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
           </a>
         </div>
 
-        {/* Center: Desktop Navigation Links (Shop, Archive, About) */}
+        {/* Center: Desktop Navigation Links (Shop, Explore Decants, About Us) */}
         <nav className="hidden md:flex items-center gap-10 lg:gap-14 text-[#FF1801] text-lg lg:text-xl font-medium tracking-tight">
           <button
             onClick={() => handleCollectionClick('all')}
@@ -60,10 +60,17 @@ export const Header: React.FC<HeaderProps> = ({
             Shop
           </button>
           <button
-            onClick={() => handleCollectionClick('archive')}
+            onClick={() => {
+              const el = document.getElementById('new-arrivals');
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+              } else {
+                handleCollectionClick('all');
+              }
+            }}
             className="hover:opacity-75 transition-opacity cursor-pointer"
           >
-            Archive
+            Explore Decants
           </button>
           <button
             onClick={() => {
@@ -72,7 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="hover:opacity-75 transition-opacity cursor-pointer"
           >
-            About
+            About Us
           </button>
         </nav>
 
@@ -119,25 +126,31 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => handleCollectionClick('all')}
                   className="text-left hover:opacity-75 transition-opacity"
                 >
-                  All Products
+                  Shop
                 </button>
                 <button
-                  onClick={() => handleCollectionClick('forhim')}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    const el = document.getElementById('new-arrivals');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      handleCollectionClick('all');
+                    }
+                  }}
                   className="text-left hover:opacity-75 transition-opacity"
                 >
-                  Apparel
+                  Explore Decants
                 </button>
                 <button
-                  onClick={() => handleCollectionClick('forher')}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    const el = document.getElementById('studio-section') || document.getElementById('why-section');
+                    el?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="text-left hover:opacity-75 transition-opacity"
                 >
-                  Accessories
-                </button>
-                <button
-                  onClick={() => handleCollectionClick('best-sellers')}
-                  className="text-left hover:opacity-75 transition-opacity"
-                >
-                  Featured & Archive
+                  About Us
                 </button>
                 <button
                   onClick={() => {
