@@ -66,25 +66,32 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section className="w-full bg-[#ECE8E1] text-[#FF1801] pt-1 sm:pt-2 pb-12 sm:pb-20 select-none">
       <div className="w-full px-5 sm:px-8 md:px-12">
-        {/* Massive OUTFIT.® Branding Header */}
-        <div className="w-full overflow-hidden leading-none select-none">
-          <h1 className="w-full flex items-baseline justify-between text-[#FF1801] font-black tracking-[-0.045em] text-[20vw] xs:text-[20.2vw] sm:text-[19.8vw] md:text-[20vw] uppercase leading-[0.82] select-none py-0 sm:py-1">
-            <span className="inline-block">OUTFIT.</span>
-            <span className="text-[5vw] xs:text-[4.5vw] sm:text-[4.2vw] md:text-[3.8vw] font-bold self-end mb-2 sm:mb-4 lg:mb-6">
-              ®
+        {/* Massive Centered Pure Portions By Arrina Branding Header */}
+        <div className="w-full overflow-hidden select-none py-2 sm:py-4">
+          <h1 className="w-full text-center text-[#FF1801] font-black tracking-tight uppercase leading-[0.88] select-none flex flex-col items-center justify-center">
+            {/* Line 1: Pure Portions */}
+            <span className="block text-[11.5vw] sm:text-[11vw] md:text-[10vw] lg:text-[9.5vw] tracking-[-0.035em] whitespace-nowrap">
+              Pure Portions
+            </span>
+            {/* Line 2: By Arrina with trademark */}
+            <span className="relative inline-flex items-center justify-center text-[10vw] sm:text-[9.5vw] md:text-[8.5vw] lg:text-[8vw] tracking-[-0.03em] whitespace-nowrap mt-1 sm:mt-2">
+              <span>By Arrina</span>
+              <span className="text-[3vw] sm:text-[2.5vw] md:text-[2vw] font-bold align-top -mt-3 sm:-mt-5 md:-mt-6 ml-1 sm:ml-1.5 inline-block">
+                ®
+              </span>
             </span>
           </h1>
         </div>
 
         {/* Thick Solid Red Horizontal Divider */}
-        <div className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5.5px] bg-[#FF1801] mt-1 sm:mt-2 mb-6 sm:mb-8" />
+        <div className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5.5px] bg-[#FF1801] mt-2 sm:mt-3 mb-6 sm:mb-8" />
 
         {/* Editorial Information Section */}
         {/* Desktop Layout (4 columns matching reference screenshot) */}
         <div className="hidden md:grid md:grid-cols-12 gap-8 text-[15px] lg:text-[16px] xl:text-[17px] font-semibold leading-[1.3] text-[#FF1801] mb-12 lg:mb-16">
-          {/* Column 1: OUTFIT & Links */}
+          {/* Column 1: Brand & Links */}
           <div className="md:col-span-3 flex flex-col justify-between">
-            <span className="tracking-tight uppercase font-bold text-base lg:text-lg">OUTFIT</span>
+            <span className="tracking-tight uppercase font-bold text-base lg:text-lg">PURE PORTIONS</span>
             <div className="space-y-2 mt-8 lg:mt-12 text-sm lg:text-[15px] font-bold tracking-tight">
               <div>
                 <a
@@ -136,11 +143,11 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Mobile Layout (exact stack from mobile screenshot) */}
         <div className="md:hidden flex flex-col space-y-6 text-[#FF1801] font-semibold mb-8 text-[13px] sm:text-[14px]">
-          {/* Row 1: OUTFIT (left) & WHY + Description (right) */}
+          {/* Row 1: Brand (left) & WHY + Description (right) */}
           <div className="grid grid-cols-12 gap-3 sm:gap-4">
             <div className="col-span-4 sm:col-span-3">
               <span className="tracking-tight uppercase font-bold text-sm sm:text-base">
-                OUTFIT
+                PURE PORTIONS
               </span>
             </div>
             <div className="col-span-8 sm:col-span-9 space-y-2">
