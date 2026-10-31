@@ -1,5 +1,6 @@
 import React from 'react';
-import { FragranceProduct } from '../types';
+import { FragranceProduct, SeasonsGalleryData } from '../types';
+import { SeasonsGallery } from './SeasonsGallery';
 
 interface HeroProps {
   products?: FragranceProduct[];
@@ -8,60 +9,14 @@ interface HeroProps {
   onOrderProduct?: () => void;
   onNavigateToCollection?: (slug: string) => void;
   heroData?: any;
+  seasonsData?: SeasonsGalleryData;
 }
 
 export const Hero: React.FC<HeroProps> = ({
-  products = [],
-  onSelectProduct,
+  onExploreClick,
   onNavigateToCollection,
+  seasonsData,
 }) => {
-  // Use first 4 dynamic products or fallback to default sample products
-  const displayProducts = products.length >= 4
-    ? products.slice(0, 4)
-    : products.length > 0
-    ? products
-    : [
-        {
-          id: 'prod-1',
-          name: 'Off by Design Tee',
-          brand: 'OUTFIT',
-          startingPrice: 65,
-          image: '/src/assets/images/season_dark_forest_1791908203381.jpg',
-          category: 'Apparel',
-          gender: 'Unisex',
-          sizes: [{ size: 'M', price: 65 }]
-        },
-        {
-          id: 'prod-2',
-          name: 'Kerned Confidence Cap',
-          brand: 'OUTFIT',
-          startingPrice: 45,
-          image: '/src/assets/images/campaign_for_him_1791908163466.jpg',
-          category: 'Accessories',
-          gender: 'Unisex',
-          sizes: [{ size: 'One Size', price: 45 }]
-        },
-        {
-          id: 'prod-3',
-          name: 'Code & Canvas Oversized Hoodie',
-          brand: 'OUTFIT',
-          startingPrice: 110,
-          image: '/src/assets/images/season_monochrome_street_1791908200992.jpg',
-          category: 'Apparel',
-          gender: 'Unisex',
-          sizes: [{ size: 'L', price: 110 }]
-        },
-        {
-          id: 'prod-4',
-          name: 'Vector State Heavyweight Longsleeve',
-          brand: 'OUTFIT',
-          startingPrice: 75,
-          image: '/src/assets/images/season_dune_red_sun_1791908201156.jpg',
-          category: 'Apparel',
-          gender: 'Unisex',
-          sizes: [{ size: 'L', price: 75 }]
-        }
-      ] as FragranceProduct[];
 
   return (
     <section className="w-full bg-[#ECE8E1] text-[#FF1801] pt-1 sm:pt-2 pb-12 sm:pb-20 select-none">
@@ -185,32 +140,14 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
         </div>
 
-        {/* Dynamic Product Grid Matching Screenshot */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 sm:gap-x-4 md:gap-x-5 lg:gap-x-6 gap-y-6 sm:gap-y-8 pt-1">
-          {displayProducts.map((product) => (
-            <div
-              key={product.id}
-              onClick={() => onSelectProduct && onSelectProduct(product)}
-              className="group cursor-pointer flex flex-col"
-            >
-              {/* Product Image Frame */}
-              <div className="relative aspect-[3/4] sm:aspect-[4/5] w-full bg-[#D6D2CB] overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Product Title Underneath */}
-              <div className="pt-2 sm:pt-3">
-                <h3 className="text-[#FF1801] font-semibold text-xs sm:text-sm md:text-[15px] leading-tight truncate group-hover:opacity-80 transition-opacity">
-                  {product.name}
-                </h3>
-              </div>
-            </div>
-          ))}
+        {/* Seasonal Boxes Grid - Reusing Seasons Component without Header */}
+        <div className="w-full pt-1">
+          <SeasonsGallery
+            seasonsData={seasonsData}
+            onExploreClick={onExploreClick}
+            onNavigateToCollection={onNavigateToCollection}
+            hideHeader={true}
+          />
         </div>
       </div>
     </section>
