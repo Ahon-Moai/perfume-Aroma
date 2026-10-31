@@ -348,7 +348,7 @@ export default function App() {
         ) : (
           /* Storefront Homepage */
           <>
-            {/* B. Editorial OUTFIT Hero Section */}
+            {/* B. Editorial Pure Portions Hero Section with Seasons boxes */}
             <Hero
               products={products}
               onSelectProduct={(p) => navigateToProduct(p)}
@@ -358,6 +358,7 @@ export default function App() {
               }}
               onNavigateToCollection={navigateToCollection}
               heroData={homepageData?.sections?.hero?.content}
+              seasonsData={homepageData?.sections?.seasons_gallery?.content}
             />
 
             {/* C. Oversized category marquee */}
@@ -378,13 +379,6 @@ export default function App() {
               onSelectCategory={handleSelectGenderCategory}
               onNavigateToCollection={navigateToCollection}
               campaignData={homepageData?.sections?.campaign_banners?.content}
-            />
-
-            {/* F. Seasons campaign gallery */}
-            <SeasonsGallery
-              seasonsData={homepageData?.sections?.seasons_gallery?.content}
-              onExploreClick={handleExploreClick}
-              onNavigateToCollection={navigateToCollection}
             />
 
             {/* G. Premium Video Product Showcase Carousel */}
