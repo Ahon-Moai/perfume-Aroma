@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Search, User, Heart, ShoppingBag, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Search } from 'lucide-react';
 
 interface HeaderProps {
   cartCount: number;
@@ -15,36 +15,11 @@ export const Header: React.FC<HeaderProps> = ({
   cartCount,
   onOpenCart,
   onOpenSearch,
-  onOpenWishlist,
   onNavigateHome,
   onNavigateToCollection,
   storeSettings
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [announcementIndex, setAnnouncementIndex] = useState(0);
-
-  const defaultAnnouncements = [
-    'Upto 1500BDT Cashback On bKash Payments',
-    'Free Shipping on Decant Orders Over BDT 3,000',
-    'Guaranteed 100% Authentic & Unaltered Decants'
-  ];
-
-  const customAnnouncement = storeSettings?.announcement_bar;
-  const announcements = customAnnouncement
-    ? customAnnouncement.includes('·')
-      ? customAnnouncement.split('·').map((s: string) => s.trim())
-      : customAnnouncement.includes('|')
-      ? customAnnouncement.split('|').map((s: string) => s.trim())
-      : [customAnnouncement]
-    : defaultAnnouncements;
-
-  const nextAnnouncement = () => {
-    setAnnouncementIndex((prev) => (prev + 1) % announcements.length);
-  };
-
-  const prevAnnouncement = () => {
-    setAnnouncementIndex((prev) => (prev - 1 + announcements.length) % announcements.length);
-  };
 
   const handleCollectionClick = (slug: string) => {
     setMobileMenuOpen(false);
@@ -56,77 +31,11 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white transition-all duration-200">
-      {/* Top Black Announcement Strip */}
-      <div className="bg-black text-white text-[11px] font-medium tracking-wider uppercase py-2 px-4 flex items-center justify-between border-b border-zinc-900">
-        <button
-          onClick={prevAnnouncement}
-          aria-label="Previous announcement"
-          className="text-zinc-400 hover:text-white transition-colors p-1"
-        >
-          <ChevronLeft className="w-3.5 h-3.5" />
-        </button>
-        <div className="flex-1 text-center font-sans tracking-widest px-2 truncate">
-          {announcements[announcementIndex]}
-        </div>
-        <button
-          onClick={nextAnnouncement}
-          aria-label="Next announcement"
-          className="text-zinc-400 hover:text-white transition-colors p-1"
-        >
-          <ChevronRight className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
-      {/* Main Navbar */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between border-b border-zinc-100">
-        {/* Left: Mobile & Desktop Navigation */}
-        <div className="flex items-center gap-6">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-zinc-900 hover:text-zinc-600 transition-colors focus:outline-none cursor-pointer"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-
-          {/* Desktop Collections Quick Links */}
-          <nav className="hidden lg:flex items-center gap-5 text-xs uppercase font-sans tracking-widest font-medium text-zinc-700">
-            <button
-              onClick={() => handleCollectionClick('all')}
-              className="hover:text-amber-800 transition-colors cursor-pointer"
-            >
-              All Fragrances
-            </button>
-            <button
-              onClick={() => handleCollectionClick('forhim')}
-              className="hover:text-amber-800 transition-colors cursor-pointer"
-            >
-              For Him
-            </button>
-            <button
-              onClick={() => handleCollectionClick('forher')}
-              className="hover:text-amber-800 transition-colors cursor-pointer"
-            >
-              For Her
-            </button>
-            <button
-              onClick={() => handleCollectionClick('unisex')}
-              className="hover:text-amber-800 transition-colors cursor-pointer"
-            >
-              Unisex
-            </button>
-            <button
-              onClick={() => handleCollectionClick('best-sellers')}
-              className="hover:text-amber-800 transition-colors cursor-pointer text-amber-900 font-semibold"
-            >
-              Best Sellers
-            </button>
-          </nav>
-        </div>
-
-        {/* Center: Brand Wordmark */}
-        <div className="absolute left-1/2 -translate-x-1/2 text-center">
+    <header className="sticky top-0 z-40 w-full bg-[#ECE8E1] transition-all duration-200">
+      {/* Main Top Navigation matching reference */}
+      <div className="w-full px-5 sm:px-8 md:px-12 pt-5 pb-3 flex items-center justify-between">
+        {/* Left: Red ++ Brand Symbol */}
+        <div className="flex items-center">
           <a
             href="/"
             onClick={(e) => {
@@ -135,107 +44,125 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigateHome();
               }
             }}
-            className="font-bodoni text-base xs:text-lg sm:text-2xl md:text-3xl tracking-[0.08em] xs:tracking-[0.1em] sm:tracking-[0.18em] font-light text-zinc-950 uppercase hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer"
+            className="text-[#FF1801] text-3xl sm:text-4xl font-black tracking-[-0.15em] hover:opacity-85 transition-opacity inline-flex items-center select-none"
+            aria-label="Home"
           >
-            {storeSettings?.store_name || 'AROMATICA'}
+            ++
           </a>
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-1 sm:gap-2 text-zinc-900">
+        {/* Center: Desktop Navigation Links (Shop, Archive, About) */}
+        <nav className="hidden md:flex items-center gap-10 lg:gap-14 text-[#FF1801] text-lg lg:text-xl font-medium tracking-tight">
           <button
-            onClick={onOpenSearch}
-            className="p-2 hover:text-zinc-600 transition-colors hidden md:block"
-            aria-label="Search fragrances"
+            onClick={() => handleCollectionClick('all')}
+            className="hover:opacity-75 transition-opacity cursor-pointer"
           >
-            <Search className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
+            Shop
           </button>
-          
+          <button
+            onClick={() => handleCollectionClick('archive')}
+            className="hover:opacity-75 transition-opacity cursor-pointer"
+          >
+            Archive
+          </button>
           <button
             onClick={() => {
-              const el = document.getElementById('account-section');
+              const el = document.getElementById('studio-section') || document.getElementById('why-section');
               el?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="p-2 hover:text-zinc-600 transition-colors hidden md:block"
-            aria-label="Account"
+            className="hover:opacity-75 transition-opacity cursor-pointer"
           >
-            <User className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
+            About
           </button>
+        </nav>
 
-          <button
-            onClick={onOpenWishlist}
-            className="p-2 hover:text-zinc-600 transition-colors relative hidden md:block"
-            aria-label="Wishlist"
-          >
-            <Heart className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
-          </button>
-
+        {/* Right: Actions (Bag (count), Menu) */}
+        <div className="flex items-center gap-6 sm:gap-8 text-[#FF1801] text-lg lg:text-xl font-medium tracking-tight">
           <button
             onClick={onOpenCart}
-            className="p-2 hover:text-zinc-600 transition-colors relative"
-            aria-label="Shopping bag"
+            className="hover:opacity-75 transition-opacity cursor-pointer inline-flex items-center gap-1"
+            aria-label={`Shopping Bag (${cartCount})`}
           >
-            <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 stroke-[1.75]" />
-            {cartCount > 0 && (
-              <span className="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
+            Bag ({cartCount})
+          </button>
+
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="hover:opacity-75 transition-opacity cursor-pointer"
+            aria-label="Open Navigation Menu"
+          >
+            Menu
           </button>
         </div>
       </div>
 
-      {/* Slide-out Mobile Navigation Drawer */}
+      {/* Slide-out Menu Drawer for both Mobile and Desktop Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[96px] z-50 bg-black/40 backdrop-blur-sm md:hidden animate-fade-in">
-          <div className="bg-white w-4/5 max-w-sm h-full p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
-            <div className="space-y-6">
-              <div className="border-b border-zinc-100 pb-4">
-                <p className="text-[10px] tracking-widest uppercase text-zinc-400 font-medium">Explore Decants</p>
-                <div className="mt-4 flex flex-col space-y-3 font-serif text-lg text-zinc-900">
-                  <button onClick={() => handleCollectionClick('all')} className="text-left hover:text-amber-800 transition-colors font-semibold">
-                    Explore All Decants
-                  </button>
-                  <button onClick={() => handleCollectionClick('forhim')} className="text-left hover:text-amber-800 transition-colors">
-                    For Him
-                  </button>
-                  <button onClick={() => handleCollectionClick('forher')} className="text-left hover:text-amber-800 transition-colors">
-                    For Her
-                  </button>
-                  <button onClick={() => handleCollectionClick('unisex')} className="text-left hover:text-amber-800 transition-colors">
-                    Unisex
-                  </button>
-                  <button onClick={() => handleCollectionClick('best-sellers')} className="text-left hover:text-amber-800 transition-colors">
-                    Best Sellers
-                  </button>
-                  <button onClick={() => handleCollectionClick('new-arrivals')} className="text-left hover:text-amber-800 transition-colors">
-                    New Arrivals
-                  </button>
-                  <button onClick={() => handleCollectionClick('woody')} className="text-left hover:text-amber-800 transition-colors text-sm">
-                    Woody & Oud Collection
-                  </button>
-                  <button onClick={() => handleCollectionClick('gourmand')} className="text-left hover:text-amber-800 transition-colors text-sm">
-                    Gourmand & Vanilla Collection
-                  </button>
-                  <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
-                    Frequently Asked Questions
-                  </a>
-                  <a href="#journal" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-600 transition-colors">
-                    Editorial Diary
-                  </a>
-                </div>
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm animate-fade-in flex justify-end">
+          <div className="bg-[#ECE8E1] text-[#FF1801] w-full max-w-sm sm:max-w-md h-full p-6 sm:p-8 shadow-2xl flex flex-col justify-between overflow-y-auto">
+            <div className="space-y-8">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between border-b border-[#FF1801]/30 pb-4">
+                <span className="text-3xl font-black tracking-[-0.15em]">++</span>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1 hover:opacity-70 transition-opacity cursor-pointer"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6 stroke-[2.5]" />
+                </button>
               </div>
 
-              <div className="space-y-2 text-xs text-zinc-600 font-sans">
-                <p className="text-zinc-400 tracking-wider uppercase text-[10px]">Concierge Service</p>
-                <p>Contact: {storeSettings?.contact_phone || '+880 1700-AROMA'}</p>
-                <p>Email: {storeSettings?.contact_email || 'concierge@aromatica.com.bd'}</p>
+              {/* Navigation Links */}
+              <nav className="flex flex-col space-y-4 text-2xl font-semibold tracking-tight">
+                <button
+                  onClick={() => handleCollectionClick('all')}
+                  className="text-left hover:opacity-75 transition-opacity"
+                >
+                  All Products
+                </button>
+                <button
+                  onClick={() => handleCollectionClick('forhim')}
+                  className="text-left hover:opacity-75 transition-opacity"
+                >
+                  Apparel
+                </button>
+                <button
+                  onClick={() => handleCollectionClick('forher')}
+                  className="text-left hover:opacity-75 transition-opacity"
+                >
+                  Accessories
+                </button>
+                <button
+                  onClick={() => handleCollectionClick('best-sellers')}
+                  className="text-left hover:opacity-75 transition-opacity"
+                >
+                  Featured & Archive
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenSearch();
+                  }}
+                  className="text-left hover:opacity-75 transition-opacity inline-flex items-center gap-2 pt-2 text-xl"
+                >
+                  <Search className="w-5 h-5 stroke-[2.5]" />
+                  <span>Search Catalog</span>
+                </button>
+              </nav>
+
+              {/* Store & Contact Information */}
+              <div className="pt-6 border-t border-[#FF1801]/30 space-y-2 text-sm text-[#FF1801]/90">
+                <p className="font-bold tracking-wider uppercase text-xs">Customer Care & Studio</p>
+                <p>Location: 100 Main St., Studio</p>
+                <p>Email: {storeSettings?.contact_email || 'hello@outfitstore.com'}</p>
+                <p>Phone: {storeSettings?.contact_phone || '+1 (555) 019-2834'}</p>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-zinc-100 text-xs text-zinc-400">
-              <p className="font-serif italic text-zinc-600">{storeSettings?.tagline || 'Luxury, By The ML.'}</p>
-              <p className="mt-1">{storeSettings?.address || 'AROMATICA Dhaka, Bangladesh'}</p>
+            <div className="pt-6 border-t border-[#FF1801]/30 text-xs text-[#FF1801]/80 flex justify-between items-center">
+              <span>VISIT ++ WEBSITE</span>
+              <span>© 2026</span>
             </div>
           </div>
         </div>
