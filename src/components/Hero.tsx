@@ -17,13 +17,21 @@ export const Hero: React.FC<HeroProps> = ({
   onNavigateToCollection,
   seasonsData,
 }) => {
-
   return (
-    <section className="w-full bg-[#ECE8E1] text-[#FF1801] pt-1 sm:pt-2 pb-12 sm:pb-20 select-none">
+    <section
+      className="w-full pt-1 sm:pt-2 pb-12 sm:pb-20 select-none"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        color: 'var(--theme-primary)',
+      }}
+    >
       <div className="w-full px-5 sm:px-8 md:px-12">
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
         <div className="w-full overflow-hidden select-none py-2 sm:py-4">
-          <h1 className="w-full text-center text-[#FF1801] font-black tracking-tight uppercase leading-[0.88] select-none flex flex-col items-center justify-center">
+          <h1
+            className="w-full text-center font-black tracking-tight uppercase leading-[0.88] select-none flex flex-col items-center justify-center"
+            style={{ color: 'var(--theme-primary)' }}
+          >
             {/* Line 1: Pure Portions */}
             <span className="block text-[11.5vw] sm:text-[11vw] md:text-[10vw] lg:text-[9.5vw] tracking-[-0.035em] whitespace-nowrap">
               Pure Portions
@@ -38,12 +46,18 @@ export const Hero: React.FC<HeroProps> = ({
           </h1>
         </div>
 
-        {/* Thick Solid Red Horizontal Divider */}
-        <div className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5.5px] bg-[#FF1801] mt-2 sm:mt-3 mb-6 sm:mb-8" />
+        {/* Thick Solid Horizontal Divider */}
+        <div
+          className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5.5px] mt-2 sm:mt-3 mb-6 sm:mb-8"
+          style={{ backgroundColor: 'var(--theme-primary)' }}
+        />
 
         {/* Editorial Information Section */}
         {/* Desktop Layout (4 columns matching reference screenshot) */}
-        <div className="hidden md:grid md:grid-cols-12 gap-8 text-[15px] lg:text-[16px] xl:text-[17px] font-semibold leading-[1.3] text-[#FF1801] mb-12 lg:mb-16">
+        <div
+          className="hidden md:grid md:grid-cols-12 gap-8 text-[15px] lg:text-[16px] xl:text-[17px] font-semibold leading-[1.3] mb-12 lg:mb-16"
+          style={{ color: 'var(--theme-primary)' }}
+        >
           {/* Column 1: Brand & Links */}
           <div className="md:col-span-3 flex flex-col justify-between">
             <span className="tracking-tight uppercase font-bold text-base lg:text-lg">PURE PORTIONS</span>
@@ -97,7 +111,10 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Mobile Layout (exact stack from mobile screenshot) */}
-        <div className="md:hidden flex flex-col space-y-6 text-[#FF1801] font-semibold mb-8 text-[13px] sm:text-[14px]">
+        <div
+          className="md:hidden flex flex-col space-y-6 font-semibold mb-8 text-[13px] sm:text-[14px]"
+          style={{ color: 'var(--theme-primary)' }}
+        >
           {/* Row 1: Brand (left) & WHY + Description (right) */}
           <div className="grid grid-cols-12 gap-3 sm:gap-4">
             <div className="col-span-4 sm:col-span-3">

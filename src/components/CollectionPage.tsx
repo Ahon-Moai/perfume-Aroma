@@ -126,7 +126,11 @@ const CollectionProductCard: React.FC<{
 
         <button
           onClick={() => onAddToCart(product, selectedSize.size, selectedSize.price, 1)}
-          className="w-full bg-zinc-950 hover:bg-[#FF1801] text-white py-2 text-[10px] font-sans uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs"
+          className="w-full py-2 text-[10px] font-sans uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs hover:opacity-85"
+          style={{
+            backgroundColor: 'var(--theme-btn-bg)',
+            color: 'var(--theme-btn-text)',
+          }}
         >
           <ShoppingBag className="w-3 h-3" />
           <span>Add To Bag</span>

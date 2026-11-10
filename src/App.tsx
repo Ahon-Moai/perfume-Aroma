@@ -30,8 +30,17 @@ import { NEW_ARRIVALS } from './data/fragranceData';
 import { FragranceProduct, CartItem, JournalArticle } from './types';
 import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMessage } from './services/api';
 import { Shield } from 'lucide-react';
+import { ThemeProvider } from './context/ThemeContext';
 
 export default function App() {
+  return (
+    <ThemeProvider>
+      <StorefrontApp />
+    </ThemeProvider>
+  );
+}
+
+function StorefrontApp() {
   const [showIntro, setShowIntro] = useState<boolean>(true);
   const [introKey, setIntroKey] = useState<number>(0);
   const [isPageTransitionIntro, setIsPageTransitionIntro] = useState<boolean>(false);
