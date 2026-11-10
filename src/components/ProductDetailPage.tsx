@@ -367,7 +367,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <button
                     onClick={handleAddToCartClick}
                     disabled={added}
-                    className="flex-1 bg-zinc-950 hover:bg-zinc-800 text-white py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+                    className="flex-1 py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:opacity-90"
+                    style={{
+                      backgroundColor: 'var(--theme-btn-bg)',
+                      color: 'var(--theme-btn-text)',
+                    }}
                   >
                     {added ? (
                       <>

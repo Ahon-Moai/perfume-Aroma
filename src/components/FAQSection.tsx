@@ -16,58 +16,96 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
   };
 
   return (
-    <section id="faq" className="w-full bg-[#ECE8E1] text-[#FF1801] py-14 sm:py-20 border-b border-[#FF1801]/20 select-none">
+    <section
+      id="faq"
+      className="w-full py-14 sm:py-20 border-b select-none"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        color: 'var(--theme-primary)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Editorial Section Header */}
         <div className="mb-8 sm:mb-12">
           <div className="flex items-center gap-3">
-            <span className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold text-[#FF1801]">
+            <span
+              className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               ++ QUESTIONS & CLARIFICATIONS
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2 mb-3">
-            <h2 className="font-sans font-black text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-[#FF1801] leading-none">
+            <h2
+              className="font-sans font-black text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight leading-none"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               Frequently Asked Questions
             </h2>
-            <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest uppercase text-[#FF1801]/80">
+            <span
+              className="text-[11px] sm:text-xs font-mono font-bold tracking-widest uppercase opacity-80"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               CONCIERGE & SUPPORT
             </span>
           </div>
 
-          {/* Thick Solid Red Horizontal Divider matching Hero */}
-          <div className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5px] bg-[#FF1801] mt-3 sm:mt-4 mb-8" />
+          {/* Thick Solid Horizontal Divider matching Hero */}
+          <div
+            className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5px] mt-3 sm:mt-4 mb-8"
+            style={{ backgroundColor: 'var(--theme-primary)' }}
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
           {/* Left Column: Accordion Questions */}
           <div className="lg:col-span-7 order-2 lg:order-1">
-            <div className="divide-y-2 divide-[#FF1801] border-t-2 border-b-2 border-[#FF1801]">
+            <div
+              className="divide-y-2 border-t-2 border-b-2"
+              style={{ borderColor: 'var(--theme-border)' }}
+            >
               {faqList.map((item) => {
                 const isOpen = openId === item.id;
                 return (
-                  <div key={item.id} className="py-4 sm:py-5 transition-colors">
+                  <div
+                    key={item.id}
+                    className="py-4 sm:py-5 transition-colors"
+                    style={{ borderColor: 'var(--theme-border)' }}
+                  >
                     <button
                       onClick={() => toggleAccordion(item.id)}
                       className="w-full flex items-center justify-between text-left group cursor-pointer focus:outline-none"
                       aria-expanded={isOpen}
                     >
                       <div className="flex items-center gap-3 pr-2">
-                        <span className="text-[#FF1801] font-bold text-sm sm:text-base">++</span>
-                        <span className="font-sans text-xs sm:text-sm font-bold text-[#FF1801] group-hover:opacity-75 uppercase tracking-wide transition-opacity">
+                        <span className="font-bold text-sm sm:text-base" style={{ color: 'var(--theme-primary)' }}>++</span>
+                        <span
+                          className="font-sans text-xs sm:text-sm font-bold group-hover:opacity-75 uppercase tracking-wide transition-opacity"
+                          style={{ color: 'var(--theme-primary)' }}
+                        >
                           {item.question}
                         </span>
                       </div>
                       <ChevronDown
-                        className={`w-4 h-4 text-[#FF1801] transition-transform duration-300 shrink-0 ml-3 ${
+                        className={`w-4 h-4 transition-transform duration-300 shrink-0 ml-3 ${
                           isOpen ? 'rotate-180' : ''
                         }`}
+                        style={{ color: 'var(--theme-primary)' }}
                       />
                     </button>
 
                     {isOpen && (
-                      <div className="mt-3 pl-7 pr-4 text-xs sm:text-[13px] text-[#111111] font-sans leading-relaxed font-semibold animate-fade-in bg-[#FAF8F5] p-3.5 border-l-2 border-[#FF1801]">
+                      <div
+                        className="mt-3 pl-7 pr-4 text-xs sm:text-[13px] font-sans leading-relaxed font-semibold animate-fade-in p-3.5 border-l-2"
+                        style={{
+                          backgroundColor: 'var(--theme-surface-card)',
+                          color: 'var(--theme-text-primary)',
+                          borderColor: 'var(--theme-border)',
+                        }}
+                      >
                         {item.answer}
                       </div>
                     )}
@@ -79,14 +117,29 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
 
           {/* Right Column: Information, Editorial Card & CTA */}
           <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
-            <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-6 sm:p-8 space-y-4">
-              <span className="text-[10px] tracking-[0.25em] font-mono uppercase font-bold text-[#FF1801] block">
+            <div
+              className="border-2 p-6 sm:p-8 space-y-4"
+              style={{
+                backgroundColor: 'var(--theme-surface-card)',
+                borderColor: 'var(--theme-border)',
+              }}
+            >
+              <span
+                className="text-[10px] tracking-[0.25em] font-mono uppercase font-bold block"
+                style={{ color: 'var(--theme-secondary)' }}
+              >
                 AROMATICA CARE
               </span>
-              <h3 className="font-sans font-black text-xl sm:text-2xl text-[#FF1801] uppercase tracking-tight leading-snug">
+              <h3
+                className="font-sans font-black text-xl sm:text-2xl uppercase tracking-tight leading-snug"
+                style={{ color: 'var(--theme-primary)' }}
+              >
                 Need Personalized Scent Advice or Order Support?
               </h3>
-              <p className="text-xs sm:text-sm text-[#111111] font-sans font-semibold leading-relaxed">
+              <p
+                className="text-xs sm:text-sm font-sans font-semibold leading-relaxed"
+                style={{ color: 'var(--theme-text-primary)' }}
+              >
                 Our decant studio is here to assist with notes advice, authenticity confirmation, and bulk allocations for weddings and corporate orders.
               </p>
 
@@ -96,7 +149,12 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
                     const firstItem = document.getElementById('faq');
                     firstItem?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="inline-flex items-center gap-2 border-2 border-[#FF1801] bg-[#FF1801] text-[#FAF8F5] hover:bg-transparent hover:text-[#FF1801] text-xs font-bold tracking-widest uppercase px-6 py-3 transition-all duration-200 cursor-pointer shadow-xs"
+                  className="inline-flex items-center gap-2 border-2 text-xs font-bold tracking-widest uppercase px-6 py-3 transition-all duration-200 cursor-pointer shadow-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-btn-bg)',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-btn-text)',
+                  }}
                 >
                   <span>EXPLORE ALL FAQS</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -104,16 +162,25 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
               </div>
             </div>
 
-            <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 flex items-center justify-between">
+            <div
+              className="border-2 p-4 flex items-center justify-between"
+              style={{
+                backgroundColor: 'var(--theme-surface-card)',
+                borderColor: 'var(--theme-border)',
+              }}
+            >
               <div>
-                <p className="text-[10px] font-mono tracking-widest uppercase text-[#FF1801] font-bold">
+                <p
+                  className="text-[10px] font-mono tracking-widest uppercase font-bold"
+                  style={{ color: 'var(--theme-secondary)' }}
+                >
                   DIRECT CONCIERGE
                 </p>
-                <p className="text-xs font-bold text-[#FF1801]">
+                <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                   WhatsApp Hotline: +880 1700-000000
                 </p>
               </div>
-              <span className="text-xs font-mono font-bold text-[#FF1801]">10AM - 11PM</span>
+              <span className="text-xs font-mono font-bold" style={{ color: 'var(--theme-primary)' }}>10AM - 11PM</span>
             </div>
           </div>
         </div>

@@ -170,7 +170,12 @@ export const NewArrivals: React.FC<NewArrivalsProps> = ({
           ) : (
             <button
               onClick={handleSeeAll}
-              className="inline-flex items-center gap-2 border-2 border-zinc-950 bg-zinc-950 text-white hover:bg-[#FF1801] hover:border-[#FF1801] px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer shadow-xs active:scale-95"
+              className="inline-flex items-center gap-2 border-2 px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer shadow-xs active:scale-95 hover:opacity-85"
+              style={{
+                backgroundColor: 'var(--theme-btn-bg)',
+                borderColor: 'var(--theme-border)',
+                color: 'var(--theme-btn-text)',
+              }}
             >
               <span>See all products</span>
               <ArrowRight className="w-4 h-4" />

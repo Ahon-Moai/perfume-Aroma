@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, ArrowRight, Sparkles } from 'lucide-react';
+import { ShieldCheck, ArrowRight } from 'lucide-react';
 import { FragranceProduct } from '../types';
 
 interface BrandItem {
@@ -123,65 +123,102 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
   };
 
   return (
-    <section id="trust-section" className="w-full bg-[#ECE8E1] text-[#FF1801] pt-12 pb-16 sm:pb-24 select-none">
+    <section
+      id="trust-section"
+      className="w-full pt-12 pb-16 sm:pb-24 select-none"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        color: 'var(--theme-primary)',
+      }}
+    >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section 1: Community Header & Editorial Dividing Line */}
         <div className="mb-10 sm:mb-14">
           <div className="flex items-center gap-3">
-            <span className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold text-[#FF1801]">
+            <span
+              className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               ++ COMMUNITY
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2 mb-3">
-            <h2 className="font-sans font-black text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-[#FF1801] leading-none">
+            <h2
+              className="font-sans font-black text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight leading-none"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               Trusted, stocked, moving fast
             </h2>
-            <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest uppercase text-[#FF1801]/80">
+            <span
+              className="text-[11px] sm:text-xs font-mono font-bold tracking-widest uppercase opacity-80"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               BANGLADESH'S #1 DECANT ATELIER
             </span>
           </div>
 
-          {/* Thick Solid Red Horizontal Divider */}
-          <div className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5px] bg-[#FF1801] mt-3 sm:mt-4 mb-8" />
+          {/* Thick Solid Horizontal Divider */}
+          <div
+            className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5px] mt-3 sm:mt-4 mb-8"
+            style={{ backgroundColor: 'var(--theme-primary)' }}
+          />
 
           {/* Dense Trust Matrix Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
             {/* Column 1 */}
             <div className="space-y-3.5">
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   LARGEST DECANT COLLECTION IN BD
                 </p>
-                <p className="font-black text-2xl sm:text-3xl text-[#FF1801] group-hover:text-[#FAF8F5] my-1 tabular-nums tracking-tight">
+                <p className="font-black text-2xl sm:text-3xl my-1 tabular-nums tracking-tight" style={{ color: 'var(--theme-primary)' }}>
                   1,000+
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Current Open Bottles Count
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   BRANDS WE OFFER
                 </p>
-                <p className="font-black text-2xl sm:text-3xl text-[#FF1801] group-hover:text-[#FAF8F5] my-1 tabular-nums tracking-tight">
+                <p className="font-black text-2xl sm:text-3xl my-1 tabular-nums tracking-tight" style={{ color: 'var(--theme-primary)' }}>
                   160+
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Unique Brands In Our Collection
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   TOTAL SOLD
                 </p>
-                <p className="font-black text-2xl sm:text-3xl text-[#FF1801] group-hover:text-[#FAF8F5] my-1 tabular-nums tracking-tight">
+                <p className="font-black text-2xl sm:text-3xl my-1 tabular-nums tracking-tight" style={{ color: 'var(--theme-primary)' }}>
                   89,000+
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Decant Count | Till Date
                 </p>
               </div>
@@ -189,38 +226,56 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
 
             {/* Column 2 */}
             <div className="space-y-3.5">
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   CUSTOMERS
                 </p>
-                <p className="font-black text-2xl sm:text-3xl text-[#FF1801] group-hover:text-[#FAF8F5] my-1 tabular-nums tracking-tight">
+                <p className="font-black text-2xl sm:text-3xl my-1 tabular-nums tracking-tight" style={{ color: 'var(--theme-primary)' }}>
                   29,000+
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Fragheads We Served
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   AUTHENTIC | UNALTERED
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 leading-snug">
+                <p className="text-xs sm:text-sm font-bold my-1 leading-snug" style={{ color: 'var(--theme-primary)' }}>
                   100% Authenticity Guaranteed
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Decanted straight from originals
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   REGISTERED
                 </p>
-                <p className="font-mono text-xs sm:text-sm font-black text-[#FF1801] group-hover:text-[#FAF8F5] my-1">
+                <p className="font-mono text-xs sm:text-sm font-black my-1" style={{ color: 'var(--theme-primary)' }}>
                   TL NO : 8024484
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   + Labeling license pending
                 </p>
               </div>
@@ -228,38 +283,56 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
 
             {/* Column 3 */}
             <div className="space-y-3.5">
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   DELIVERY (Dhaka ৳{feeDhaka} / Outside ৳{feeOutside})
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 leading-snug">
+                <p className="text-xs sm:text-sm font-bold my-1 leading-snug" style={{ color: 'var(--theme-primary)' }}>
                   Free Over ৳{freeThreshold}
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Nationwide | Door to door
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   COD
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 leading-snug">
+                <p className="text-xs sm:text-sm font-bold my-1 leading-snug" style={{ color: 'var(--theme-primary)' }}>
                   Cash on Delivery Nationwide
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Advance only on orders over BDT 5000
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   LEAK POLICY
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 leading-snug">
+                <p className="text-xs sm:text-sm font-bold my-1 leading-snug" style={{ color: 'var(--theme-primary)' }}>
                   Leak Protected During Shipping
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Immediate Exchange If Leaks | Breaks
                 </p>
               </div>
@@ -267,38 +340,56 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
 
             {/* Column 4 */}
             <div className="space-y-3.5">
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   SUPPORT
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 leading-snug">
+                <p className="text-xs sm:text-sm font-bold my-1 leading-snug" style={{ color: 'var(--theme-primary)' }}>
                   WhatsApp | Insta DMs | Messenger
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   18 Hours X 7 Days
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   DECANT SIZES
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 font-mono">
+                <p className="text-xs sm:text-sm font-bold my-1 font-mono" style={{ color: 'var(--theme-primary)' }}>
                   3ml · 5ml · 9ml · 15ml
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Flat Margins | Premium Sprayers
                 </p>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 min-h-[120px] flex flex-col justify-between hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
-                <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+              <div
+                className="border-2 p-4 min-h-[120px] flex flex-col justify-between transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
+                <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                   CURATED FOR BANGLADESH
                 </p>
-                <p className="text-xs sm:text-sm font-bold text-[#FF1801] group-hover:text-[#FAF8F5] my-1 leading-snug">
+                <p className="text-xs sm:text-sm font-bold my-1 leading-snug" style={{ color: 'var(--theme-primary)' }}>
                   For Dusty Air & Humidity
                 </p>
-                <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90 font-medium">
+                <p className="text-[10px] font-medium opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                   Formal | Casual | Signature scents
                 </p>
               </div>
@@ -306,74 +397,86 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
 
             {/* Column 5 */}
             <div className="space-y-3.5 sm:col-span-2 lg:col-span-1">
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 flex flex-col justify-between space-y-3 hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
+              <div
+                className="border-2 p-4 flex flex-col justify-between space-y-3 transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
                 <div>
-                  <p className="text-xs font-bold text-[#FF1801] group-hover:text-[#FAF8F5]">
+                  <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                     Fast Order Updates
                   </p>
-                  <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90">
+                  <p className="text-[10px] opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                     Quick Issue Resolution
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+                  <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                     PACKAGING
                   </p>
-                  <p className="text-xs font-bold text-[#FF1801] group-hover:text-[#FAF8F5]">
+                  <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                     Transit-safe packing
                   </p>
-                  <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90">
+                  <p className="text-[10px] opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                     Complimentary Gift Boxes
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+                  <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                     100% MONEYBACK GUARANTEE
                   </p>
-                  <p className="text-xs font-bold text-[#FF1801] group-hover:text-[#FAF8F5]">
+                  <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                     If Proven Unauthentic
                   </p>
-                  <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90">
+                  <p className="text-[10px] opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                     Only True Decants
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+                  <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                     RESTOCKS | NEW STOCKS
                   </p>
-                  <p className="text-xs font-bold text-[#FF1801] group-hover:text-[#FAF8F5]">
+                  <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                     Every Week
                   </p>
-                  <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90">
+                  <p className="text-[10px] opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                     Runs Out Quick
                   </p>
                 </div>
               </div>
 
-              <div className="bg-[#FAF8F5] border-2 border-[#FF1801] p-4 space-y-2 hover:bg-[#FF1801] hover:text-[#FAF8F5] transition-colors group cursor-default">
+              <div
+                className="border-2 p-4 space-y-2 transition-colors group cursor-default"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
+              >
                 <div>
-                  <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+                  <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                     QC'D ALWAYS
                   </p>
-                  <p className="text-xs font-bold text-[#FF1801] group-hover:text-[#FAF8F5]">
+                  <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                     Freshly Decanted On Order
                   </p>
-                  <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90">
+                  <p className="text-[10px] opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                     Labeled | Glass Bottles
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-[#FF1801]/30">
-                  <p className="text-[9px] tracking-[0.16em] uppercase text-[#FF1801] group-hover:text-[#FAF8F5] font-bold">
+                <div className="pt-2 border-t" style={{ borderColor: 'var(--theme-border-subtle)' }}>
+                  <p className="text-[9px] tracking-[0.16em] uppercase font-bold" style={{ color: 'var(--theme-secondary)' }}>
                     EMI AVAILABLE
                   </p>
-                  <p className="text-xs font-bold text-[#FF1801] group-hover:text-[#FAF8F5]">
+                  <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
                     Split In Installments
                   </p>
-                  <p className="text-[10px] text-[#FF1801]/80 group-hover:text-[#FAF8F5]/90">
+                  <p className="text-[10px] opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
                     Pick SSLCOMMERZ On Checkout
                   </p>
                 </div>
@@ -386,20 +489,29 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
         <div id="shop-by-brands" className="pt-4 sm:pt-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-2">
             <div>
-              <span className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold text-[#FF1801]">
+              <span
+                className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold"
+                style={{ color: 'var(--theme-primary)' }}
+              >
                 ++ THE ATELIER HOUSES
               </span>
-              <h3 className="font-sans font-black text-2xl sm:text-3xl md:text-4xl uppercase tracking-tight text-[#FF1801] mt-1">
+              <h3
+                className="font-sans font-black text-2xl sm:text-3xl md:text-4xl uppercase tracking-tight mt-1"
+                style={{ color: 'var(--theme-primary)' }}
+              >
                 Shop by brands
               </h3>
             </div>
-            <p className="text-xs sm:text-sm font-semibold text-[#FF1801]/80 uppercase max-w-md">
+            <p className="text-xs sm:text-sm font-semibold uppercase max-w-md opacity-80" style={{ color: 'var(--theme-primary)' }}>
               Select a fragrance house below to explore their dedicated collection and authentic decants.
             </p>
           </div>
 
-          {/* Thick Solid Red Horizontal Divider */}
-          <div className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5px] bg-[#FF1801] mt-2 mb-8" />
+          {/* Thick Solid Horizontal Divider */}
+          <div
+            className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5px] mt-2 mb-8"
+            style={{ backgroundColor: 'var(--theme-primary)' }}
+          />
 
           {/* Perfume Brands Image Boxes Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
@@ -407,27 +519,49 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
               <div
                 key={brand.slug}
                 onClick={() => handleBrandClick(brand.slug)}
-                className="group cursor-pointer bg-[#FAF8F5] border-2 border-[#FF1801] p-3 sm:p-4 flex flex-col justify-between hover:bg-[#FF1801] transition-all duration-300 shadow-sm"
+                className="group cursor-pointer border-2 p-3 sm:p-4 flex flex-col justify-between transition-all duration-300 shadow-sm hover:opacity-90"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border)',
+                }}
               >
                 {/* Brand Perfume Image Box */}
-                <div className="relative w-full aspect-square bg-[#ECE8E1] border border-[#FF1801]/30 overflow-hidden flex items-center justify-center p-3 mb-3">
+                <div
+                  className="relative w-full aspect-square border overflow-hidden flex items-center justify-center p-3 mb-3"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
                   <img
                     src={brand.image}
                     alt={brand.name}
                     className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <div className="absolute top-2 right-2 bg-[#FF1801] text-[#FAF8F5] group-hover:bg-[#FAF8F5] group-hover:text-[#FF1801] text-[9px] font-mono font-bold px-1.5 py-0.5 uppercase transition-colors">
+                  <div
+                    className="absolute top-2 right-2 text-[9px] font-mono font-bold px-1.5 py-0.5 uppercase transition-colors"
+                    style={{
+                      backgroundColor: 'var(--theme-btn-bg)',
+                      color: 'var(--theme-btn-text)',
+                    }}
+                  >
                     {brand.count} {brand.count === 1 ? 'Ed.' : 'Eds.'}
                   </div>
                 </div>
 
                 {/* Brand Name & Action */}
                 <div className="pt-1 text-center">
-                  <h4 className="font-sans font-black text-xs sm:text-sm text-[#FF1801] group-hover:text-[#FAF8F5] uppercase tracking-wider truncate transition-colors">
+                  <h4
+                    className="font-sans font-black text-xs sm:text-sm uppercase tracking-wider truncate transition-colors"
+                    style={{ color: 'var(--theme-primary)' }}
+                  >
                     {brand.name}
                   </h4>
-                  <div className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-[#FF1801]/80 group-hover:text-[#FAF8F5] uppercase tracking-widest mt-1.5 transition-colors">
+                  <div
+                    className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest mt-1.5 transition-colors"
+                    style={{ color: 'var(--theme-secondary)' }}
+                  >
                     <span>EXPLORE</span>
                     <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -437,31 +571,37 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
           </div>
         </div>
 
-        {/* Payments Verification Strip Styled with Red Accent */}
-        <div className="mt-12 bg-[#FAF8F5] border-2 border-[#FF1801] p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        {/* Payments Verification Strip Styled with Accent */}
+        <div
+          className="mt-12 border-2 p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+          style={{
+            backgroundColor: 'var(--theme-surface-card)',
+            borderColor: 'var(--theme-border)',
+          }}
+        >
           <div className="space-y-1">
-            <p className="text-[9px] tracking-[0.2em] uppercase text-[#FF1801] font-bold">
+            <p className="text-[9px] tracking-[0.2em] uppercase font-bold" style={{ color: 'var(--theme-primary)' }}>
               ++ SECURE TRANSACTIONS
             </p>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#FF1801]" />
-              <h4 className="font-sans text-sm font-black text-[#FF1801] uppercase tracking-wider">
+              <ShieldCheck className="w-4 h-4" style={{ color: 'var(--theme-primary)' }} />
+              <h4 className="font-sans text-sm font-black uppercase tracking-wider" style={{ color: 'var(--theme-primary)' }}>
                 Verified by SSLCommerz Bangladesh
               </h4>
             </div>
-            <p className="text-[11px] text-[#FF1801]/80 font-medium">
+            <p className="text-[11px] opacity-80 font-medium" style={{ color: 'var(--theme-text-secondary)' }}>
               Visa · Mastercard · Amex · UnionPay · bKash · Nagad · Rocket · Upay + more
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono">
-            <span className="px-2.5 py-1 bg-white border border-[#FF1801] font-bold text-[#1a1f71]">VISA</span>
-            <span className="px-2.5 py-1 bg-white border border-[#FF1801] font-bold text-[#eb001b]">Mastercard</span>
-            <span className="px-2.5 py-1 bg-white border border-[#FF1801] font-bold text-[#006fcf]">AMEX</span>
+            <span className="px-2.5 py-1 bg-white border font-bold text-[#1a1f71]" style={{ borderColor: 'var(--theme-border-subtle)' }}>VISA</span>
+            <span className="px-2.5 py-1 bg-white border font-bold text-[#eb001b]" style={{ borderColor: 'var(--theme-border-subtle)' }}>Mastercard</span>
+            <span className="px-2.5 py-1 bg-white border font-bold text-[#006fcf]" style={{ borderColor: 'var(--theme-border-subtle)' }}>AMEX</span>
             <span className="px-2.5 py-1 bg-[#e2136e] text-white font-bold">bKash</span>
             <span className="px-2.5 py-1 bg-[#f7931e] text-white font-bold">Nagad</span>
             <span className="px-2.5 py-1 bg-[#8c3494] text-white font-bold">Rocket</span>
-            <span className="px-2.5 py-1 bg-white border border-[#FF1801] font-bold text-[#FF1801]">256-BIT SSL ENCRYPTION</span>
+            <span className="px-2.5 py-1 font-bold border" style={{ backgroundColor: 'var(--theme-surface)', borderColor: 'var(--theme-border)', color: 'var(--theme-primary)' }}>256-BIT SSL ENCRYPTION</span>
           </div>
         </div>
 

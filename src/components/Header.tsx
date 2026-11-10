@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { X, Search } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Search, Palette, Check, ChevronDown } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 interface HeaderProps {
   cartCount: number;
@@ -20,6 +21,21 @@ export const Header: React.FC<HeaderProps> = ({
   storeSettings
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { theme, setTheme, themes, currentTheme } = useTheme();
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setThemeDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleCollectionClick = (slug: string) => {
     setMobileMenuOpen(false);
@@ -31,10 +47,16 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#ECE8E1] transition-all duration-200">
+    <header
+      className="sticky top-0 z-40 w-full border-b transition-colors duration-200"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       {/* Main Top Navigation matching reference */}
       <div className="w-full px-5 sm:px-8 md:px-12 pt-5 pb-3 flex items-center justify-between">
-        {/* Left: Red ++ Brand Symbol */}
+        {/* Left: Brand Symbol */}
         <div className="flex items-center">
           <a
             href="/"
@@ -44,7 +66,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigateHome();
               }
             }}
-            className="text-[#FF1801] text-3xl sm:text-4xl font-black tracking-[-0.15em] hover:opacity-85 transition-opacity inline-flex items-center select-none"
+            className="text-3xl sm:text-4xl font-black tracking-[-0.15em] hover:opacity-85 transition-opacity inline-flex items-center select-none"
+            style={{ color: 'var(--theme-primary)' }}
             aria-label="Home"
           >
             ++
@@ -52,7 +75,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Center: Desktop Navigation Links (Shop, Explore Decants, About Us) */}
-        <nav className="hidden md:flex items-center gap-10 lg:gap-14 text-[#FF1801] text-lg lg:text-xl font-medium tracking-tight">
+        <nav
+          className="hidden md:flex items-center gap-8 lg:gap-12 text-lg lg:text-xl font-medium tracking-tight"
+          style={{ color: 'var(--theme-primary)' }}
+        >
           <button
             onClick={() => handleCollectionClick('all')}
             className="hover:opacity-75 transition-opacity cursor-pointer"
@@ -83,8 +109,106 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Right: Actions (Bag (count), Menu) */}
-        <div className="flex items-center gap-6 sm:gap-8 text-[#FF1801] text-lg lg:text-xl font-medium tracking-tight">
+        {/* Right: Actions (Theme Selector, Bag (count), Menu) */}
+        <div
+          className="flex items-center gap-4 sm:gap-6 text-lg lg:text-xl font-medium tracking-tight"
+          style={{ color: 'var(--theme-primary)' }}
+        >
+          {/* Theme Selector Popover (Desktop) */}
+          <div className="relative hidden md:block" ref={dropdownRef}>
+            <button
+              onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs sm:text-sm font-semibold tracking-wider uppercase hover:opacity-80 transition-all cursor-pointer"
+              style={{
+                borderColor: 'var(--theme-primary)',
+                color: 'var(--theme-primary)',
+                backgroundColor: 'transparent',
+              }}
+              aria-label="Select colour theme"
+              aria-expanded={themeDropdownOpen}
+            >
+              {/* Swatch mini preview of active theme */}
+              <div className="flex -space-x-1 items-center">
+                <span
+                  className="w-2.5 h-2.5 rounded-full border border-black/20"
+                  style={{ backgroundColor: currentTheme.colors.primary }}
+                />
+                <span
+                  className="w-2.5 h-2.5 rounded-full border border-black/20"
+                  style={{ backgroundColor: currentTheme.colors.secondary }}
+                />
+                <span
+                  className="w-2.5 h-2.5 rounded-full border border-black/20"
+                  style={{ backgroundColor: currentTheme.colors.accent }}
+                />
+              </div>
+              <span className="text-[11px] lg:text-xs font-bold">{currentTheme.name}</span>
+              <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {themeDropdownOpen && (
+              <div
+                className="absolute right-0 mt-2 w-64 rounded-xl shadow-xl border p-2 z-50 backdrop-blur-md"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border-subtle)',
+                }}
+              >
+                <div
+                  className="px-3 py-2 text-[10px] uppercase font-bold tracking-widest border-b mb-1"
+                  style={{
+                    color: 'var(--theme-text-secondary)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  Choose Palette
+                </div>
+                <div className="space-y-1">
+                  {themes.map((t) => {
+                    const isSelected = t.id === theme;
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => {
+                          setTheme(t.id);
+                          setThemeDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          isSelected ? 'font-bold' : 'hover:opacity-80'
+                        }`}
+                        style={{
+                          backgroundColor: isSelected ? 'var(--theme-surface)' : 'transparent',
+                          color: 'var(--theme-primary)',
+                        }}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          {/* 3 Color Swatch Pills */}
+                          <div className="flex items-center -space-x-1">
+                            <span
+                              className="w-3.5 h-3.5 rounded-full border border-black/20"
+                              style={{ backgroundColor: t.colors.primary }}
+                            />
+                            <span
+                              className="w-3.5 h-3.5 rounded-full border border-black/20"
+                              style={{ backgroundColor: t.colors.secondary }}
+                            />
+                            <span
+                              className="w-3.5 h-3.5 rounded-full border border-black/20"
+                              style={{ backgroundColor: t.colors.accent }}
+                            />
+                          </div>
+                          <span>{t.name}</span>
+                        </div>
+                        {isSelected && <Check className="w-4 h-4 ml-2" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={onOpenCart}
             className="hover:opacity-75 transition-opacity cursor-pointer inline-flex items-center gap-1"
@@ -106,10 +230,19 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Slide-out Menu Drawer for both Mobile and Desktop Menu */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm animate-fade-in flex justify-end">
-          <div className="bg-[#ECE8E1] text-[#FF1801] w-full max-w-sm sm:max-w-md h-full p-6 sm:p-8 shadow-2xl flex flex-col justify-between overflow-y-auto">
+          <div
+            className="w-full max-w-sm sm:max-w-md h-full p-6 sm:p-8 shadow-2xl flex flex-col justify-between overflow-y-auto"
+            style={{
+              backgroundColor: 'var(--theme-surface)',
+              color: 'var(--theme-primary)',
+            }}
+          >
             <div className="space-y-8">
               {/* Drawer Header */}
-              <div className="flex items-center justify-between border-b border-[#FF1801]/30 pb-4">
+              <div
+                className="flex items-center justify-between border-b pb-4"
+                style={{ borderColor: 'var(--theme-border-subtle)' }}
+              >
                 <span className="text-3xl font-black tracking-[-0.15em]">++</span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
@@ -118,6 +251,58 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <X className="w-6 h-6 stroke-[2.5]" />
                 </button>
+              </div>
+
+              {/* Theme Selector Section in Mobile Drawer */}
+              <div
+                className="p-4 rounded-xl border space-y-3"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border-subtle)',
+                }}
+              >
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                  <Palette className="w-4 h-4" />
+                  <span>Colour Scheme</span>
+                </div>
+                <div className="space-y-1.5">
+                  {themes.map((t) => {
+                    const isSelected = t.id === theme;
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => setTheme(t.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                          isSelected ? 'font-bold' : 'hover:opacity-80'
+                        }`}
+                        style={{
+                          backgroundColor: isSelected ? 'var(--theme-surface)' : 'transparent',
+                          color: 'var(--theme-primary)',
+                          border: isSelected ? '1px solid var(--theme-border)' : '1px solid transparent',
+                        }}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex items-center -space-x-1">
+                            <span
+                              className="w-4 h-4 rounded-full border border-black/20"
+                              style={{ backgroundColor: t.colors.primary }}
+                            />
+                            <span
+                              className="w-4 h-4 rounded-full border border-black/20"
+                              style={{ backgroundColor: t.colors.secondary }}
+                            />
+                            <span
+                              className="w-4 h-4 rounded-full border border-black/20"
+                              style={{ backgroundColor: t.colors.accent }}
+                            />
+                          </div>
+                          <span>{t.name}</span>
+                        </div>
+                        {isSelected && <Check className="w-4 h-4" />}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Navigation Links */}
@@ -165,7 +350,10 @@ export const Header: React.FC<HeaderProps> = ({
               </nav>
 
               {/* Store & Contact Information */}
-              <div className="pt-6 border-t border-[#FF1801]/30 space-y-2 text-sm text-[#FF1801]/90">
+              <div
+                className="pt-6 border-t space-y-2 text-sm opacity-90"
+                style={{ borderColor: 'var(--theme-border-subtle)' }}
+              >
                 <p className="font-bold tracking-wider uppercase text-xs">Customer Care & Studio</p>
                 <p>Location: 100 Main St., Studio</p>
                 <p>Email: {storeSettings?.contact_email || 'hello@outfitstore.com'}</p>
@@ -173,7 +361,10 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            <div className="pt-6 border-t border-[#FF1801]/30 text-xs text-[#FF1801]/80 flex justify-between items-center">
+            <div
+              className="pt-6 border-t text-xs opacity-80 flex justify-between items-center"
+              style={{ borderColor: 'var(--theme-border-subtle)' }}
+            >
               <span>VISIT ++ WEBSITE</span>
               <span>© 2026</span>
             </div>

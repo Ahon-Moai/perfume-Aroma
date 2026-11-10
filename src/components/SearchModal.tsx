@@ -43,20 +43,35 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:pt-16 p-3 sm:p-4 bg-black/70 backdrop-blur-md animate-fade-in">
-      <div className="w-full max-w-2xl bg-white shadow-2xl border border-zinc-200 rounded-2xl overflow-hidden flex flex-col max-h-[85vh]">
-
+      <div
+        className="w-full max-w-2xl shadow-2xl border rounded-2xl overflow-hidden flex flex-col max-h-[85vh]"
+        style={{
+          backgroundColor: 'var(--theme-surface-card)',
+          borderColor: 'var(--theme-border-subtle)',
+        }}
+      >
         {/* Top Header & Search Bar */}
-        <div className="p-4 sm:p-5 border-b border-zinc-150 bg-white sticky top-0 z-10 space-y-3">
+        <div
+          className="p-4 sm:p-5 border-b sticky top-0 z-10 space-y-3"
+          style={{
+            backgroundColor: 'var(--theme-surface-card)',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-zinc-900" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-900">
+              <Sparkles className="w-4 h-4" style={{ color: 'var(--theme-primary)' }} />
+              <span
+                className="text-xs font-semibold uppercase tracking-wider"
+                style={{ color: 'var(--theme-primary)' }}
+              >
                 Fragrance Catalog Search
               </span>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full hover:bg-zinc-100 text-zinc-500 hover:text-zinc-950 transition-colors cursor-pointer"
+              className="p-1.5 rounded-full hover:opacity-75 transition-opacity cursor-pointer"
+              style={{ color: 'var(--theme-primary)' }}
               aria-label="Close search"
             >
               <X className="w-5 h-5" />
@@ -64,19 +79,28 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           </div>
 
           <div className="relative flex items-center">
-            <Search className="w-5 h-5 absolute left-3.5 text-zinc-400 pointer-events-none" />
+            <Search
+              className="w-5 h-5 absolute left-3.5 pointer-events-none opacity-50"
+              style={{ color: 'var(--theme-primary)' }}
+            />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by perfume, brand, or note (e.g. Vanilla, ARRINA, Oud)..."
-              className="w-full bg-zinc-50 border border-zinc-200/80 rounded-xl pl-10 pr-16 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:bg-white focus:border-zinc-900 transition-all font-sans"
+              className="w-full border rounded-xl pl-10 pr-16 py-3 text-sm focus:outline-none transition-all font-sans"
+              style={{
+                backgroundColor: 'var(--theme-surface)',
+                borderColor: 'var(--theme-border-subtle)',
+                color: 'var(--theme-text-primary)',
+              }}
               autoFocus
             />
             {query && (
               <button
                 onClick={() => setQuery('')}
-                className="absolute right-3 text-xs font-medium text-zinc-400 hover:text-zinc-900 uppercase tracking-wider px-2 py-1 rounded cursor-pointer"
+                className="absolute right-3 text-xs font-medium uppercase tracking-wider px-2 py-1 rounded cursor-pointer opacity-70 hover:opacity-100"
+                style={{ color: 'var(--theme-primary)' }}
               >
                 Clear
               </button>
@@ -85,16 +109,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
           {/* Quick Filter Search Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
-            <TrendingUp className="w-3.5 h-3.5 text-zinc-400 shrink-0 mr-1" />
+            <TrendingUp className="w-3.5 h-3.5 shrink-0 mr-1 opacity-50" style={{ color: 'var(--theme-primary)' }} />
             {POPULAR_SEARCH_TAGS.map((tag) => (
               <button
                 key={tag}
                 onClick={() => setQuery(tag)}
-                className={`text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all cursor-pointer ${
-                  query === tag
-                    ? 'bg-zinc-950 text-white'
-                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
-                }`}
+                className="text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all cursor-pointer border"
+                style={{
+                  backgroundColor: query === tag ? 'var(--theme-btn-bg)' : 'var(--theme-surface)',
+                  color: query === tag ? 'var(--theme-btn-text)' : 'var(--theme-text-primary)',
+                  borderColor: 'var(--theme-border-subtle)',
+                }}
               >
                 {tag}
               </button>
@@ -108,10 +133,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             /* Initial State: Popular / Featured Catalog Showcase */
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 font-sans">
+                <h4
+                  className="text-xs font-semibold uppercase tracking-wider font-sans"
+                  style={{ color: 'var(--theme-text-secondary)' }}
+                >
                   Featured & Trending Decants
                 </h4>
-                <span className="text-[10px] font-mono text-zinc-400">
+                <span className="text-[10px] font-mono opacity-60" style={{ color: 'var(--theme-text-secondary)' }}>
                   {products.length} Products Available
                 </span>
               </div>
@@ -124,9 +152,19 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       onSelectProduct(item);
                       onClose();
                     }}
-                    className="flex items-center gap-3 p-3 bg-zinc-50/70 hover:bg-zinc-100/90 border border-zinc-200/60 rounded-xl transition-all cursor-pointer group"
+                    className="flex items-center gap-3 p-3 border rounded-xl transition-all cursor-pointer group hover:opacity-90"
+                    style={{
+                      backgroundColor: 'var(--theme-surface)',
+                      borderColor: 'var(--theme-border-subtle)',
+                    }}
                   >
-                    <div className="w-14 h-14 bg-white rounded-lg p-1 border border-zinc-200/60 flex items-center justify-center shrink-0">
+                    <div
+                      className="w-14 h-14 rounded-lg p-1 border flex items-center justify-center shrink-0"
+                      style={{
+                        backgroundColor: 'var(--theme-surface-card)',
+                        borderColor: 'var(--theme-border-subtle)',
+                      }}
+                    >
                       <img
                         src={item.image}
                         alt={item.name}
@@ -134,14 +172,20 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="text-[9px] font-semibold tracking-widest text-zinc-400 uppercase block">
+                      <span
+                        className="text-[9px] font-semibold tracking-widest uppercase block"
+                        style={{ color: 'var(--theme-secondary)' }}
+                      >
                         {item.brand}
                       </span>
-                      <h5 className="font-serif text-sm text-zinc-900 font-normal truncate">
+                      <h5
+                        className="font-serif text-sm font-normal truncate"
+                        style={{ color: 'var(--theme-text-primary)' }}
+                      >
                         {item.name}
                       </h5>
-                      <p className="text-[11px] font-medium text-zinc-600 mt-0.5">
-                        ৳ {item.startingPrice} <span className="text-[10px] text-zinc-400 font-normal">/ decant</span>
+                      <p className="text-[11px] font-medium mt-0.5" style={{ color: 'var(--theme-primary)' }}>
+                        ৳ {item.startingPrice} <span className="text-[10px] opacity-70 font-normal">/ decant</span>
                       </p>
                     </div>
                   </div>
@@ -151,13 +195,16 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           ) : filtered.length === 0 ? (
             /* Empty Search State */
             <div className="py-12 text-center space-y-2">
-              <p className="font-serif text-base text-zinc-800">No decants found for "{query}"</p>
-              <p className="text-xs text-zinc-500 font-sans max-w-xs mx-auto">
+              <p className="font-serif text-base" style={{ color: 'var(--theme-text-primary)' }}>
+                No decants found for "{query}"
+              </p>
+              <p className="text-xs font-sans max-w-xs mx-auto opacity-75" style={{ color: 'var(--theme-text-secondary)' }}>
                 Try searching for a different scent profile, family name, or brand.
               </p>
               <button
                 onClick={() => setQuery('')}
-                className="mt-3 text-xs font-semibold text-zinc-900 underline underline-offset-4 cursor-pointer"
+                className="mt-3 text-xs font-semibold underline underline-offset-4 cursor-pointer"
+                style={{ color: 'var(--theme-primary)' }}
               >
                 Clear query and view all fragrances
               </button>
@@ -165,7 +212,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           ) : (
             /* Active Search Results Grid */
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-xs text-zinc-500">
+              <div className="flex items-center justify-between text-xs" style={{ color: 'var(--theme-text-secondary)' }}>
                 <span>Matching Decants</span>
                 <span className="font-mono text-[11px]">{filtered.length} found</span>
               </div>
@@ -178,10 +225,20 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       onSelectProduct(item);
                       onClose();
                     }}
-                    className="flex items-center justify-between p-3 bg-zinc-50/50 hover:bg-zinc-100 border border-zinc-200/60 rounded-xl transition-colors cursor-pointer group"
+                    className="flex items-center justify-between p-3 border rounded-xl transition-colors cursor-pointer group hover:opacity-90"
+                    style={{
+                      backgroundColor: 'var(--theme-surface)',
+                      borderColor: 'var(--theme-border-subtle)',
+                    }}
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="w-12 h-12 bg-white rounded-lg p-1 border border-zinc-200/60 flex items-center justify-center shrink-0">
+                      <div
+                        className="w-12 h-12 rounded-lg p-1 border flex items-center justify-center shrink-0"
+                        style={{
+                          backgroundColor: 'var(--theme-surface-card)',
+                          borderColor: 'var(--theme-border-subtle)',
+                        }}
+                      >
                         <img
                           src={item.image}
                           alt={item.name}
@@ -189,19 +246,31 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         />
                       </div>
                       <div className="min-w-0">
-                        <span className="text-[9px] font-semibold tracking-widest text-zinc-400 uppercase block">
+                        <span
+                          className="text-[9px] font-semibold tracking-widest uppercase block"
+                          style={{ color: 'var(--theme-secondary)' }}
+                        >
                           {item.brand}
                         </span>
-                        <h4 className="font-serif text-sm font-normal text-zinc-900 truncate">
+                        <h4
+                          className="font-serif text-sm font-normal truncate"
+                          style={{ color: 'var(--theme-text-primary)' }}
+                        >
                           {item.name}
                         </h4>
-                        <p className="text-[11px] text-zinc-500 mt-0.5">
-                          {item.category} &bull; <span className="font-semibold text-zinc-900">৳ {item.startingPrice}</span>
+                        <p className="text-[11px] opacity-80 mt-0.5" style={{ color: 'var(--theme-text-secondary)' }}>
+                          {item.category} &bull;{' '}
+                          <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>
+                            ৳ {item.startingPrice}
+                          </span>
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-xs text-zinc-400 group-hover:text-zinc-950 transition-colors shrink-0 pl-2">
+                    <div
+                      className="flex items-center gap-1.5 text-xs transition-colors shrink-0 pl-2"
+                      style={{ color: 'var(--theme-primary)' }}
+                    >
                       <span className="hidden sm:inline font-medium">Explore</span>
                       <ArrowRight className="w-4 h-4" />
                     </div>
@@ -211,7 +280,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

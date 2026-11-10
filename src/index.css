@@ -16,6 +16,111 @@
   font-family: "Urbanist", sans-serif;
 }
 
+/*
+  Theme CSS Variables
+  Theme 1 (Default): Monochrome Ivory
+    - Primary: #111111 (Black)
+    - Background/Surface: #F2EEE5 (Ivory)
+    - Card/Surface Light: #FFFFFF (White)
+  Theme 2: Burgundy Romance
+    - Primary: #650F25 (Burgundy)
+    - Secondary: #A52A43 (Crimson)
+    - Surface/Background: #E8D6D1 (Dusty Rose)
+    - Card: #FFFFFF / #FBF6F4
+  Theme 3: Forest Luxe
+    - Primary: #183B32 (Deep Forest)
+    - Secondary: #718675 (Sage)
+    - Surface/Background: #E5E9DF (Soft Eucalyptus)
+    - Card: #FFFFFF / #F5F7F3
+*/
+
+:root,
+[data-theme="monochrome-ivory"] {
+  --theme-primary: #111111;
+  --theme-secondary: #333333;
+  --theme-surface: #F2EEE5;
+  --theme-surface-card: #FFFFFF;
+  --theme-bg: #FFFFFF;
+  --theme-text-primary: #111111;
+  --theme-text-secondary: #555555;
+  --theme-text-accent: #111111;
+  --theme-border: #111111;
+  --theme-border-subtle: rgba(17, 17, 17, 0.15);
+  --theme-btn-bg: #111111;
+  --theme-btn-text: #FFFFFF;
+  --theme-footer-bg: #111111;
+  --theme-footer-text: #F2EEE5;
+  --theme-swatch-1: #111111;
+  --theme-swatch-2: #FFFFFF;
+  --theme-swatch-3: #F2EEE5;
+}
+
+[data-theme="burgundy-romance"] {
+  --theme-primary: #650F25;
+  --theme-secondary: #A52A43;
+  --theme-surface: #E8D6D1;
+  --theme-surface-card: #FFFFFF;
+  --theme-bg: #FDF9F8;
+  --theme-text-primary: #650F25;
+  --theme-text-secondary: #A52A43;
+  --theme-text-accent: #650F25;
+  --theme-border: #650F25;
+  --theme-border-subtle: rgba(101, 15, 37, 0.18);
+  --theme-btn-bg: #650F25;
+  --theme-btn-text: #FFFFFF;
+  --theme-footer-bg: #650F25;
+  --theme-footer-text: #E8D6D1;
+  --theme-swatch-1: #650F25;
+  --theme-swatch-2: #A52A43;
+  --theme-swatch-3: #E8D6D1;
+}
+
+[data-theme="forest-luxe"] {
+  --theme-primary: #183B32;
+  --theme-secondary: #718675;
+  --theme-surface: #E5E9DF;
+  --theme-surface-card: #FFFFFF;
+  --theme-bg: #F7F9F6;
+  --theme-text-primary: #183B32;
+  --theme-text-secondary: #718675;
+  --theme-text-accent: #183B32;
+  --theme-border: #183B32;
+  --theme-border-subtle: rgba(24, 59, 50, 0.18);
+  --theme-btn-bg: #183B32;
+  --theme-btn-text: #FFFFFF;
+  --theme-footer-bg: #183B32;
+  --theme-footer-text: #E5E9DF;
+  --theme-swatch-1: #183B32;
+  --theme-swatch-2: #718675;
+  --theme-swatch-3: #E5E9DF;
+}
+
+/* Global 250ms smooth transition for all theme color switches */
+body,
+header,
+main,
+footer,
+nav,
+div,
+button,
+a,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+select,
+section,
+article {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 250ms;
+}
+
 /* Custom smooth marquee */
 @keyframes marquee {
   0% {
