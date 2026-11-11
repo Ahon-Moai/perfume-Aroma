@@ -7,6 +7,7 @@ interface HeaderProps {
   onOpenCart: () => void;
   onOpenSearch: () => void;
   onOpenWishlist: () => void;
+  onOpenFinder?: () => void;
   onNavigateHome?: () => void;
   onNavigateToCollection?: (slug: string) => void;
   storeSettings?: any;
@@ -16,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   cartCount,
   onOpenCart,
   onOpenSearch,
+  onOpenFinder,
   onNavigateHome,
   onNavigateToCollection,
   storeSettings
@@ -84,6 +86,12 @@ export const Header: React.FC<HeaderProps> = ({
             className="hover:opacity-75 transition-opacity cursor-pointer"
           >
             Shop
+          </button>
+          <button
+            onClick={onOpenFinder}
+            className="hover:opacity-75 transition-opacity cursor-pointer inline-flex items-center gap-1.5"
+          >
+            <span>AI Scent Finder</span>
           </button>
           <button
             onClick={() => {
@@ -312,6 +320,15 @@ export const Header: React.FC<HeaderProps> = ({
                   className="text-left hover:opacity-75 transition-opacity"
                 >
                   Shop
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenFinder?.();
+                  }}
+                  className="text-left hover:opacity-75 transition-opacity"
+                >
+                  AI Scent Finder
                 </button>
                 <button
                   onClick={() => {

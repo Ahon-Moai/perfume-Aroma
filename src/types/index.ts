@@ -167,3 +167,50 @@ export interface FilterState {
   sort: string;
   search: string;
 }
+
+export interface FinderAnswers {
+  gender?: string; // "For Him" | "For Her" | "Unisex" | "Doesn't matter"
+  families?: string[]; // multiple choices
+  occasion?: string;
+  season?: string;
+  intensity?: string;
+  longevity?: string;
+  budget?: string; // "budget" | "mid" | "premium" | "any"
+  experience?: string;
+}
+
+export interface FinderMetadata {
+  currency: string;
+  currency_symbol: string;
+  price_range: {
+    min: number;
+    max: number;
+    avg: number;
+  };
+  budget_tiers: {
+    [key: string]: {
+      label: string;
+      description: string;
+      min?: number;
+      max?: number;
+    };
+  };
+}
+
+export interface RecommendedPerfume extends FragranceProduct {
+  compatibilityScore: number;
+  matchScore: number;
+  explanation: string;
+  whyMatches: string;
+  fragranceFamily: string;
+  longevity?: string;
+  projection?: string;
+}
+
+export interface RecommendationResponse {
+  profileSummary: string;
+  recommendations: RecommendedPerfume[];
+  fallbackApplied: boolean;
+  totalEvaluated: number;
+  totalEligible: number;
+}

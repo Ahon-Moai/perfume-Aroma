@@ -24,6 +24,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { SearchModal } from './components/SearchModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { IntroSequence } from './components/IntroSequence';
+import { PerfumeFinder } from './components/PerfumeFinder';
 import { AdminLogin } from './admin/AdminLogin';
 import { AdminLayout } from './admin/AdminLayout';
 import { NEW_ARRIVALS } from './data/fragranceData';
@@ -49,6 +50,7 @@ function StorefrontApp() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFinderOpen, setIsFinderOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Routing State: 'home' | 'product' | 'collection' | 'admin'
@@ -92,6 +94,10 @@ function StorefrontApp() {
       let nextRoute: { path: 'home' | 'product' | 'collection'; productSlugOrId?: string; collectionSlug?: string } = { path: 'home' };
 
       const queryProd = searchParams.get('product');
+      const queryFinder = searchParams.get('finder');
+      if (queryFinder === '1' || pathname === '/finder') {
+        setIsFinderOpen(true);
+      }
       if (queryProd) {
         nextRoute = { path: 'product', productSlugOrId: queryProd };
       } else if (pathname.startsWith('/products/') || pathname.startsWith('/product/')) {
@@ -365,6 +371,7 @@ function StorefrontApp() {
         onOpenCart={() => setIsCartOpen(true)}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenWishlist={() => showToast('Wishlist: 3 items saved')}
+        onOpenFinder={() => setIsFinderOpen(true)}
         onNavigateHome={navigateToHome}
         onNavigateToCollection={navigateToCollection}
         storeSettings={storeSettings}
@@ -478,7 +485,9 @@ function StorefrontApp() {
       {/* N. Premium Mobile Floating Bottom Navigation */}
       <MobileBottomNav
         activeTab={
-          isSearchOpen
+          isFinderOpen
+            ? 'ai'
+            : isSearchOpen
             ? 'search'
             : isCartOpen
             ? 'bag'
@@ -493,7 +502,7 @@ function StorefrontApp() {
         onNavigateShop={() => navigateToCollection('all')}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
-        onSelectAI={() => showToast('AromaAI Concierge: Scent recommendation engine ready')}
+        onSelectAI={() => setIsFinderOpen(true)}
       />
 
       {/* Interactive Drawers & Search Modal */}
@@ -511,6 +520,14 @@ function StorefrontApp() {
         onClose={() => setIsSearchOpen(false)}
         products={products}
         onSelectProduct={(p) => navigateToProduct(p)}
+      />
+
+      {/* Intelligent AI Perfume Finder Modal */}
+      <PerfumeFinder
+        isOpen={isFinderOpen}
+        onClose={() => setIsFinderOpen(false)}
+        onNavigateToProduct={(p) => navigateToProduct(p)}
+        onAddToCart={(p, size, price, qty) => handleAddToCart(p, size, price, qty || 1)}
       />
     </div>
   );
