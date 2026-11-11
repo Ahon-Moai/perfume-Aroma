@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { FragranceProduct, Collection, FilterState, DecantSize } from '../types';
 import { fetchCollectionBySlug, fetchPublicProducts } from '../services/api';
+import { trackSearchSubmission } from '../services/searchTracker';
 
 const getSprayEstimate = (sizeStr: string): string => {
   const match = sizeStr.match(/(\d+(\.\d+)?)/);
@@ -385,6 +386,20 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
           type="text"
           value={filters.search}
           onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              const term = filters.search.trim();
+              if (term.length >= 2) {
+                trackSearchSubmission({ term, resultCount: filteredProducts.length });
+              }
+            }
+          }}
+          onBlur={() => {
+            const term = filters.search.trim();
+            if (term.length >= 2) {
+              trackSearchSubmission({ term, resultCount: filteredProducts.length });
+            }
+          }}
           placeholder="Fragrance name, brand or note..."
           className="w-full bg-[#fafaf8] border border-zinc-200 px-3 py-2 text-xs text-zinc-900 focus:outline-none focus:border-zinc-950"
         />

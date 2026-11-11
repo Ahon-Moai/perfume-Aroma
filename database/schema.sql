@@ -307,7 +307,24 @@ CREATE TABLE IF NOT EXISTS `inventory_transactions` (
   FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Search Tracking & Analytics Table
+CREATE TABLE IF NOT EXISTS `search_logs` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `search_term` VARCHAR(255) NOT NULL,
+  `normalized_term` VARCHAR(255) NOT NULL,
+  `matched_product_id` VARCHAR(64) NULL,
+  `result_count` INT NOT NULL DEFAULT 0,
+  `ip_hash` VARCHAR(64) NULL,
+  `session_id` VARCHAR(100) NULL,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`matched_product_id`) REFERENCES `products`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_search_normalized_term ON search_logs(normalized_term);
+CREATE INDEX IF NOT EXISTS idx_search_created_at ON search_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_search_matched_prod ON search_logs(matched_product_id);
+CREATE INDEX IF NOT EXISTS idx_search_rate_limit ON search_logs(ip_hash, normalized_term, created_at);
 CREATE INDEX IF NOT EXISTS idx_prod_brand ON products(brand);
 CREATE INDEX IF NOT EXISTS idx_prod_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_prod_status ON products(status);

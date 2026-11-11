@@ -16,9 +16,11 @@ import {
   ChevronRight,
   Sun,
   Moon,
-  FlaskConical
+  FlaskConical,
+  Search
 } from 'lucide-react';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
+import { SearchAnalytics } from './SearchAnalytics';
 import { ProductManager } from './ProductManager';
 import { CollectionManager } from './CollectionManager';
 import { OrderManager } from './OrderManager';
@@ -45,7 +47,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   onLogout,
   onSwitchToStorefront
 }) => {
-  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'inventory' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'search_analytics' | 'products' | 'inventory' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('analytics');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
@@ -60,6 +62,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const navItems = [
     { id: 'analytics', label: 'Analytics & Insights', icon: BarChart3, desc: 'Sales performance & metrics' },
+    { id: 'search_analytics', label: 'Search Analytics', icon: Search, desc: 'Popular searches & decant stock' },
     { id: 'products', label: 'Products & Catalogue', icon: Package, desc: 'Manage catalogue & variants' },
     { id: 'inventory', label: 'ML Perfume Inventory', icon: FlaskConical, desc: 'Track bottle ML & stock ledger' },
     { id: 'collections', label: 'Collections & Categories', icon: Layers, desc: 'Organize store taxonomy' },
@@ -360,6 +363,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             : 'bg-white border-[#EAEAEA] text-[#111111]'
         }`}>
           {activeTab === 'analytics' && <AnalyticsDashboard csrfToken={csrfToken} />}
+          {activeTab === 'search_analytics' && <SearchAnalytics csrfToken={csrfToken} />}
           {activeTab === 'products' && <ProductManager csrfToken={csrfToken} />}
           {activeTab === 'inventory' && <InventoryManager csrfToken={csrfToken} />}
           {activeTab === 'collections' && <CollectionManager csrfToken={csrfToken} />}
