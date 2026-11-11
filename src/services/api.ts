@@ -124,3 +124,37 @@ export async function submitOrder(orderPayload: {
   });
   return await res.json();
 }
+
+export async function fetchFinderMetadata(): Promise<import('../types').FinderMetadata | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/recommendations.php`);
+    const data = await res.json();
+    if (data.success && data.data) {
+      return data.data;
+    }
+  } catch (err) {
+    console.warn('Failed to fetch finder metadata', err);
+  }
+  return null;
+}
+
+export async function getPerfumeRecommendations(
+  answers: import('../types').FinderAnswers
+): Promise<import('../types').RecommendationResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/recommendations.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(answers)
+    });
+    const data = await res.json();
+    if (data.success && data.data) {
+      return data.data;
+    }
+  } catch (err) {
+    console.warn('Failed to calculate fragrance recommendations', err);
+  }
+  return null;
+}
