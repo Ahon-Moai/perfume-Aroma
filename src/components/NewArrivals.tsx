@@ -30,12 +30,22 @@ const NewArrivalProductCard: React.FC<{
 
   return (
     <div
-      className="group flex flex-col justify-between cursor-pointer bg-white transition-all h-full"
+      className="group flex flex-col justify-between cursor-pointer transition-all h-full p-2.5 rounded-xs border"
+      style={{
+        backgroundColor: 'var(--theme-surface-card)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
       onClick={() => onSelectProduct(product)}
     >
       <div>
         {/* Product Image Frame */}
-        <div className="relative w-full aspect-square bg-[#fafafa] overflow-hidden flex items-center justify-center p-4 border border-zinc-100 group-hover:border-zinc-300 transition-all duration-300">
+        <div
+          className="relative w-full aspect-square overflow-hidden flex items-center justify-center p-4 border transition-all duration-300"
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
+        >
           <img
             src={product.image}
             alt={product.name}
@@ -50,7 +60,11 @@ const NewArrivalProductCard: React.FC<{
               e.stopPropagation();
               onAddToCart(product, selectedSize.size, selectedSize.price);
             }}
-            className="absolute bottom-2 right-2 bg-black/90 hover:bg-[#FF1801] text-white p-2 rounded-none opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-sm"
+            className="absolute bottom-2 right-2 p-2 rounded-none opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-sm"
+            style={{
+              backgroundColor: 'var(--theme-btn-bg)',
+              color: 'var(--theme-btn-text)',
+            }}
             aria-label={`Quick add ${selectedSize.size} ${product.name}`}
             title={`Quick add ${selectedSize.size}`}
           >
@@ -60,15 +74,21 @@ const NewArrivalProductCard: React.FC<{
 
         {/* Product Info */}
         <div className="pt-3.5 text-center flex flex-col items-center">
-          <span className="text-[9px] sm:text-[10px] tracking-[0.2em] font-sans text-zinc-400 uppercase">
+          <span
+            className="text-[9px] sm:text-[10px] tracking-[0.2em] font-sans uppercase font-bold"
+            style={{ color: 'var(--theme-secondary)' }}
+          >
             {product.brand}
           </span>
-          <h3 className="font-serif text-xs sm:text-sm text-zinc-900 mt-1 font-normal group-hover:text-[#FF1801] transition-colors line-clamp-1">
+          <h3
+            className="font-serif text-xs sm:text-sm mt-1 font-normal transition-colors line-clamp-1"
+            style={{ color: 'var(--theme-primary)' }}
+          >
             {product.name}
           </h3>
-          <p className="text-[12px] sm:text-xs text-zinc-900 font-sans mt-0.5 tabular-nums">
-            <span className="font-bold text-zinc-950">৳ {selectedSize.price}</span>
-            <span className="text-zinc-500 text-[10px] sm:text-[11px] ml-1">({selectedSize.size})</span>
+          <p className="text-[12px] sm:text-xs font-sans mt-0.5 tabular-nums">
+            <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>৳ {selectedSize.price}</span>
+            <span className="text-[10px] sm:text-[11px] ml-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>({selectedSize.size})</span>
           </p>
         </div>
       </div>
@@ -82,7 +102,12 @@ const NewArrivalProductCard: React.FC<{
               const matched = product.sizes.find((s) => s.size === e.target.value);
               if (matched) setSelectedSize(matched);
             }}
-            className="w-full appearance-none bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 text-zinc-800 text-[11px] sm:text-xs font-sans rounded-md py-1.5 pl-2.5 pr-7 focus:outline-none focus:border-zinc-400 cursor-pointer transition-colors"
+            className="w-full appearance-none border text-[11px] sm:text-xs font-sans rounded-md py-1.5 pl-2.5 pr-7 focus:outline-none cursor-pointer transition-colors"
+            style={{
+              backgroundColor: 'var(--theme-surface)',
+              borderColor: 'var(--theme-border-subtle)',
+              color: 'var(--theme-text-primary)',
+            }}
           >
             {product.sizes.map((sz, idx) => (
               <option key={sz.size || idx} value={sz.size}>
@@ -90,7 +115,10 @@ const NewArrivalProductCard: React.FC<{
               </option>
             ))}
           </select>
-          <ChevronDown className="w-3.5 h-3.5 text-zinc-500 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <ChevronDown
+            className="w-3.5 h-3.5 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"
+            style={{ color: 'var(--theme-secondary)' }}
+          />
         </div>
       </div>
     </div>
@@ -130,17 +158,33 @@ export const NewArrivals: React.FC<NewArrivalsProps> = ({
   };
 
   return (
-    <section id="new-arrivals" className="w-full bg-white pt-10 pb-14 sm:pt-14 sm:pb-20 border-b border-zinc-100">
+    <section
+      id="new-arrivals"
+      className="w-full pt-10 pb-14 sm:pt-14 sm:pb-20 border-b select-none"
+      style={{
+        backgroundColor: 'var(--theme-bg)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-8 sm:mb-10">
           <div className="flex items-center gap-3 sm:gap-4">
-            <h2 className="font-sans font-black text-2xl sm:text-3xl md:text-4xl tracking-tight text-[#FF1801] uppercase shrink-0 select-none">
+            <h2
+              className="font-sans font-black text-2xl sm:text-3xl md:text-4xl tracking-tight uppercase shrink-0 select-none"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               NEW ARRIVALS
             </h2>
-            <div className="h-[3px] sm:h-[4px] bg-[#FF1801] flex-1 max-w-[120px] sm:max-w-[200px]" />
+            <div
+              className="h-[3px] sm:h-[4px] flex-1 max-w-[120px] sm:max-w-[200px]"
+              style={{ backgroundColor: 'var(--theme-primary)' }}
+            />
           </div>
-          <p className="text-xs sm:text-sm font-semibold tracking-wider text-[#FF1801]/80 uppercase mt-1.5 select-none">
+          <p
+            className="text-xs sm:text-sm font-semibold tracking-wider uppercase mt-1.5 select-none opacity-80"
+            style={{ color: 'var(--theme-primary)' }}
+          >
             OUR LATEST BOTTLES
           </p>
         </div>
@@ -162,7 +206,12 @@ export const NewArrivals: React.FC<NewArrivalsProps> = ({
           {canShowMore ? (
             <button
               onClick={handleShowMore}
-              className="inline-flex items-center gap-2 border-2 border-[#FF1801] text-[#FF1801] hover:bg-[#FF1801] hover:text-white px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer shadow-xs active:scale-95"
+              className="inline-flex items-center gap-2 border-2 px-6 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer shadow-xs active:scale-95 hover:opacity-85"
+              style={{
+                borderColor: 'var(--theme-border)',
+                color: 'var(--theme-primary)',
+                backgroundColor: 'var(--theme-surface-card)',
+              }}
             >
               <span>Show More Products</span>
               <ChevronDown className="w-4 h-4" />

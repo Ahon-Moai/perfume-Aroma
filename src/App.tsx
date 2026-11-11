@@ -328,7 +328,13 @@ function StorefrontApp() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 font-sans flex flex-col selection:bg-zinc-900 selection:text-white relative">
+    <div
+      className="min-h-screen font-sans flex flex-col relative transition-colors duration-250"
+      style={{
+        backgroundColor: 'var(--theme-bg)',
+        color: 'var(--theme-text-primary)',
+      }}
+    >
       {/* Editorial Pure Portions opening intro sequence */}
       {showIntro && (
         <IntroSequence
@@ -344,7 +350,12 @@ function StorefrontApp() {
           setViewMode('admin');
           window.location.hash = '#admin';
         }}
-        className="fixed bottom-6 left-6 z-40 bg-zinc-950 text-white hover:bg-amber-400 hover:text-black px-3 py-2 border border-zinc-700 shadow-2xl text-[10px] font-sans tracking-widest uppercase flex items-center gap-2 transition-all cursor-pointer"
+        className="fixed bottom-6 left-6 z-40 px-3 py-2 border shadow-2xl text-[10px] font-sans tracking-widest uppercase flex items-center gap-2 transition-all cursor-pointer hover:opacity-90"
+        style={{
+          backgroundColor: 'var(--theme-primary)',
+          color: '#FFFFFF',
+          borderColor: 'var(--theme-border-subtle)',
+        }}
         title="Open Admin CMS Dashboard"
       >
         <Shield className="w-3.5 h-3.5" />
@@ -353,8 +364,18 @@ function StorefrontApp() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-zinc-950 text-white border border-zinc-700 px-4 py-2.5 shadow-2xl text-xs font-sans tracking-wide flex items-center gap-2 animate-bounce">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+        <div
+          className="fixed bottom-6 right-6 z-50 border px-4 py-2.5 shadow-2xl text-xs font-sans tracking-wide flex items-center gap-2 animate-bounce"
+          style={{
+            backgroundColor: 'var(--theme-primary)',
+            color: '#FFFFFF',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
+        >
+          <span
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: 'var(--theme-secondary)' }}
+          />
           <span>{toastMessage}</span>
         </div>
       )}

@@ -40,12 +40,20 @@ const CollectionProductCard: React.FC<{
   return (
     <div
       onClick={() => onNavigateToProduct(product)}
-      className="group bg-white border border-zinc-200/90 hover:border-zinc-400 transition-all flex flex-col justify-between p-4 shadow-xs cursor-pointer"
+      className="group transition-all flex flex-col justify-between p-4 shadow-xs cursor-pointer border rounded-xs"
+      style={{
+        backgroundColor: 'var(--theme-surface-card)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
     >
       <div>
         {/* Product Image Stage */}
         <div
-          className="relative w-full aspect-square bg-[#fafaf8] border border-zinc-100 p-3 flex items-center justify-center overflow-hidden mb-3"
+          className="relative w-full aspect-square border p-3 flex items-center justify-center overflow-hidden mb-3 rounded-xs"
+          style={{
+            backgroundColor: 'var(--theme-surface)',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
         >
           <img
             src={product.image}
@@ -57,7 +65,14 @@ const CollectionProductCard: React.FC<{
           {/* Badges Overlay */}
           <div className="absolute top-2 left-2 flex flex-col gap-1">
             {product.gender && (
-              <span className="bg-amber-100 text-amber-900 border border-amber-200 text-[8px] font-sans font-bold uppercase px-1.5 py-0.5">
+              <span
+                className="border text-[8px] font-sans font-bold uppercase px-1.5 py-0.5"
+                style={{
+                  backgroundColor: 'var(--theme-surface-card)',
+                  borderColor: 'var(--theme-border-subtle)',
+                  color: 'var(--theme-primary)',
+                }}
+              >
                 {product.gender}
               </span>
             )}
@@ -69,7 +84,11 @@ const CollectionProductCard: React.FC<{
               e.stopPropagation();
               onAddToCart(product, selectedSize.size, selectedSize.price, 1);
             }}
-            className="absolute bottom-2 right-2 bg-black/90 hover:bg-[#FF1801] text-white p-2 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-sm cursor-pointer"
+            className="absolute bottom-2 right-2 p-2 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-sm cursor-pointer"
+            style={{
+              backgroundColor: 'var(--theme-btn-bg)',
+              color: 'var(--theme-btn-text)',
+            }}
             aria-label={`Quick add ${selectedSize.size} ${product.name}`}
             title={`Quick add ${selectedSize.size}`}
           >
@@ -619,30 +638,41 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
   );
 
   return (
-    <div className="bg-[#fdfbf7] text-zinc-900 min-h-screen selection:bg-zinc-900 selection:text-white">
+    <div
+      className="min-h-screen transition-colors duration-250 select-none"
+      style={{
+        backgroundColor: 'var(--theme-bg)',
+        color: 'var(--theme-text-primary)',
+      }}
+    >
       {/* 1. Breadcrumb Header */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-        <div className="flex items-center justify-between border-b border-zinc-200/80 pb-3 text-xs font-sans text-zinc-500">
+        <div
+          className="flex items-center justify-between border-b pb-3 text-xs font-sans"
+          style={{ borderColor: 'var(--theme-border-subtle)', color: 'var(--theme-text-secondary)' }}
+        >
           <div className="flex items-center gap-2 truncate">
             <button
               onClick={onNavigateHome}
-              className="hover:text-zinc-950 transition-colors uppercase tracking-wider text-[11px] cursor-pointer"
+              className="transition-colors uppercase tracking-wider text-[11px] cursor-pointer hover:opacity-80"
+              style={{ color: 'var(--theme-primary)' }}
             >
               Home
             </button>
-            <ChevronRight className="w-3 h-3 text-zinc-400 shrink-0" />
-            <span className="uppercase tracking-wider text-[11px] text-zinc-400 shrink-0">
+            <ChevronRight className="w-3 h-3 shrink-0 opacity-50" />
+            <span className="uppercase tracking-wider text-[11px] shrink-0 opacity-70">
               Collections
             </span>
-            <ChevronRight className="w-3 h-3 text-zinc-400 shrink-0" />
-            <span className="text-zinc-900 font-medium truncate text-[11px]">
+            <ChevronRight className="w-3 h-3 shrink-0 opacity-50" />
+            <span className="font-bold truncate text-[11px]" style={{ color: 'var(--theme-primary)' }}>
               {collection?.title || ucwords(collectionSlug.replace(/-/g, ' '))}
             </span>
           </div>
 
           <button
             onClick={onNavigateHome}
-            className="hidden sm:flex items-center gap-1.5 text-zinc-600 hover:text-black transition-colors text-[11px] uppercase tracking-wider shrink-0 cursor-pointer"
+            className="hidden sm:flex items-center gap-1.5 transition-colors text-[11px] uppercase tracking-wider shrink-0 cursor-pointer hover:opacity-80 font-bold"
+            style={{ color: 'var(--theme-primary)' }}
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return To Boutique</span>
@@ -652,7 +682,13 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
       {/* 2. Collection Header Banner & Story */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="relative bg-white border border-zinc-200 p-6 sm:p-10 shadow-xs overflow-hidden">
+        <div
+          className="relative border p-6 sm:p-10 shadow-xs overflow-hidden rounded-xs"
+          style={{
+            backgroundColor: 'var(--theme-surface-card)',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
+        >
           {collection?.image && (
             <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-15 pointer-events-none hidden md:block">
               <img
@@ -660,24 +696,32 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
                 alt={collection.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
             </div>
           )}
 
           <div className="relative z-10 max-w-2xl space-y-3">
-            <span className="text-[10px] font-mono tracking-[0.25em] text-amber-800 uppercase font-bold block">
+            <span
+              className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold block"
+              style={{ color: 'var(--theme-secondary)' }}
+            >
               AROMATICA COLLECTION EDITIONS
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl text-zinc-950 font-normal leading-tight">
+            <h1
+              className="font-serif text-3xl sm:text-4xl font-normal leading-tight"
+              style={{ color: 'var(--theme-primary)' }}
+            >
               {collection?.title || ucwords(collectionSlug.replace(/-/g, ' '))}
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed">
+            <p
+              className="text-xs sm:text-sm font-sans leading-relaxed opacity-85"
+              style={{ color: 'var(--theme-text-secondary)' }}
+            >
               {collection?.description || 'Discover hand-decanted luxury fragrances sourced directly from original European & Middle Eastern brand flacons.'}
             </p>
-            <div className="pt-2 flex items-center gap-4 text-xs font-mono text-zinc-500">
+            <div className="pt-2 flex items-center gap-4 text-xs font-mono opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
               <span>{filteredProducts.length} Decant Edt. Available</span>
               <span>•</span>
-              <span className="text-emerald-700 font-sans font-semibold">100% Authentic Guaranteed</span>
+              <span className="font-sans font-semibold" style={{ color: 'var(--theme-secondary)' }}>100% Authentic Guaranteed</span>
             </div>
           </div>
         </div>
@@ -686,30 +730,45 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
       {/* 3. Main Catalog Two-Column Layout (Filters + Product Grid) */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Top Control Bar (Mobile filter toggle & Sorting dropdown) */}
-        <div className="bg-white border border-zinc-200 p-4 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div
+          className="border p-4 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 rounded-xs"
+          style={{
+            backgroundColor: 'var(--theme-surface-card)',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
+        >
           <div className="flex items-center justify-between sm:justify-start gap-4">
             <button
               onClick={() => setIsMobileFilterOpen(true)}
-              className="lg:hidden inline-flex items-center gap-2 bg-zinc-950 text-white px-4 py-2 text-xs font-sans uppercase tracking-wider font-semibold cursor-pointer shadow-xs"
+              className="lg:hidden inline-flex items-center gap-2 px-4 py-2 text-xs font-sans uppercase tracking-wider font-semibold cursor-pointer shadow-xs rounded-xs hover:opacity-90"
+              style={{
+                backgroundColor: 'var(--theme-btn-bg)',
+                color: 'var(--theme-btn-text)',
+              }}
             >
               <Filter className="w-3.5 h-3.5" />
               <span>Filter ({activeFilterCount})</span>
             </button>
 
-            <span className="text-xs text-zinc-500 font-sans">
-              Showing <strong className="text-zinc-950 font-mono">{filteredProducts.length}</strong> fragrances
+            <span className="text-xs font-sans opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
+              Showing <strong className="font-mono font-bold" style={{ color: 'var(--theme-primary)' }}>{filteredProducts.length}</strong> fragrances
             </span>
           </div>
 
           {/* Sorting Dropdown */}
           <div className="flex items-center gap-2 self-end sm:self-auto">
-            <span className="text-xs text-zinc-500 font-sans uppercase tracking-wider text-[10px] hidden sm:inline">
+            <span className="text-xs font-sans uppercase tracking-wider text-[10px] hidden sm:inline opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
               Sort By:
             </span>
             <select
               value={filters.sort}
               onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
-              className="bg-[#fafaf8] border border-zinc-200 text-zinc-900 text-xs px-3 py-2 focus:outline-none focus:border-zinc-950 font-sans cursor-pointer"
+              className="border text-xs px-3 py-2 focus:outline-none font-sans cursor-pointer rounded-xs"
+              style={{
+                backgroundColor: 'var(--theme-surface)',
+                borderColor: 'var(--theme-border-subtle)',
+                color: 'var(--theme-text-primary)',
+              }}
             >
               <option value="featured">Featured / Curated</option>
               <option value="best-selling">Best Selling</option>
@@ -723,15 +782,29 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
         {/* Active Filter Chips Bar */}
         {activeFilterCount > 0 && (
-          <div className="bg-white border border-zinc-200 p-3 mb-6 flex flex-wrap items-center gap-2 text-xs">
-            <span className="text-[10px] font-mono uppercase text-zinc-400 tracking-wider">
+          <div
+            className="border p-3 mb-6 flex flex-wrap items-center gap-2 text-xs rounded-xs"
+            style={{
+              backgroundColor: 'var(--theme-surface-card)',
+              borderColor: 'var(--theme-border-subtle)',
+            }}
+          >
+            <span className="text-[10px] font-mono uppercase tracking-wider opacity-70" style={{ color: 'var(--theme-secondary)' }}>
               Active Filters:
             </span>
 
             {filters.gender.map((g) => (
-              <span key={g} className="bg-amber-100 text-amber-900 border border-amber-200 px-2 py-1 text-[11px] font-medium flex items-center gap-1">
+              <span
+                key={g}
+                className="border px-2 py-1 text-[11px] font-medium flex items-center gap-1 rounded-xs"
+                style={{
+                  backgroundColor: 'var(--theme-surface)',
+                  borderColor: 'var(--theme-border-subtle)',
+                  color: 'var(--theme-primary)',
+                }}
+              >
                 Gender: {g}
-                <button type="button" onClick={() => toggleArrayFilter('gender', g)} className="hover:text-black cursor-pointer">
+                <button type="button" onClick={() => toggleArrayFilter('gender', g)} className="cursor-pointer hover:opacity-75">
                   <X className="w-3 h-3" />
                 </button>
               </span>
@@ -830,16 +903,29 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Desktop Sidebar Filter Panel (Cols 1-3) */}
-          <div className="hidden lg:block lg:col-span-3 bg-white border border-zinc-200 p-6 sticky top-24 shadow-xs">
-            <div className="flex items-center justify-between border-b border-zinc-200 pb-3 mb-4">
-              <span className="text-xs font-sans uppercase font-bold tracking-widest text-zinc-950 flex items-center gap-2">
-                <Filter className="w-4 h-4 text-amber-700" />
+          <div
+            className="hidden lg:block lg:col-span-3 border p-6 sticky top-24 shadow-xs rounded-xs"
+            style={{
+              backgroundColor: 'var(--theme-surface-card)',
+              borderColor: 'var(--theme-border-subtle)',
+            }}
+          >
+            <div
+              className="flex items-center justify-between border-b pb-3 mb-4"
+              style={{ borderColor: 'var(--theme-border-subtle)' }}
+            >
+              <span
+                className="text-xs font-sans uppercase font-bold tracking-widest flex items-center gap-2"
+                style={{ color: 'var(--theme-primary)' }}
+              >
+                <Filter className="w-4 h-4" style={{ color: 'var(--theme-secondary)' }} />
                 <span>Filter Catalog</span>
               </span>
               {activeFilterCount > 0 && (
                 <button
                   onClick={handleClearAllFilters}
-                  className="text-[10px] text-amber-800 hover:underline uppercase font-mono cursor-pointer"
+                  className="text-[10px] hover:underline uppercase font-mono cursor-pointer font-bold"
+                  style={{ color: 'var(--theme-secondary)' }}
                 >
                   Reset
                 </button>

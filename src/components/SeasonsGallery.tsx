@@ -94,14 +94,27 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({
   }
 
   return (
-    <section id="seasons" className="w-full bg-white pt-6 pb-14 border-b border-zinc-100">
+    <section
+      id="seasons"
+      className="w-full pt-6 pb-14 border-b"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Right-aligned Section Header as in screenshot */}
         <div className="flex flex-col items-end mb-4 sm:mb-6">
-          <h2 className="font-serif text-lg sm:text-2xl font-light tracking-[0.16em] text-zinc-950 uppercase">
+          <h2
+            className="font-serif text-lg sm:text-2xl font-light tracking-[0.16em] uppercase"
+            style={{ color: 'var(--theme-primary)' }}
+          >
             {sectionTitle}
           </h2>
-          <span className="text-[9px] sm:text-[10px] tracking-[0.22em] font-sans text-zinc-400 uppercase mt-0.5">
+          <span
+            className="text-[9px] sm:text-[10px] tracking-[0.22em] font-sans uppercase mt-0.5"
+            style={{ color: 'var(--theme-secondary)' }}
+          >
             {sectionSubtitle}
           </span>
         </div>

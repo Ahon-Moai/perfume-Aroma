@@ -126,20 +126,39 @@ export const VideoSection: React.FC<VideoSectionProps> = ({
   };
 
   return (
-    <section className="w-full bg-black py-12 sm:py-16 border-b border-zinc-900 relative overflow-hidden select-none">
+    <section
+      className="w-full py-12 sm:py-16 border-b relative overflow-hidden select-none transition-colors"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       {/* Header Info */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center space-y-2">
         {badgeText && (
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-zinc-900/90 border border-amber-400/30 rounded-full text-[10px] tracking-[0.25em] text-amber-300 uppercase font-sans">
-            <Sparkles className="w-3 h-3 text-amber-400" />
+          <div
+            className="inline-flex items-center gap-2 px-3.5 py-1 border rounded-full text-[10px] tracking-[0.25em] uppercase font-sans"
+            style={{
+              backgroundColor: 'var(--theme-surface-card)',
+              borderColor: 'var(--theme-border)',
+              color: 'var(--theme-primary)',
+            }}
+          >
+            <Sparkles className="w-3 h-3" style={{ color: 'var(--theme-secondary)' }} />
             <span>{badgeText}</span>
           </div>
         )}
-        <h2 className="font-serif text-2xl sm:text-4xl text-white font-light tracking-widest uppercase">
+        <h2
+          className="font-serif text-2xl sm:text-4xl font-light tracking-widest uppercase"
+          style={{ color: 'var(--theme-primary)' }}
+        >
           {headline}
         </h2>
         {tagline && (
-          <p className="max-w-2xl mx-auto text-xs sm:text-sm text-zinc-400 font-sans tracking-wide leading-relaxed">
+          <p
+            className="max-w-2xl mx-auto text-xs sm:text-sm font-sans tracking-wide leading-relaxed opacity-80"
+            style={{ color: 'var(--theme-text-secondary)' }}
+          >
             {tagline}
           </p>
         )}
@@ -230,13 +249,24 @@ export const VideoSection: React.FC<VideoSectionProps> = ({
                     </div>
                   )}
 
-                  {/* Bottom Translucent White Product Panel */}
+                  {/* Bottom Translucent Product Panel */}
                   <div
                     onClick={() => handleCardClick(card)}
-                    className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20 bg-white/90 backdrop-blur-md text-zinc-900 p-2.5 sm:p-3 flex items-center gap-3 border border-white/40 shadow-xl cursor-pointer hover:bg-white transition-all duration-200 group-hover/card:shadow-2xl"
+                    className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20 backdrop-blur-md p-2.5 sm:p-3 flex items-center gap-3 border shadow-xl cursor-pointer transition-all duration-200 group-hover/card:shadow-2xl"
+                    style={{
+                      backgroundColor: 'var(--theme-surface-card)',
+                      borderColor: 'var(--theme-border-subtle)',
+                      color: 'var(--theme-text-primary)',
+                    }}
                   >
                     {/* Thumbnail Image */}
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 bg-zinc-100 overflow-hidden border border-zinc-200">
+                    <div
+                      className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 overflow-hidden border"
+                      style={{
+                        backgroundColor: 'var(--theme-surface)',
+                        borderColor: 'var(--theme-border-subtle)',
+                      }}
+                    >
                       <img
                         src={
                           card.thumbnail_url ||
@@ -253,10 +283,16 @@ export const VideoSection: React.FC<VideoSectionProps> = ({
 
                     {/* Title */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-[10px] tracking-widest text-zinc-500 font-mono uppercase truncate">
+                      <p
+                        className="text-[10px] tracking-widest font-mono uppercase truncate"
+                        style={{ color: 'var(--theme-secondary)' }}
+                      >
                         AROMATICA ATELIER
                       </p>
-                      <h3 className="font-serif text-xs sm:text-sm font-medium text-zinc-950 truncate tracking-wide">
+                      <h3
+                        className="font-serif text-xs sm:text-sm font-medium truncate tracking-wide"
+                        style={{ color: 'var(--theme-primary)' }}
+                      >
                         {card.title}
                       </h3>
                     </div>
