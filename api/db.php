@@ -105,6 +105,22 @@ class Database {
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                     )");
 
+                    // Auto-create Search Logs table if missing
+                    self::$instance->exec("CREATE TABLE IF NOT EXISTS search_logs (
+                        id {$autoInc},
+                        search_term VARCHAR(255) NOT NULL,
+                        normalized_term VARCHAR(255) NOT NULL,
+                        matched_product_id VARCHAR(64) NULL,
+                        result_count INT NOT NULL DEFAULT 0,
+                        ip_hash VARCHAR(64) NULL,
+                        session_id VARCHAR(100) NULL,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    )");
+                    self::$instance->exec("CREATE INDEX IF NOT EXISTS idx_search_normalized_term ON search_logs(normalized_term)");
+                    self::$instance->exec("CREATE INDEX IF NOT EXISTS idx_search_created_at ON search_logs(created_at)");
+                    self::$instance->exec("CREATE INDEX IF NOT EXISTS idx_search_matched_prod ON search_logs(matched_product_id)");
+                    self::$instance->exec("CREATE INDEX IF NOT EXISTS idx_search_rate_limit ON search_logs(ip_hash, normalized_term, created_at)");
+
                     // Initial seed if inventory is empty
                     $chk = self::$instance->query("SELECT COUNT(*) FROM perfume_inventory")->fetchColumn();
                     if ($chk == 0) {

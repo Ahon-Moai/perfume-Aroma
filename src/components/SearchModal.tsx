@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, X, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import { FragranceProduct } from '../types';
+import { trackSearchSubmission } from '../services/searchTracker';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -29,17 +30,60 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   if (!isOpen) return null;
 
-  const filtered = query.trim() === ''
+  const cleanQuery = query.trim();
+  const filtered = cleanQuery === ''
     ? []
     : products.filter(
         (p) =>
-          p.name.toLowerCase().includes(query.toLowerCase()) ||
-          p.brand.toLowerCase().includes(query.toLowerCase()) ||
-          p.category.toLowerCase().includes(query.toLowerCase()) ||
-          p.notes?.some((n) => n.toLowerCase().includes(query.toLowerCase()))
+          p.name.toLowerCase().includes(cleanQuery.toLowerCase()) ||
+          p.brand.toLowerCase().includes(cleanQuery.toLowerCase()) ||
+          p.category.toLowerCase().includes(cleanQuery.toLowerCase()) ||
+          p.notes?.some((n) => n.toLowerCase().includes(cleanQuery.toLowerCase()))
       );
 
   const featuredShowcase = products.slice(0, 4);
+
+  const handleSelectPill = (tag: string) => {
+    setQuery(tag);
+    // Track submitted tag search
+    const matching = products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(tag.toLowerCase()) ||
+        p.brand.toLowerCase().includes(tag.toLowerCase()) ||
+        p.category.toLowerCase().includes(tag.toLowerCase()) ||
+        p.notes?.some((n) => n.toLowerCase().includes(tag.toLowerCase()))
+    );
+    trackSearchSubmission({
+      term: tag,
+      productId: matching[0]?.id,
+      resultCount: matching.length
+    });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (cleanQuery.length >= 2) {
+        trackSearchSubmission({
+          term: cleanQuery,
+          productId: filtered[0]?.id,
+          resultCount: filtered.length
+        });
+      }
+    }
+  };
+
+  const handleSelectProductItem = (item: FragranceProduct) => {
+    if (cleanQuery.length >= 2) {
+      trackSearchSubmission({
+        term: cleanQuery,
+        productId: item.id,
+        resultCount: filtered.length
+      });
+    }
+    onSelectProduct(item);
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:pt-16 p-3 sm:p-4 bg-black/70 backdrop-blur-md animate-fade-in">
@@ -87,6 +131,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Search by perfume, brand, or note (e.g. Vanilla, ARRINA, Oud)..."
               className="w-full border rounded-xl pl-10 pr-16 py-3 text-sm focus:outline-none transition-all font-sans"
               style={{
@@ -113,7 +158,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             {POPULAR_SEARCH_TAGS.map((tag) => (
               <button
                 key={tag}
-                onClick={() => setQuery(tag)}
+                onClick={() => handleSelectPill(tag)}
                 className="text-[11px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all cursor-pointer border"
                 style={{
                   backgroundColor: query === tag ? 'var(--theme-btn-bg)' : 'var(--theme-surface)',
@@ -221,10 +266,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 {filtered.map((item) => (
                   <div
                     key={item.id}
-                    onClick={() => {
-                      onSelectProduct(item);
-                      onClose();
-                    }}
+                    onClick={() => handleSelectProductItem(item)}
                     className="flex items-center justify-between p-3 border rounded-xl transition-colors cursor-pointer group hover:opacity-90"
                     style={{
                       backgroundColor: 'var(--theme-surface)',
