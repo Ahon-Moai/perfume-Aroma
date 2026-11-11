@@ -18,7 +18,14 @@ export const BrandFilterStrip: React.FC<BrandFilterStripProps> = ({ onSelectBran
   };
 
   return (
-    <div id="brands" className="w-full bg-white py-6 border-b border-zinc-100 overflow-hidden">
+    <div
+      id="brands"
+      className="w-full py-6 border-b overflow-hidden"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
           {list.map((brand) => {
@@ -27,20 +34,21 @@ export const BrandFilterStrip: React.FC<BrandFilterStripProps> = ({ onSelectBran
               <button
                 key={brand.name}
                 onClick={() => handleSelect(brand.name)}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-full border text-[11px] sm:text-xs font-sans tracking-wider uppercase transition-all duration-150 flex items-center gap-1.5 cursor-pointer shrink-0 ${
-                  isSelected
-                    ? 'border-zinc-950 bg-zinc-950 text-white'
-                    : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400 hover:text-zinc-950'
-                }`}
+                className="whitespace-nowrap px-4 py-1.5 rounded-full border text-[11px] sm:text-xs font-sans tracking-wider uppercase transition-all duration-150 flex items-center gap-1.5 cursor-pointer shrink-0 hover:opacity-90"
+                style={{
+                  backgroundColor: isSelected ? 'var(--theme-btn-bg)' : 'var(--theme-surface-card)',
+                  color: isSelected ? 'var(--theme-btn-text)' : 'var(--theme-text-primary)',
+                  borderColor: isSelected ? 'var(--theme-border)' : 'var(--theme-border-subtle)',
+                }}
               >
                 <span>{brand.name}</span>
                 {brand.isNew && (
                   <span
-                    className={`text-[8px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-tight ${
-                      isSelected
-                        ? 'bg-red-600 text-white'
-                        : 'bg-zinc-900 text-white'
-                    }`}
+                    className="text-[8px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-tight"
+                    style={{
+                      backgroundColor: isSelected ? 'var(--theme-secondary)' : 'var(--theme-primary)',
+                      color: '#FFFFFF',
+                    }}
                   >
                     NEW
                   </span>

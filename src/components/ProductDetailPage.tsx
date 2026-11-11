@@ -38,21 +38,34 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // If product not found
   if (!product) {
     return (
-      <div className="min-h-[70vh] bg-[#fdfbf7] flex flex-col items-center justify-center px-4 py-20 text-center">
+      <div
+        className="min-h-[70vh] flex flex-col items-center justify-center px-4 py-20 text-center select-none"
+        style={{
+          backgroundColor: 'var(--theme-bg)',
+          color: 'var(--theme-text-primary)',
+        }}
+      >
         <div className="max-w-md space-y-4">
-          <span className="text-xs font-mono tracking-widest text-amber-700 uppercase">
+          <span
+            className="text-xs font-mono tracking-widest uppercase font-bold"
+            style={{ color: 'var(--theme-secondary)' }}
+          >
             AROMATICA CATALOGUE
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl text-zinc-950">
+          <h1 className="font-serif text-3xl sm:text-4xl" style={{ color: 'var(--theme-primary)' }}>
             Fragrance Not Found
           </h1>
-          <p className="text-sm font-sans text-zinc-600 leading-relaxed">
+          <p className="text-sm font-sans leading-relaxed opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
             The decant edition you are looking for may have been archived or is currently out of stock.
           </p>
           <div className="pt-4">
             <button
               onClick={onNavigateHome}
-              className="inline-flex items-center gap-2 bg-zinc-950 text-white hover:bg-amber-400 hover:text-black px-6 py-3 text-xs font-sans uppercase tracking-widest transition-all shadow-md cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 text-xs font-sans uppercase tracking-widest transition-all shadow-md cursor-pointer rounded-xs hover:opacity-90"
+              style={{
+                backgroundColor: 'var(--theme-btn-bg)',
+                color: 'var(--theme-btn-text)',
+              }}
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Return To Boutique</span>
@@ -133,30 +146,41 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     .slice(0, 4);
 
   return (
-    <div className="bg-[#fdfbf7] text-zinc-900 min-h-screen selection:bg-zinc-900 selection:text-white">
+    <div
+      className="min-h-screen select-none transition-colors duration-250"
+      style={{
+        backgroundColor: 'var(--theme-bg)',
+        color: 'var(--theme-text-primary)',
+      }}
+    >
       {/* 1. Top Breadcrumb & Navigation Bar */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-        <div className="flex items-center justify-between border-b border-zinc-200/80 pb-3 text-xs font-sans text-zinc-500">
+        <div
+          className="flex items-center justify-between border-b pb-3 text-xs font-sans"
+          style={{ borderColor: 'var(--theme-border-subtle)', color: 'var(--theme-text-secondary)' }}
+        >
           <div className="flex items-center gap-2 truncate">
             <button
               onClick={onNavigateHome}
-              className="hover:text-zinc-950 transition-colors uppercase tracking-wider text-[11px]"
+              className="transition-colors uppercase tracking-wider text-[11px] font-bold hover:opacity-80 cursor-pointer"
+              style={{ color: 'var(--theme-primary)' }}
             >
               Home
             </button>
-            <ChevronRight className="w-3 h-3 text-zinc-400 shrink-0" />
-            <span className="uppercase tracking-wider text-[11px] text-zinc-400 shrink-0">
+            <ChevronRight className="w-3 h-3 shrink-0 opacity-50" />
+            <span className="uppercase tracking-wider text-[11px] shrink-0 opacity-70">
               {product.brand}
             </span>
-            <ChevronRight className="w-3 h-3 text-zinc-400 shrink-0" />
-            <span className="text-zinc-900 font-medium truncate text-[11px]">
+            <ChevronRight className="w-3 h-3 shrink-0 opacity-50" />
+            <span className="font-bold truncate text-[11px]" style={{ color: 'var(--theme-primary)' }}>
               {product.name}
             </span>
           </div>
 
           <button
             onClick={onNavigateHome}
-            className="hidden sm:flex items-center gap-1.5 text-zinc-600 hover:text-black transition-colors text-[11px] uppercase tracking-wider shrink-0 cursor-pointer"
+            className="hidden sm:flex items-center gap-1.5 transition-colors text-[11px] uppercase tracking-wider shrink-0 cursor-pointer font-bold hover:opacity-80"
+            style={{ color: 'var(--theme-primary)' }}
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Catalogue</span>
@@ -171,7 +195,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           {/* A. PRODUCT GALLERY (Columns 1 to 7 on desktop) */}
           <div className="lg:col-span-7 flex flex-col gap-4">
             {/* Main Image Stage */}
-            <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square bg-white border border-zinc-200/90 shadow-xs flex items-center justify-center p-6 sm:p-10 overflow-hidden group">
+            <div
+              className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square border shadow-xs flex items-center justify-center p-6 sm:p-10 overflow-hidden group rounded-xs"
+              style={{
+                backgroundColor: 'var(--theme-surface-card)',
+                borderColor: 'var(--theme-border-subtle)',
+              }}
+            >
               <img
                 src={activeImage}
                 alt={product.name}
@@ -181,11 +211,24 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               {/* Badges Overlay */}
               <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
-                <span className="bg-zinc-950 text-white text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 shadow-sm">
+                <span
+                  className="text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 shadow-sm rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-primary)',
+                    color: '#FFFFFF',
+                  }}
+                >
                   100% AUTHENTIC ATOMIZER
                 </span>
                 {product.gender && (
-                  <span className="bg-amber-100 text-amber-900 border border-amber-200 text-[9px] font-sans font-semibold tracking-wider uppercase px-2.5 py-0.5 w-fit">
+                  <span
+                    className="border text-[9px] font-sans font-semibold tracking-wider uppercase px-2.5 py-0.5 w-fit rounded-xs"
+                    style={{
+                      backgroundColor: 'var(--theme-surface)',
+                      borderColor: 'var(--theme-border-subtle)',
+                      color: 'var(--theme-secondary)',
+                    }}
+                  >
                     {product.gender} EDITION
                   </span>
                 )}
@@ -194,7 +237,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {/* Share Floating Action */}
               <button
                 onClick={handleCopyShareLink}
-                className="absolute top-4 right-4 p-2.5 bg-white/90 hover:bg-zinc-950 hover:text-white text-zinc-700 transition-all border border-zinc-200 shadow-sm rounded-full cursor-pointer z-10"
+                className="absolute top-4 right-4 p-2.5 border shadow-sm rounded-full cursor-pointer z-10 hover:opacity-80 transition-all"
+                style={{
+                  backgroundColor: 'var(--theme-surface)',
+                  borderColor: 'var(--theme-border-subtle)',
+                  color: 'var(--theme-primary)',
+                }}
                 title="Share product link"
               >
                 {copiedLink ? (
@@ -204,7 +252,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 )}
               </button>
 
-              <div className="absolute bottom-4 right-4 text-[9px] font-mono text-zinc-400 tracking-widest uppercase">
+              <div
+                className="absolute bottom-4 right-4 text-[9px] font-mono tracking-widest uppercase opacity-70"
+                style={{ color: 'var(--theme-text-secondary)' }}
+              >
                 FINE MIST DISPERSION GLASS BOTTLE
               </div>
             </div>
@@ -216,11 +267,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <button
                     key={idx}
                     onClick={() => setSelectedImageIndex(idx)}
-                    className={`relative w-20 h-20 sm:w-24 sm:h-24 bg-white border transition-all cursor-pointer p-2 shrink-0 flex items-center justify-center ${
-                      selectedImageIndex === idx
-                        ? 'border-zinc-950 ring-1 ring-zinc-950 shadow-md scale-102'
-                        : 'border-zinc-200 opacity-70 hover:opacity-100 hover:border-zinc-400'
-                    }`}
+                    className="relative w-20 h-20 sm:w-24 sm:h-24 border transition-all cursor-pointer p-2 shrink-0 flex items-center justify-center rounded-xs"
+                    style={{
+                      backgroundColor: 'var(--theme-surface-card)',
+                      borderColor: selectedImageIndex === idx ? 'var(--theme-primary)' : 'var(--theme-border-subtle)',
+                      boxShadow: selectedImageIndex === idx ? '0 0 0 1.5px var(--theme-primary)' : 'none',
+                    }}
                   >
                     <img
                       src={img}
@@ -235,35 +287,59 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
 
           {/* B. PRODUCT INFORMATION (Columns 8 to 12 on desktop) */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 bg-white p-6 sm:p-8 border border-zinc-200/90 shadow-xs">
+          <div
+            className="lg:col-span-5 flex flex-col justify-between space-y-6 p-6 sm:p-8 border shadow-xs rounded-xs"
+            style={{
+              backgroundColor: 'var(--theme-surface-card)',
+              borderColor: 'var(--theme-border-subtle)',
+            }}
+          >
             <div className="space-y-4">
               {/* Brand & Concentration Header */}
-              <div className="flex items-center justify-between border-b border-zinc-150 pb-3">
-                <span className="text-xs font-sans tracking-[0.2em] uppercase font-bold text-amber-800">
+              <div
+                className="flex items-center justify-between border-b pb-3"
+                style={{ borderColor: 'var(--theme-border-subtle)' }}
+              >
+                <span
+                  className="text-xs font-sans tracking-[0.2em] uppercase font-bold"
+                  style={{ color: 'var(--theme-secondary)' }}
+                >
                   {product.brand} · {product.concentration || 'Eau de Parfum'}
                 </span>
-                <span className="text-[10px] font-mono text-zinc-400 uppercase">
+                <span className="text-[10px] font-mono uppercase opacity-60" style={{ color: 'var(--theme-text-secondary)' }}>
                   ID: {product.id}
                 </span>
               </div>
 
               {/* Title & Category */}
               <div>
-                <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-zinc-950 font-normal leading-tight">
+                <h1
+                  className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal leading-tight"
+                  style={{ color: 'var(--theme-primary)' }}
+                >
                   {product.name}
                 </h1>
-                <p className="text-xs font-sans tracking-widest text-zinc-500 uppercase mt-1">
-                  Olfactory Family: <span className="text-zinc-800 font-medium">{product.category}</span>
+                <p className="text-xs font-sans tracking-widest uppercase mt-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
+                  Olfactory Family: <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{product.category}</span>
                 </p>
               </div>
 
               {/* Dynamic Price Display */}
-              <div className="bg-[#fcfbf9] border border-zinc-200/80 p-4 flex items-baseline justify-between">
+              <div
+                className="border p-4 flex items-baseline justify-between rounded-xs"
+                style={{
+                  backgroundColor: 'var(--theme-surface)',
+                  borderColor: 'var(--theme-border-subtle)',
+                }}
+              >
                 <div>
-                  <span className="text-[10px] font-sans tracking-widest text-zinc-400 uppercase block">
+                  <span className="text-[10px] font-sans tracking-widest uppercase block opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
                     PRICE FOR {currentSize.size} ({quantity}x)
                   </span>
-                  <span className="font-serif text-2xl sm:text-3xl text-zinc-950 font-bold tabular-nums">
+                  <span
+                    className="font-serif text-2xl sm:text-3xl font-bold tabular-nums"
+                    style={{ color: 'var(--theme-primary)' }}
+                  >
                     ৳ {totalPrice.toLocaleString()}
                   </span>
                 </div>
@@ -277,19 +353,25 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               {/* Short Description */}
               {product.shortDescription && (
-                <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed pt-1">
+                <p className="text-xs sm:text-sm font-sans leading-relaxed pt-1 opacity-85" style={{ color: 'var(--theme-text-secondary)' }}>
                   {product.shortDescription}
                 </p>
               )}
 
               {/* Decant Volume / Size Option Visual Cards Selector */}
-              <div className="space-y-3 pt-3 border-t border-zinc-150">
-                <div className="flex items-center justify-between text-xs text-zinc-800 font-sans">
-                  <span className="font-bold tracking-widest uppercase text-amber-900 text-xs">
+              <div
+                className="space-y-3 pt-3 border-t"
+                style={{ borderColor: 'var(--theme-border-subtle)' }}
+              >
+                <div className="flex items-center justify-between text-xs font-sans">
+                  <span
+                    className="font-bold tracking-widest uppercase text-xs"
+                    style={{ color: 'var(--theme-secondary)' }}
+                  >
                     SELECT SIZE
                   </span>
-                  <span className="text-xs text-zinc-600 font-medium">
-                    Selected: <span className="font-bold text-zinc-950">{currentSize.size}</span>
+                  <span className="text-xs opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
+                    Selected: <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>{currentSize.size}</span>
                   </span>
                 </div>
 
@@ -302,14 +384,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       <button
                         key={s.size || idx}
                         onClick={() => setSelectedSizeIndex(idx)}
-                        className={`group relative flex flex-col overflow-hidden rounded-2xl border transition-all duration-200 text-left cursor-pointer ${
-                          isSelected
-                            ? 'border-amber-600 ring-2 ring-amber-600/40 shadow-lg scale-[1.02]'
-                            : 'border-zinc-200 hover:border-zinc-400 bg-white'
-                        }`}
+                        className="group relative flex flex-col overflow-hidden rounded-xl border transition-all duration-200 text-left cursor-pointer"
+                        style={{
+                          backgroundColor: 'var(--theme-surface-card)',
+                          borderColor: isSelected ? 'var(--theme-primary)' : 'var(--theme-border-subtle)',
+                          boxShadow: isSelected ? '0 0 0 2px var(--theme-primary)' : 'none',
+                        }}
                       >
                         {/* Variant Picture Container */}
-                        <div className="w-full aspect-square bg-[#f8f7f4] p-3 flex items-center justify-center overflow-hidden">
+                        <div
+                          className="w-full aspect-square p-3 flex items-center justify-center overflow-hidden"
+                          style={{ backgroundColor: 'var(--theme-surface)' }}
+                        >
                           <img
                             src={sizeImage}
                             alt={s.size}
@@ -318,13 +404,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                           />
                         </div>
 
-                        {/* Dark/Gold Label Banner */}
+                        {/* Label Banner */}
                         <div
-                          className={`w-full py-2 px-2 text-center transition-colors ${
-                            isSelected
-                              ? 'bg-amber-700 text-white'
-                              : 'bg-zinc-900 text-white group-hover:bg-zinc-800'
-                          }`}
+                          className="w-full py-2 px-2 text-center transition-colors"
+                          style={{
+                            backgroundColor: isSelected ? 'var(--theme-primary)' : 'var(--theme-surface)',
+                            color: isSelected ? '#FFFFFF' : 'var(--theme-text-primary)',
+                          }}
                         >
                           <span className="text-xs font-bold font-sans tracking-wide uppercase block">
                             {s.size}
@@ -343,20 +429,31 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div className="space-y-3 pt-3">
                 <div className="flex flex-col sm:flex-row items-stretch gap-3">
                   {/* Quantity Control */}
-                  <div className="flex items-center border border-zinc-300 bg-zinc-50 shrink-0 justify-between sm:justify-start">
+                  <div
+                    className="flex items-center border shrink-0 justify-between sm:justify-start rounded-xs"
+                    style={{
+                      backgroundColor: 'var(--theme-surface)',
+                      borderColor: 'var(--theme-border-subtle)',
+                    }}
+                  >
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="px-4 py-3 text-zinc-700 hover:bg-zinc-200 transition-colors font-mono cursor-pointer"
+                      className="px-4 py-3 transition-colors font-mono cursor-pointer hover:opacity-75"
+                      style={{ color: 'var(--theme-text-primary)' }}
                       aria-label="Decrease quantity"
                     >
                       -
                     </button>
-                    <span className="px-4 py-3 text-xs font-semibold font-mono min-w-[36px] text-center text-zinc-950">
+                    <span
+                      className="px-4 py-3 text-xs font-semibold font-mono min-w-[36px] text-center"
+                      style={{ color: 'var(--theme-primary)' }}
+                    >
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="px-4 py-3 text-zinc-700 hover:bg-zinc-200 transition-colors font-mono cursor-pointer"
+                      className="px-4 py-3 transition-colors font-mono cursor-pointer hover:opacity-75"
+                      style={{ color: 'var(--theme-text-primary)' }}
                       aria-label="Increase quantity"
                     >
                       +
@@ -367,7 +464,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <button
                     onClick={handleAddToCartClick}
                     disabled={added}
-                    className="flex-1 py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:opacity-90"
+                    className="flex-1 py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:opacity-90 rounded-xs"
                     style={{
                       backgroundColor: 'var(--theme-btn-bg)',
                       color: 'var(--theme-btn-text)',
@@ -390,7 +487,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 {/* Buy Now Direct Button */}
                 <button
                   onClick={handleBuyNowClick}
-                  className="w-full bg-amber-700 hover:bg-amber-800 text-white py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md font-semibold"
+                  className="w-full py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md font-semibold rounded-xs hover:opacity-90"
+                  style={{
+                    backgroundColor: 'var(--theme-secondary)',
+                    color: '#FFFFFF',
+                  }}
                 >
                   <span>Buy Now · ৳ {totalPrice.toLocaleString()}</span>
                 </button>
@@ -418,37 +519,46 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
       {/* 3. Detailed Additional Product Information Section (Notes, Specs, Maceration Guide) */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-        <div className="bg-white border border-zinc-200/90 shadow-xs p-6 sm:p-10 lg:p-12 space-y-10">
+        <div
+          className="border shadow-xs p-6 sm:p-10 lg:p-12 space-y-10 rounded-xs"
+          style={{
+            backgroundColor: 'var(--theme-surface-card)',
+            borderColor: 'var(--theme-border-subtle)',
+          }}
+        >
 
           {/* Section Navigation Tabs */}
-          <div className="flex items-center gap-6 border-b border-zinc-200 overflow-x-auto no-scrollbar pb-3">
+          <div
+            className="flex items-center gap-6 border-b overflow-x-auto no-scrollbar pb-3"
+            style={{ borderColor: 'var(--theme-border-subtle)' }}
+          >
             <button
               onClick={() => setActiveTab('notes')}
-              className={`text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 border-b-2 cursor-pointer whitespace-nowrap ${
-                activeTab === 'notes'
-                  ? 'border-zinc-950 text-zinc-950'
-                  : 'border-transparent text-zinc-400 hover:text-zinc-700'
-              }`}
+              className="text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 cursor-pointer whitespace-nowrap"
+              style={{
+                borderBottom: activeTab === 'notes' ? '2px solid var(--theme-primary)' : '2px solid transparent',
+                color: activeTab === 'notes' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)',
+              }}
             >
               Fragrance Notes & Profile
             </button>
             <button
               onClick={() => setActiveTab('specs')}
-              className={`text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 border-b-2 cursor-pointer whitespace-nowrap ${
-                activeTab === 'specs'
-                  ? 'border-zinc-950 text-zinc-950'
-                  : 'border-transparent text-zinc-400 hover:text-zinc-700'
-              }`}
+              className="text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 cursor-pointer whitespace-nowrap"
+              style={{
+                borderBottom: activeTab === 'specs' ? '2px solid var(--theme-primary)' : '2px solid transparent',
+                color: activeTab === 'specs' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)',
+              }}
             >
               Details & Specifications
             </button>
             <button
               onClick={() => setActiveTab('care')}
-              className={`text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 border-b-2 cursor-pointer whitespace-nowrap ${
-                activeTab === 'care'
-                  ? 'border-zinc-950 text-zinc-950'
-                  : 'border-transparent text-zinc-400 hover:text-zinc-700'
-              }`}
+              className="text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 cursor-pointer whitespace-nowrap"
+              style={{
+                borderBottom: activeTab === 'care' ? '2px solid var(--theme-primary)' : '2px solid transparent',
+                color: activeTab === 'care' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)',
+              }}
             >
               Decant Care & Maceration
             </button>
@@ -684,7 +794,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <div className="pt-2">
                   <button
                     onClick={() => showToast('Performance vote submitted!')}
-                    className="w-full border border-zinc-300/80 hover:border-zinc-950 bg-white hover:bg-zinc-950 text-zinc-800 hover:text-white py-3.5 px-6 rounded-full text-xs font-sans font-bold tracking-widest uppercase transition-all shadow-2xs cursor-pointer text-center"
+                    className="w-full border py-3.5 px-6 rounded-full text-xs font-sans font-bold tracking-widest uppercase transition-all shadow-2xs cursor-pointer text-center hover:opacity-90"
+                    style={{
+                      backgroundColor: 'var(--theme-surface)',
+                      borderColor: 'var(--theme-border)',
+                      color: 'var(--theme-primary)',
+                    }}
                   >
                     VOTE FOR PERFORMANCE
                   </button>
@@ -696,61 +811,121 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           {/* TAB 2: Details & Specifications */}
           {activeTab === 'specs' && (
             <div className="space-y-6 animate-fade-in max-w-4xl">
-              <h3 className="font-serif text-xl sm:text-2xl text-zinc-950">
+              <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'var(--theme-primary)' }}>
                 Decant Technical Specifications
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">BRAND HOUSE</span>
-                  <span className="font-semibold text-zinc-900">{product.brand}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>BRAND HOUSE</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{product.brand}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">CONCENTRATION</span>
-                  <span className="font-semibold text-zinc-900">{product.concentration || 'Eau de Parfum'}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>CONCENTRATION</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{product.concentration || 'Eau de Parfum'}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">FRAGRANCE FAMILY</span>
-                  <span className="font-semibold text-zinc-900">
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>FRAGRANCE FAMILY</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>
                     {sp.fragranceFamilies && sp.fragranceFamilies.length > 0 ? sp.fragranceFamilies.join(', ') : product.category}
                   </span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">SUITABLE GENDER</span>
-                  <span className="font-semibold text-zinc-900">{sp.genderPositioning || product.gender || 'Unisex'}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>SUITABLE GENDER</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.genderPositioning || product.gender || 'Unisex'}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">INTENSITY LEVEL</span>
-                  <span className="font-semibold text-zinc-900">{sp.intensity || 'Unknown'}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>INTENSITY LEVEL</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.intensity || 'Unknown'}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">PROJECTION & SILLAGE</span>
-                  <span className="font-semibold text-zinc-900">{sp.projection || 'Unknown'}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>PROJECTION & SILLAGE</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.projection || 'Unknown'}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">SKIN LONGEVITY</span>
-                  <span className="font-semibold text-zinc-900">{sp.longevity || 'Unknown'}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>SKIN LONGEVITY</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.longevity || 'Unknown'}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">SWEETNESS LEVEL</span>
-                  <span className="font-semibold text-zinc-900">{sp.sweetness || 'Unknown'}</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>SWEETNESS LEVEL</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.sweetness || 'Unknown'}</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">BOTTLE MECHANISM</span>
-                  <span className="font-semibold text-zinc-900">Italian Glass Tube with Precision High-Pressure Spray Head</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>BOTTLE MECHANISM</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>Italian Glass Tube with Precision High-Pressure Spray Head</span>
                 </div>
 
-                <div className="border border-zinc-200 p-4 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase block">AUTHENTICITY GUARANTEE</span>
-                  <span className="font-semibold text-zinc-900">100% Direct-from-Flacon Decant (Zero dilution, zero oils)</span>
+                <div
+                  className="border p-4 space-y-1 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>AUTHENTICITY GUARANTEE</span>
+                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>100% Direct-from-Flacon Decant (Zero dilution, zero oils)</span>
                 </div>
               </div>
             </div>
@@ -758,15 +933,21 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
           {/* TAB 3: Care & Maceration Guide */}
           {activeTab === 'care' && (
-            <div className="space-y-6 animate-fade-in max-w-4xl text-xs sm:text-sm font-sans text-zinc-700 leading-relaxed">
-              <h3 className="font-serif text-xl sm:text-2xl text-zinc-950">
+            <div className="space-y-6 animate-fade-in max-w-4xl text-xs sm:text-sm font-sans leading-relaxed opacity-90" style={{ color: 'var(--theme-text-primary)' }}>
+              <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'var(--theme-primary)' }}>
                 Decant Transit Care & Maceration Advice
               </h3>
 
               <div className="space-y-4">
-                <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
-                  <h4 className="font-semibold text-zinc-900 uppercase tracking-wide text-xs flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-amber-600" />
+                <div
+                  className="border p-5 space-y-2 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <h4 className="font-semibold uppercase tracking-wide text-xs flex items-center gap-2" style={{ color: 'var(--theme-primary)' }}>
+                    <Clock className="w-4 h-4" style={{ color: 'var(--theme-secondary)' }} />
                     <span>1. Let the Decant Rest After Delivery</span>
                   </h4>
                   <p>
@@ -774,9 +955,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </p>
                 </div>
 
-                <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
-                  <h4 className="font-semibold text-zinc-900 uppercase tracking-wide text-xs flex items-center gap-2">
-                    <Info className="w-4 h-4 text-amber-600" />
+                <div
+                  className="border p-5 space-y-2 rounded-xs"
+                  style={{
+                    backgroundColor: 'var(--theme-surface)',
+                    borderColor: 'var(--theme-border-subtle)',
+                  }}
+                >
+                  <h4 className="font-semibold uppercase tracking-wide text-xs flex items-center gap-2" style={{ color: 'var(--theme-primary)' }}>
+                    <Info className="w-4 h-4" style={{ color: 'var(--theme-secondary)' }} />
                     <span>2. Maceration & Oxygen Contact</span>
                   </h4>
                   <p>

@@ -19,11 +19,21 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
   const forHerImage = campaignData?.for_her_image || IMAGES.campaigns.forHer;
 
   return (
-    <section id="for-him-her" className="w-full bg-white pt-8 pb-14 border-b border-zinc-100">
+    <section
+      id="for-him-her"
+      className="w-full pt-8 pb-14 border-b select-none"
+      style={{
+        backgroundColor: 'var(--theme-surface)',
+        borderColor: 'var(--theme-border-subtle)',
+      }}
+    >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Right-aligned Section Heading as in screenshot */}
         <div className="flex justify-end mb-4 sm:mb-6">
-          <h2 className="font-serif text-lg sm:text-2xl font-light tracking-[0.16em] text-zinc-950 uppercase">
+          <h2
+            className="font-serif text-lg sm:text-2xl font-light tracking-[0.16em] uppercase"
+            style={{ color: 'var(--theme-primary)' }}
+          >
             {sectionTitle}
           </h2>
         </div>
@@ -33,7 +43,11 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
           {/* For Him Card */}
           <div
             onClick={() => onNavigateToCollection ? onNavigateToCollection('forhim') : onSelectCategory('Him')}
-            className="group relative cursor-pointer overflow-hidden flex flex-col bg-zinc-950"
+            className="group relative cursor-pointer overflow-hidden flex flex-col rounded-xs border shadow-xs"
+            style={{
+              backgroundColor: 'var(--theme-surface-card)',
+              borderColor: 'var(--theme-border-subtle)',
+            }}
           >
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
               <img
@@ -45,12 +59,19 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
               />
             </div>
 
-            {/* Black Lower Bar */}
-            <div className="bg-black text-white px-5 py-3.5 flex items-center justify-between border-t border-zinc-900">
-              <span className="font-serif text-sm sm:text-base font-normal tracking-wide text-zinc-100">
+            {/* Themed Lower Bar */}
+            <div
+              className="px-5 py-3.5 flex items-center justify-between border-t transition-colors"
+              style={{
+                backgroundColor: 'var(--theme-btn-bg)',
+                color: 'var(--theme-btn-text)',
+                borderColor: 'var(--theme-border-subtle)',
+              }}
+            >
+              <span className="font-serif text-sm sm:text-base font-normal tracking-wide">
                 {forHimTitle}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.18em] uppercase text-zinc-300 group-hover:text-white group-hover:underline underline-offset-4 transition-all">
+              <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.18em] uppercase opacity-90 group-hover:opacity-100 group-hover:underline underline-offset-4 transition-all">
                 {forHimButtonText}
               </span>
             </div>
@@ -59,7 +80,11 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
           {/* For Her Card */}
           <div
             onClick={() => onNavigateToCollection ? onNavigateToCollection('forher') : onSelectCategory('Her')}
-            className="group relative cursor-pointer overflow-hidden flex flex-col bg-zinc-950"
+            className="group relative cursor-pointer overflow-hidden flex flex-col rounded-xs border shadow-xs"
+            style={{
+              backgroundColor: 'var(--theme-surface-card)',
+              borderColor: 'var(--theme-border-subtle)',
+            }}
           >
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
               <img
@@ -71,12 +96,19 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
               />
             </div>
 
-            {/* Black Lower Bar */}
-            <div className="bg-black text-white px-5 py-3.5 flex items-center justify-between border-t border-zinc-900">
-              <span className="font-serif text-sm sm:text-base font-normal tracking-wide text-zinc-100">
+            {/* Themed Lower Bar */}
+            <div
+              className="px-5 py-3.5 flex items-center justify-between border-t transition-colors"
+              style={{
+                backgroundColor: 'var(--theme-btn-bg)',
+                color: 'var(--theme-btn-text)',
+                borderColor: 'var(--theme-border-subtle)',
+              }}
+            >
+              <span className="font-serif text-sm sm:text-base font-normal tracking-wide">
                 {forHerTitle}
               </span>
-              <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.18em] uppercase text-zinc-300 group-hover:text-white group-hover:underline underline-offset-4 transition-all">
+              <span className="text-[10px] sm:text-[11px] font-sans tracking-[0.18em] uppercase opacity-90 group-hover:opacity-100 group-hover:underline underline-offset-4 transition-all">
                 {forHerButtonText}
               </span>
             </div>

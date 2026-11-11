@@ -90,19 +90,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               <button
                 key={item.id}
                 onClick={item.action}
-                className={`group relative flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-full transition-all duration-300 ease-out cursor-pointer active:scale-95 touch-manipulation ${
-                  isActive
-                    ? 'text-zinc-950 font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.9),inset_0_0_0_1px_rgba(255,255,255,0.7)]'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-white/30'
-                }`}
+                className="group relative flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-full transition-all duration-300 ease-out cursor-pointer active:scale-95 touch-manipulation"
                 style={
                   isActive
                     ? {
                         background: 'rgba(255, 255, 255, 0.75)',
                         backdropFilter: 'blur(16px)',
                         WebkitBackdropFilter: 'blur(16px)',
+                        color: 'var(--theme-primary)',
                       }
-                    : undefined
+                    : {
+                        color: 'var(--theme-text-secondary)',
+                      }
                 }
               >
                 {/* Active inner subtle glass refraction highlight */}
@@ -116,14 +115,21 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 <div className="relative flex items-center justify-center">
                   <Icon
                     className={`w-[19px] h-[19px] transition-transform duration-300 ease-out ${
-                      isActive ? 'scale-110 stroke-[2.2] text-zinc-950' : 'stroke-[1.6] group-hover:scale-105'
+                      isActive ? 'scale-110 stroke-[2.2]' : 'stroke-[1.6] group-hover:scale-105 opacity-70'
                     }`}
+                    style={{
+                      color: isActive ? 'var(--theme-primary)' : 'inherit',
+                    }}
                   />
 
                   {/* Cart Notification Counter Badge */}
                   {item.badge !== undefined && (
                     <span
-                      className="absolute -top-1.5 -right-2.5 bg-zinc-950 text-white text-[9px] font-medium min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.25)] border border-white/40 ring-1 ring-black/5"
+                      className="absolute -top-1.5 -right-2.5 text-white text-[9px] font-medium min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.25)] border border-white/40"
+                      style={{
+                        backgroundColor: 'var(--theme-btn-bg)',
+                        color: 'var(--theme-btn-text)',
+                      }}
                     >
                       {item.badge > 99 ? '99+' : item.badge}
                     </span>
@@ -132,8 +138,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
                 <span
                   className={`text-[10px] tracking-tight mt-0.5 leading-tight transition-colors duration-200 ${
-                    isActive ? 'text-zinc-950 font-semibold' : 'text-zinc-600 group-hover:text-zinc-900 font-normal'
+                    isActive ? 'font-bold' : 'font-normal opacity-80'
                   }`}
+                  style={{
+                    color: isActive ? 'var(--theme-primary)' : 'inherit',
+                  }}
                 >
                   {item.label}
                 </span>
