@@ -402,3 +402,14 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
   transition: opacity .2s;
 }
 .pp-wordmark.is-releasing { transition: background-position .9s cubic-bezier(.2,.8,.2,1); }
+
+
+/* ===== Logo-inspired ornaments around the wordmark ===== */
+.pp-sprig { pointer-events: none; opacity: .9; }
+.pp-sprig-sway { transform-origin: 44px 186px; animation: pp-sway 7s ease-in-out infinite; }
+@keyframes pp-sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+.pp-flourish-line { stroke-dasharray: 420; stroke-dashoffset: 420; animation: pp-draw 2.4s cubic-bezier(.2,.8,.2,1) .6s forwards; }
+@keyframes pp-draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .pp-sprig-sway { animation: none; } .pp-flourish-line { animation: none; stroke-dashoffset: 0; } }
+
+.pp-silver-text.is-touching { animation: none !important; transition: background-position .08s linear; }

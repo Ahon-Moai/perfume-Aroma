@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { FragranceProduct, SeasonsGalleryData } from '../types';
 import { SeasonsGallery } from './SeasonsGallery';
+import { LeafSprig, AtomizerFlourish } from './BrandOrnaments';
 
 interface HeroProps {
   products?: FragranceProduct[];
@@ -42,7 +43,7 @@ export const Hero: React.FC<HeroProps> = ({
     el.classList.add('is-touching');
     el.style.backgroundPosition = `${p}% 0`;
     const sub = subRef.current;
-    if (sub) sub.style.backgroundPosition = `${p}% 0`;
+    if (sub) { sub.classList.add('is-touching'); sub.style.backgroundPosition = `${p}% 0`; }
   };
   const releaseLight = () => {
     const el = markRef.current;
@@ -50,7 +51,7 @@ export const Hero: React.FC<HeroProps> = ({
     el.classList.add('is-releasing');
     el.classList.remove('is-touching');
     el.style.backgroundPosition = '';
-    if (subRef.current) subRef.current.style.backgroundPosition = '';
+    if (subRef.current) { subRef.current.classList.remove('is-touching'); subRef.current.style.backgroundPosition = ''; }
   };
   const testerFrom = testerCount ? Math.min(...testerPrices.filter((n) => n > 0)) : 0;
 
@@ -79,25 +80,30 @@ export const Hero: React.FC<HeroProps> = ({
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
         <div className="w-full overflow-x-clip select-none py-2 sm:py-4">
           <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-2 sm:py-4" aria-label="Pure Portions by Arrina">
-            <span
-              ref={markRef}
-              className="pp-wordmark pp-silver-text whitespace-nowrap text-[19vw] sm:text-[15vw] md:text-[12.5vw] lg:text-[11vw]"
-              data-text="Pure Portions"
-              onPointerDown={(e) => followLight(e.clientX)}
-              onPointerMove={(e) => followLight(e.clientX)}
-              onPointerUp={releaseLight}
-              onPointerLeave={releaseLight}
-              onPointerCancel={releaseLight}
-              onTouchMove={(e) => e.touches[0] && followLight(e.touches[0].clientX)}
-              onTouchEnd={releaseLight}
-            >
-              Pure Portions
+            <span className="relative inline-block px-[7vw] sm:px-[6vw]">
+              <LeafSprig idSuffix="l" className="pp-sprig absolute left-0 top-1/2 -translate-y-[46%] h-[26vw] sm:h-[20vw] md:h-[16vw] lg:h-[13.5vw] w-auto -z-0" />
+              <LeafSprig idSuffix="r" flip className="pp-sprig absolute right-0 top-1/2 -translate-y-[46%] h-[26vw] sm:h-[20vw] md:h-[16vw] lg:h-[13.5vw] w-auto -z-0" />
+              <span
+                ref={markRef}
+                className="pp-wordmark pp-silver-text whitespace-nowrap text-[16.5vw] sm:text-[13vw] md:text-[11vw] lg:text-[9.5vw]"
+                data-text="Pure Portions"
+                onPointerDown={(e) => followLight(e.clientX)}
+                onPointerMove={(e) => followLight(e.clientX)}
+                onPointerUp={releaseLight}
+                onPointerLeave={releaseLight}
+                onPointerCancel={releaseLight}
+                onTouchMove={(e) => e.touches[0] && followLight(e.touches[0].clientX)}
+                onTouchEnd={releaseLight}
+              >
+                Pure Portions
+              </span>
             </span>
             <span className="pp-sub flex items-center justify-center gap-3 sm:gap-5 -mt-[1.5vw] whitespace-nowrap text-[5vw] sm:text-[3.6vw] md:text-[2.8vw] lg:text-[2.4vw]">
               <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
               <span ref={subRef} className="pp-silver-text">By Arrina</span>
               <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
             </span>
+            <AtomizerFlourish className="pp-flourish w-[62vw] max-w-[420px] h-auto mt-1 sm:mt-2" />
           </h1>
         </div>
 
