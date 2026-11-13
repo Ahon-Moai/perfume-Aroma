@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Search, ChevronDown, Plus, X, RefreshCw } from 'lucide-react';
+import { categoryOf } from '../lib/brandCategory';
 
 type Size = { id: string; size: string; ml: number; price: number };
 type Perfume = {
@@ -18,6 +19,13 @@ type Edit = { prices?: Record<string, number>; bottle_cost?: number; set_ml?: nu
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 700 } as const;
 const COLOR = { ok: '#1D9E75', low: '#EF9F27', out: '#E24B4A' };
 const api = '/api/admin/perfume_stock.php';
+const HOUSES = [
+  { id: 'all', label: 'All' },
+  { id: 'Arabian', label: 'Middle Eastern' },
+  { id: 'Designer', label: 'Designer' },
+  { id: 'Niche', label: 'Niche' },
+] as const;
+type House = (typeof HOUSES)[number]['id'];
 
 const stateOf = (p: Perfume) => {
   const left = p.ml_left ?? 0;
@@ -44,6 +52,7 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [filter, setFilter] = useState<'all' | 'low' | 'out'>('all');
+  const [house, setHouse] = useState<House>('all');
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const [edits, setEdits] = useState<Record<string, Edit>>({});
   const [saving, setSaving] = useState(false);
@@ -90,6 +99,12 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
   const changeCount = Object.values(edits).reduce(
     (n, e) => n + Object.keys(e.prices || {}).length + (e.bottle_cost != null ? 1 : 0) + (e.set_ml != null ? 1 : 0), 0);
 
+  const houseCount = useMemo(() => {
+    const c: Record<string, number> = { all: list.length, Arabian: 0, Designer: 0, Niche: 0 };
+    list.forEach((p) => { c[categoryOf(p.brand)]++; });
+    return c;
+  }, [list]);
+
   const counts = useMemo(() => ({
     low: list.filter((p) => stateOf(p) === 'low').length,
     out: list.filter((p) => stateOf(p) === 'out').length,
@@ -99,8 +114,8 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
     const t = q.trim().toLowerCase();
     return list
       .map(view)
-      .filter((p) => (filter === 'all' || stateOf(p) === filter) && (!t || `${p.brand} ${p.name}`.toLowerCase().includes(t)));
-  }, [list, q, filter, edits]);
+      .filter((p) => (filter === 'all' || stateOf(p) === filter) && (house === 'all' || categoryOf(p.brand) === house) && (!t || `${p.brand} ${p.name}`.toLowerCase().includes(t)));
+  }, [list, q, filter, house, edits]);
 
   const save = async () => {
     if (!changeCount) return;
@@ -168,7 +183,17 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
         </div>
       </div>
 
-      <div className="flex items-center gap-2 border-b border-neutral-300 pb-2 mt-6">
+      <div className="flex gap-6 mt-6 border-b border-neutral-200 overflow-x-auto">
+        {HOUSES.map((h) => (
+          <button key={h.id} onClick={() => setHouse(h.id)}
+            className={`pb-2.5 -mb-px text-[13px] font-semibold whitespace-nowrap border-b-2 transition-colors ${
+              house === h.id ? 'border-neutral-900 text-neutral-950' : 'border-transparent text-neutral-500 hover:text-neutral-900'}`}>
+            {h.label} <span className="text-neutral-400 font-medium">{houseCount[h.id] ?? 0}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 border-b border-neutral-300 pb-2 mt-4">
         <Search className="w-4 h-4 text-neutral-500" />
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search perfume or brand"
           className="flex-1 bg-transparent outline-none text-sm font-medium text-neutral-900 placeholder:text-neutral-400" />

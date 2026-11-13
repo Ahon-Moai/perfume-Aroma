@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { FragranceProduct } from '../types';
+import { categoryOf, type BrandCategory } from '../lib/brandCategory';
 
 interface BrandItem {
   name: string;
@@ -45,25 +46,6 @@ const SERIF_HOUSES = new Set([
 const brandStyle = (name: string) => (SERIF_HOUSES.has(name.trim().toUpperCase()) ? 'is-serif' : 'is-sans');
 
 
-// Brand categories shown on the homepage. Brands not listed fall back to "Arabian"
-// (most of the catalogue); edit these lists to re-categorise a house.
-type BrandCategory = 'Designer' | 'Niche' | 'Arabian';
-const DESIGNER_HOUSES = new Set([
-  'JEAN PAUL GAULTIER', 'GUCCI', 'PRADA', 'YVES SAINT LAURENT', 'ARIANA GRANDE', 'ELIZABETH ARDEN',
-  'CAROLINA HERRERA', 'NARCISO RODRIGUEZ', 'VALENTINO', 'CHANEL', 'VERSACE', 'BURBERRY', 'KENZO',
-  'DOLCE & GABBANA', 'CHLOÉ', 'CHLOE', 'CALVIN KLEIN', 'DIOR', 'GIORGIO ARMANI', 'VIKTOR & ROLF',
-  'HUGO BOSS', 'TOM FORD', 'HERMÈS', 'HERMES', 'MONTBLANC', 'AZZARO', 'PACO RABANNE', 'RABANNE', 'GIVENCHY',
-]);
-const NICHE_HOUSES = new Set([
-  'CREED', 'XERJOFF', 'MANCERA', 'KAYALI', 'ESSENTIAL PARFUMS', 'PARFUMS DE MARLY', 'MAISON FRANCIS KURKDJIAN',
-  'INITIO', 'MONTALE', 'AMOUAGE', 'NISHANE', 'BYREDO', 'LE LABO', 'MAISON MARGIELA', 'DIPTYQUE', 'JO MALONE',
-]);
-const categoryOf = (name: string): BrandCategory => {
-  const n = name.trim().toUpperCase();
-  if (DESIGNER_HOUSES.has(n)) return 'Designer';
-  if (NICHE_HOUSES.has(n)) return 'Niche';
-  return 'Arabian';
-};
 const CATEGORY_ORDER: BrandCategory[] = ['Designer', 'Niche', 'Arabian'];
 const CATEGORY_NOTE: Record<BrandCategory, string> = {
   Designer: 'Fashion-house icons',
