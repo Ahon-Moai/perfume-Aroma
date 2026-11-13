@@ -222,14 +222,9 @@ html.lenis, html.lenis body { height: auto; }
   position: relative; display: inline-block; isolation: isolate;
   font-family: 'Great Vibes', 'Brush Script MT', cursive; font-weight: 400;
   letter-spacing: 0; line-height: 1.15; padding: 0 0.12em;
+  /* soft silver glow around the letters */
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px rgba(150, 162, 188, 0.55)) drop-shadow(0 2px 24px rgba(150, 162, 188, 0.35));
 }
-.pp-wordmark::before {
-  content: attr(data-text); position: absolute; inset: 0; z-index: -1;
-  background: none; -webkit-text-fill-color: #b4bdd0; color: #b4bdd0;
-  filter: blur(14px); opacity: 0.55; pointer-events: none;
-  animation: pp-breathe 4.5s ease-in-out infinite;
-}
-@keyframes pp-breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.8; } }
 .pp-sub {
   font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; text-transform: uppercase;
   letter-spacing: 0.38em; padding-left: 0.38em; color: #6b6d74;
@@ -246,5 +241,5 @@ html.lenis, html.lenis body { height: auto; }
 }
 @keyframes pp-text-glint { 0% { background-position: 100% 0; } 30%, 100% { background-position: 0% 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .pp-logo::after, .pp-sparkle, .pp-silver-text, .pp-wordmark::before { animation: none; }
+  .pp-logo::after, .pp-sparkle, .pp-silver-text { animation: none; }
 }
