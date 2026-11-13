@@ -52,7 +52,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
             <span>ARRINA ATELIER CMS</span>
           </div>
           <h1 className="font-serif text-3xl font-normal text-white uppercase tracking-wider">
-            AROMATICA ADMIN
+            PURE PORTIONS ADMIN
           </h1>
           <p className="text-xs text-zinc-400 font-light">
             Sign in to manage storefront, products, orders & content

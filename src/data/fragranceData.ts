@@ -91,7 +91,7 @@ export const REVIEWS_LIST: ReviewItem[] = [
 export const SOCIAL_CARDS: SocialCard[] = [
   {
     id: 'soc-1',
-    handle: '@aromaticone',
+    handle: '@pureportionsbyarrina',
     image: '/src/assets/images/studio_social_travertine_1791908203434.jpg',
     likes: 223,
     comments: 2,
@@ -99,7 +99,7 @@ export const SOCIAL_CARDS: SocialCard[] = [
   },
   {
     id: 'soc-2',
-    handle: '@aromaticone',
+    handle: '@pureportionsbyarrina',
     image: '/src/assets/images/studio_social_hand_decant_1791908204628.jpg',
     likes: 234,
     comments: 1,
@@ -107,7 +107,7 @@ export const SOCIAL_CARDS: SocialCard[] = [
   },
   {
     id: 'soc-3',
-    handle: '@aromaticone',
+    handle: '@pureportionsbyarrina',
     image: '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg',
     likes: 86,
     comments: 8,
@@ -115,7 +115,7 @@ export const SOCIAL_CARDS: SocialCard[] = [
   },
   {
     id: 'soc-4',
-    handle: '@aromaticone',
+    handle: '@pureportionsbyarrina',
     image: '/src/assets/images/studio_social_amber_spray_1791908204588.jpg',
     likes: 85,
     comments: 5,
@@ -127,7 +127,7 @@ export const JOURNAL_ARTICLES: JournalArticle[] = [
   {
     id: 'art-1',
     date: 'FEB 01, 2026',
-    publisher: 'AROMATICA ONE',
+    publisher: 'PURE PORTIONS BY ARRINA',
     title: "Don't Buy Decants From Us Before Reading This!",
     description: 'Read this before you buy your first decant. Especially the part about why we genuinely cannot guarantee longevity, and what factors actually control skin chemistry...',
     image: '/src/assets/images/article_decant_buyers_guide_1791908274237.jpg'
@@ -135,7 +135,7 @@ export const JOURNAL_ARTICLES: JournalArticle[] = [
   {
     id: 'art-2',
     date: 'FEB 01, 2026',
-    publisher: 'AROMATICA ONE',
+    publisher: 'PURE PORTIONS BY ARRINA',
     title: 'Why Did You Mix Water With My Decant?',
     description: 'Weak fragrance does not mean fake decant. Here is what is actually going on, and what you can do about maceration, temperature shock, and olfactory fatigue.',
     image: '/src/assets/images/article_perfume_roses_water_1791908274460.jpg'
@@ -143,7 +143,7 @@ export const JOURNAL_ARTICLES: JournalArticle[] = [
   {
     id: 'art-3',
     date: 'FEB 01, 2026',
-    publisher: 'AROMATICA ONE',
+    publisher: 'PURE PORTIONS BY ARRINA',
     title: 'Hidden Reality Of Our Pricing!',
     description: 'Our pricing is not just random numbers. Here is the full, unvarnished math behind decant margins, high-pressure glass bottling, and genuine retail procurement.',
     image: '/src/assets/images/article_lilac_pricing_1791908274975.jpg'

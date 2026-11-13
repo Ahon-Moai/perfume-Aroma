@@ -97,7 +97,7 @@ export const StudioSection: React.FC<StudioSectionProps> = ({ socialCards }) => 
                     <div className="relative aspect-square w-full bg-zinc-900 overflow-hidden">
                       <img
                         src={card.image}
-                        alt="Aromatica fragrance studio social capture"
+                        alt="Pure Portions studio social capture"
                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                         loading="lazy"
@@ -176,7 +176,7 @@ export const StudioSection: React.FC<StudioSectionProps> = ({ socialCards }) => 
                   color: 'var(--theme-primary)',
                 }}
               >
-                <span className="font-bold" style={{ color: 'var(--theme-secondary)' }}>@aromaticone</span>
+                <span className="font-bold" style={{ color: 'var(--theme-secondary)' }}>@pureportionsbyarrina</span>
                 <span>Follow on Instagram</span>
                 <span className="text-xs group-hover:translate-x-0.5 transition-transform">↗</span>
               </a>

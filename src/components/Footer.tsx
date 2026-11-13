@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ storeSettings }) => {
         borderColor: 'var(--theme-border-subtle)',
       }}
     >
-      {/* Massive AROMATICA Wordmark Banner matching screenshot */}
+      {/* Massive Wordmark Banner matching screenshot */}
       <div
         className="w-full border-b py-6 sm:py-10 select-none overflow-hidden"
         style={{
@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({ storeSettings }) => {
             className="font-bodoni text-[8vw] sm:text-[7vw] lg:text-[6vw] font-extralight tracking-[0.15em] sm:tracking-[0.22em] uppercase leading-none whitespace-nowrap opacity-95"
             style={{ color: 'var(--theme-footer-text)' }}
           >
-            {storeSettings?.store_name || 'AROMATICA'}
+            {storeSettings?.store_name || 'PURE PORTIONS'}
           </h1>
         </div>
       </div>
@@ -108,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({ storeSettings }) => {
               {error && <p className="text-red-300 text-[11px] font-sans">{error}</p>}
               {subscribed && (
                 <p className="text-emerald-300 text-[11px] font-sans">
-                  Welcome to the AROMATICA circle. Check your inbox shortly.
+                  Welcome to the Pure Portions circle. Check your inbox shortly.
                 </p>
               )}
             </form>
@@ -210,7 +210,7 @@ export const Footer: React.FC<FooterProps> = ({ storeSettings }) => {
           </div>
 
           <div className="text-[10px] font-sans text-center sm:text-right opacity-70">
-            © {new Date().getFullYear()}, {storeSettings?.store_name || 'AROMATICA'} · {storeSettings?.address || 'Dhaka, Bangladesh'} · Privacy policy · Refund policy · Terms of service
+            © {new Date().getFullYear()}, {storeSettings?.store_name || 'PURE PORTIONS'} · {storeSettings?.address || 'Dhaka, Bangladesh'} · Privacy policy · Refund policy · Terms of service
           </div>
         </div>
       </div>

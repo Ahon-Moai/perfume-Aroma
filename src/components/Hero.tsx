@@ -90,7 +90,7 @@ export const Hero: React.FC<HeroProps> = ({
               WHY
             </span>
             <p className="font-semibold text-sm lg:text-[15px] leading-snug">
-              Created by the ++hellohello team, this store and signature collection celebrates our collective creativity and passion for apparel. Carefully designed.
+              Authentic designer & niche fragrances, decanted fresh from original bottles — so you can try a scent for weeks before committing to a full bottle.
             </p>
           </div>
 
@@ -100,7 +100,7 @@ export const Hero: React.FC<HeroProps> = ({
               WHERE
             </span>
             <p className="font-semibold text-sm lg:text-[15px] leading-snug">
-              Shop the collection here, or drop by our studio at 100 Main St. to say hello and try on pieces in person.
+              Order online right here, or message us on WhatsApp, Facebook or Instagram. Cash on delivery, nationwide across Bangladesh.
             </p>
           </div>
 
@@ -127,7 +127,7 @@ export const Hero: React.FC<HeroProps> = ({
                 WHY
               </span>
               <p className="font-semibold leading-snug text-xs sm:text-sm">
-                Created by the ++hellohello team, this store and signature collection celebrates our collective creativity and passion for apparel. Carefully designed.
+                Authentic designer & niche fragrances, decanted fresh from original bottles — so you can try a scent for weeks before committing to a full bottle.
               </p>
             </div>
           </div>

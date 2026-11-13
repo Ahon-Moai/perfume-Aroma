@@ -8,10 +8,10 @@ interface SettingsCMSProps {
 
 export const SettingsCMS: React.FC<SettingsCMSProps> = ({ csrfToken }) => {
   const [settings, setSettings] = useState({
-    store_name: 'AROMATICA ONE',
+    store_name: 'PURE PORTIONS BY ARRINA',
     tagline: 'Signature Decants Edition by ARRINA ATELIER',
-    contact_phone: '+880 1700-000000',
-    contact_email: 'concierge@aromatica.com.bd',
+    contact_phone: '+880 1972-911234',
+    contact_email: '',
     address: 'Banani High Street, Block 11, Dhaka 1213, Bangladesh',
     currency: 'BDT',
     currency_symbol: '৳',

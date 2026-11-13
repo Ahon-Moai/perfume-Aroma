@@ -77,7 +77,7 @@ if ($method === 'GET') {
         $id = sanitizeString($input['id'] ?? 'art-' . time());
         $title = sanitizeString($input['title'] ?? '');
         $date = sanitizeString($input['date'] ?? date('M d, Y'));
-        $publisher = sanitizeString($input['publisher'] ?? 'AROMATICA ONE');
+        $publisher = sanitizeString($input['publisher'] ?? 'PURE PORTIONS BY ARRINA');
         $desc = sanitizeString($input['description'] ?? '');
         $image = sanitizeString($input['image'] ?? '');
 

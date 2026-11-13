@@ -33,7 +33,7 @@ $uploadDir = $config['upload']['dir'];
 $uploadWritable = is_dir($uploadDir) && is_writable($uploadDir);
 
 $statusData = [
-    'app_name' => 'AROMATICA E-Commerce API',
+    'app_name' => 'Pure Portions E-Commerce API',
     'status' => 'ok',
     'environment' => $config['env'],
     'timestamp' => date('c'),

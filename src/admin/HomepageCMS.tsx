@@ -1667,7 +1667,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
                   id: 'art-' + Date.now(),
                   title: 'New Article Headline',
                   date: 'FEB 20, 2026',
-                  publisher: 'AROMATICA ONE',
+                  publisher: 'PURE PORTIONS BY ARRINA',
                   description: 'Short introduction or preview snippet of the editorial fragrance guide.',
                   image: '/src/assets/images/article_decant_buyers_guide_1791908274237.jpg'
                 })
