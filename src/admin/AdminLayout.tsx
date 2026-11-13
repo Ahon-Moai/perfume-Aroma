@@ -110,7 +110,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 <span className={`text-xs font-bold tracking-widest uppercase ${
                   isDarkMode ? 'text-white' : 'text-[#111111]'
                 }`}>
-                  AROMATICA <span className={`font-light ${isDarkMode ? 'text-[#a1a1aa]' : 'text-[#737373]'}`}>ATELIER</span>
+                  PURE PORTIONS <span className={`font-light ${isDarkMode ? 'text-[#a1a1aa]' : 'text-[#737373]'}`}>ATELIER</span>
                 </span>
                 <span className={`text-[10px] tracking-wider uppercase hidden sm:block ${
                   isDarkMode ? 'text-[#a1a1aa]' : 'text-[#737373]'
@@ -201,7 +201,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 }`}>
                   <div className={`px-3 py-2 border-b ${isDarkMode ? 'border-[#27272a]' : 'border-[#EAEAEA]'}`}>
                     <p className={`text-xs font-semibold ${isDarkMode ? 'text-white' : 'text-[#111111]'}`}>{user?.username}</p>
-                    <p className={`text-[11px] truncate ${isDarkMode ? 'text-[#a1a1aa]' : 'text-[#737373]'}`}>{user?.email || 'admin@aromatica.one'}</p>
+                    <p className={`text-[11px] truncate ${isDarkMode ? 'text-[#a1a1aa]' : 'text-[#737373]'}`}>{user?.email || 'admin'}</p>
                   </div>
 
                   <div className={`px-3 py-2 text-[11px] flex items-center gap-1.5 ${isDarkMode ? 'text-[#a1a1aa]' : 'text-[#737373]'}`}>

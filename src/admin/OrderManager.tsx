@@ -309,7 +309,7 @@ export const OrderManager: React.FC<OrderManagerProps> = ({ csrfToken }) => {
           <div className="bg-white text-zinc-950 p-8 max-w-xl w-full shadow-2xl font-sans space-y-6">
             <div className="flex items-start justify-between border-b pb-4 border-zinc-200">
               <div>
-                <h1 className="font-serif text-2xl font-bold tracking-tight">AROMATICA ONE</h1>
+                <h1 className="font-serif text-2xl font-bold tracking-tight">PURE PORTIONS BY ARRINA</h1>
                 <p className="text-[10px] text-[#737373] uppercase tracking-widest mt-0.5">Signature Decants Edition · ARRINA ATELIER</p>
                 <p className="text-[10px] text-[#737373]">Banani High Street, Block 11, Dhaka 1213, Bangladesh</p>
               </div>

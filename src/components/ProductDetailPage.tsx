@@ -50,7 +50,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             className="text-xs font-mono tracking-widest uppercase font-bold"
             style={{ color: 'var(--theme-secondary)' }}
           >
-            AROMATICA CATALOGUE
+            PURE PORTIONS CATALOGUE
           </span>
           <h1 className="font-serif text-3xl sm:text-4xl" style={{ color: 'var(--theme-primary)' }}>
             Fragrance Not Found

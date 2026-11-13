@@ -372,9 +372,9 @@ export const Header: React.FC<HeaderProps> = ({
                 style={{ borderColor: 'var(--theme-border-subtle)' }}
               >
                 <p className="font-bold tracking-wider uppercase text-xs">Customer Care & Studio</p>
-                <p>Location: 100 Main St., Studio</p>
-                <p>Email: {storeSettings?.contact_email || 'hello@outfitstore.com'}</p>
-                <p>Phone: {storeSettings?.contact_phone || '+1 (555) 019-2834'}</p>
+                <p>Location: Dhaka, Bangladesh · Nationwide delivery</p>
+                <p>Email: {storeSettings?.contact_email || ''}</p>
+                <p>Phone: {storeSettings?.contact_phone || '+880 1972-911234'}</p>
               </div>
             </div>
 

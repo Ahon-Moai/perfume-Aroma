@@ -287,7 +287,7 @@ export const VideoSection: React.FC<VideoSectionProps> = ({
                         className="text-[10px] tracking-widest font-mono uppercase truncate"
                         style={{ color: 'var(--theme-secondary)' }}
                       >
-                        AROMATICA ATELIER
+                        PURE PORTIONS ATELIER
                       </p>
                       <h3
                         className="font-serif text-xs sm:text-sm font-medium truncate tracking-wide"

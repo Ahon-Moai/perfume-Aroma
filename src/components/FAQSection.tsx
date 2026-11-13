@@ -128,7 +128,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
                 className="text-[10px] tracking-[0.25em] font-mono uppercase font-bold block"
                 style={{ color: 'var(--theme-secondary)' }}
               >
-                AROMATICA CARE
+                PURE PORTIONS CARE
               </span>
               <h3
                 className="font-sans font-black text-xl sm:text-2xl uppercase tracking-tight leading-snug"
@@ -177,7 +177,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
                   DIRECT CONCIERGE
                 </p>
                 <p className="text-xs font-bold" style={{ color: 'var(--theme-primary)' }}>
-                  WhatsApp Hotline: +880 1700-000000
+                  WhatsApp Hotline: +880 1972-911234
                 </p>
               </div>
               <span className="text-xs font-mono font-bold" style={{ color: 'var(--theme-primary)' }}>10AM - 11PM</span>

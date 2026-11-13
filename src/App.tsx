@@ -500,7 +500,7 @@ function StorefrontApp() {
         )}
       </main>
 
-      {/* M. Oversized AROMATICA brand footer */}
+      {/* M. Oversized brand footer */}
       <Footer storeSettings={storeSettings} />
 
       {/* N. Premium Mobile Floating Bottom Navigation */}

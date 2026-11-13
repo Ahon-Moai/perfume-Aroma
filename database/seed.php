@@ -37,10 +37,10 @@ foreach ($statements as $stmt) {
 echo "3. Schema tables created.\n";
 
 $defaultSettings = [
-    'store_name' => 'AROMATICA ONE',
+    'store_name' => 'PURE PORTIONS BY ARRINA',
     'tagline' => 'Signature Decants Edition by ARRINA ATELIER',
-    'contact_phone' => '+880 1700-000000',
-    'contact_email' => 'concierge@aromatica.com.bd',
+    'contact_phone' => '+880 1972-911234',
+    'contact_email' => '',
     'address' => 'Banani High Street, Block 11, Dhaka 1213, Bangladesh',
     'currency' => 'BDT',
     'currency_symbol' => '৳',
@@ -462,7 +462,7 @@ $journalList = [
     'art-1',
     "Don't Buy Decants From Us Before Reading This!",
     'FEB 01, 2026',
-    'AROMATICA ONE',
+    'PURE PORTIONS BY ARRINA',
     'Read this before you buy your first decant. Especially the part about why we genuinely cannot guarantee longevity, and what factors actually control skin chemistry...',
     '/src/assets/images/article_decant_buyers_guide_1791908274237.jpg'
   ],
@@ -470,7 +470,7 @@ $journalList = [
     'art-2',
     'Why Did You Mix Water With My Decant?',
     'FEB 01, 2026',
-    'AROMATICA ONE',
+    'PURE PORTIONS BY ARRINA',
     'Weak fragrance does not mean fake decant. Here is what is actually going on, and what you can do about maceration, temperature shock, and olfactory fatigue.',
     '/src/assets/images/article_perfume_roses_water_1791908274460.jpg'
   ],
@@ -478,7 +478,7 @@ $journalList = [
     'art-3',
     'Hidden Reality Of Our Pricing!',
     'FEB 01, 2026',
-    'AROMATICA ONE',
+    'PURE PORTIONS BY ARRINA',
     'Our pricing is not just random numbers. Here is the full, unvarnished math behind decant margins, high-pressure glass bottling, and genuine retail procurement.',
     '/src/assets/images/article_lilac_pricing_1791908274975.jpg'
   ]
@@ -491,10 +491,10 @@ foreach ($journalList as $a) {
 }
 
 $socialList = [
-  ['soc-1', '@aromaticone', '/src/assets/images/studio_social_travertine_1791908203434.jpg', 223, 2, 'REALITY ≠ REVIEWS'],
-  ['soc-2', '@aromaticone', '/src/assets/images/studio_social_hand_decant_1791908204628.jpg', 234, 1, 'AUTHENTIC DECANTS'],
-  ['soc-3', '@aromaticone', '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg', 86, 8, 'AUTHENTIC DECANTS'],
-  ['soc-4', '@aromaticone', '/src/assets/images/studio_social_amber_spray_1791908204588.jpg', 85, 5, 'STUDIO AROMA']
+  ['soc-1', '@pureportionsbyarrina', '/src/assets/images/studio_social_travertine_1791908203434.jpg', 223, 2, 'REALITY ≠ REVIEWS'],
+  ['soc-2', '@pureportionsbyarrina', '/src/assets/images/studio_social_hand_decant_1791908204628.jpg', 234, 1, 'AUTHENTIC DECANTS'],
+  ['soc-3', '@pureportionsbyarrina', '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg', 86, 8, 'AUTHENTIC DECANTS'],
+  ['soc-4', '@pureportionsbyarrina', '/src/assets/images/studio_social_amber_spray_1791908204588.jpg', 85, 5, 'STUDIO AROMA']
 ];
 
 $db->exec("DELETE FROM social_cards");

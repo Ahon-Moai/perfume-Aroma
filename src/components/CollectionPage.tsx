@@ -230,7 +230,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
       if (isMounted) {
         if (col) {
           setCollection(col);
-          document.title = `${col.title} Collection — AROMATICA ONE`;
+          document.title = `${col.title} Collection — Pure Portions by Arrina`;
         } else {
           // Fallback title formatting
           const formattedTitle = ucwords(collectionSlug.replace(/-/g, ' '));
@@ -240,7 +240,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             slug: collectionSlug,
             description: `Curated ${formattedTitle} luxury decant selections.`
           });
-          document.title = `${formattedTitle} — AROMATICA ONE`;
+          document.title = `${formattedTitle} — Pure Portions by Arrina`;
         }
         setLoadingCollection(false);
       }
@@ -719,7 +719,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
               className="text-[10px] font-mono tracking-[0.25em] uppercase font-bold block"
               style={{ color: 'var(--theme-secondary)' }}
             >
-              AROMATICA COLLECTION EDITIONS
+              PURE PORTIONS COLLECTION EDITIONS
             </span>
             <h1
               className="font-serif text-3xl sm:text-4xl font-normal leading-tight"
