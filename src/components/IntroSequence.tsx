@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // Fashion images from assets
@@ -9,52 +9,45 @@ import streetImg from '../assets/images/season_monochrome_street_1791908200992.j
 
 interface IntroSequenceProps {
   onComplete: () => void;
+  /** Fires the moment the intro starts sliding away (used to bring products in during the hand-off) */
+  onExitStart?: () => void;
   /** Whether this is a subsequent page transition (slightly snappier) or initial site entry */
   isPageTransition?: boolean;
 }
 
-export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPageTransition = false }) => {
+export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, onExitStart, isPageTransition = false }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [counter, setCounter] = useState(0);
+  // Counter is written straight to the DOM each frame (no React re-render) so the intro stays buttery on phones
+  const counterRef = useRef<HTMLDivElement>(null);
 
-  // Animated Counter from 0 to 99
+  useEffect(() => {
+    if (!isVisible) onExitStart?.();
+  }, [isVisible]);
+
   useEffect(() => {
     setIsVisible(true);
-    setCounter(0);
-
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     if (prefersReducedMotion) {
-      setCounter(99);
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 600);
+      if (counterRef.current) counterRef.current.textContent = '99';
+      const timer = setTimeout(() => setIsVisible(false), 600);
       return () => clearTimeout(timer);
     }
 
-    // Snappier duration on subsequent page transitions (~1.2s), full cinematic on initial load (~2.0s)
     const duration = isPageTransition ? 1200 : 3200;
-    const steps = 100;
-    const intervalTime = duration / steps; // ~12ms or ~20ms per tick
-
+    const start = performance.now();
+    let raf = 0;
     let exitTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    const interval = setInterval(() => {
-      setCounter((prev) => {
-        if (prev >= 99) {
-          clearInterval(interval);
-          // Brief pause on 99 before triggering exit
-          exitTimeout = setTimeout(() => {
-            setIsVisible(false);
-          }, 500);
-          return 99;
-        }
-        return prev + 1;
-      });
-    }, intervalTime);
-
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      // ease-out so the count settles gently into 99
+      const eased = 1 - Math.pow(1 - t, 3);
+      if (counterRef.current) counterRef.current.textContent = String(Math.round(eased * 99)).padStart(2, '0');
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else exitTimeout = setTimeout(() => setIsVisible(false), 450);
+    };
+    raf = requestAnimationFrame(tick);
     return () => {
-      clearInterval(interval);
+      cancelAnimationFrame(raf);
       if (exitTimeout) clearTimeout(exitTimeout);
     };
   }, [isPageTransition]);
@@ -111,6 +104,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               >
                 <div className="w-full h-full bg-neutral-900 overflow-hidden">
                   <img
+                    decoding="async"
                     src={streetImg}
                     alt="Left tilted fashion layer"
                     className="w-full h-full object-cover filter grayscale contrast-125 brightness-90"
@@ -138,6 +132,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               >
                 <div className="w-full h-full bg-neutral-900 overflow-hidden">
                   <img
+                    decoding="async"
                     src={heroImg}
                     alt="Right tilted fashion showcase"
                     className="w-full h-full object-cover filter contrast-110"
@@ -155,6 +150,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               >
                 <div className="relative w-full h-full overflow-hidden bg-[#e8e4dc]">
                   <img
+                    decoding="async"
                     src={portraitImg}
                     alt="Pure Portions Main Editorial Cutout"
                     className="w-full h-full object-cover object-center filter contrast-115 brightness-105"
@@ -173,9 +169,9 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               <div className="overflow-hidden pb-[0.06em]">
                 <motion.h1
                   className="pp-silver font-black uppercase tracking-[-0.045em] leading-[0.95] whitespace-nowrap font-sans text-[12.5vw] sm:text-[10vw] md:text-[8.5vw] lg:text-[8vw] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]"
-                  initial={{ y: '105%', opacity: 0, filter: 'blur(10px)' }}
-                  animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
-                  exit={{ y: '-30%', opacity: 0, filter: 'blur(6px)' }}
+                  initial={{ y: '105%', opacity: 0 }}
+                  animate={{ y: '0%', opacity: 1 }}
+                  exit={{ y: '-30%', opacity: 0 }}
                   transition={{ delay: 0.45, duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
                 >
                   Pure Portions
@@ -184,9 +180,9 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               <div className="overflow-hidden mt-[1.2vw] sm:mt-[0.8vw]">
                 <motion.p
                   className="pp-silver font-semibold uppercase tracking-[0.42em] pl-[0.42em] whitespace-nowrap font-sans text-[4.6vw] sm:text-[3.4vw] md:text-[2.6vw] lg:text-[2.2vw] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
-                  initial={{ y: '110%', opacity: 0, filter: 'blur(8px)' }}
-                  animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
-                  exit={{ y: '-30%', opacity: 0, filter: 'blur(6px)' }}
+                  initial={{ y: '110%', opacity: 0 }}
+                  animate={{ y: '0%', opacity: 1 }}
+                  exit={{ y: '-30%', opacity: 0 }}
                   transition={{ delay: 0.85, duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
                 >
                   by Arrina
@@ -196,6 +192,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
 
             {/* Counter Number Animated 00 - 99 Positioned at Lower Right Composition Area */}
             <motion.div
+              ref={counterRef}
               className="absolute bottom-[20%] right-[10%] sm:right-[15%] md:right-[18%] text-xl sm:text-2xl md:text-3xl font-sans tracking-tight text-[#eee9e0] font-semibold z-30 tabular-nums"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -205,7 +202,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                 duration: 0.8,
               }}
             >
-              {String(counter).padStart(2, '0')}
+              00
             </motion.div>
 
           </div>

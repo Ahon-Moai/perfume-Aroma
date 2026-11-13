@@ -78,9 +78,11 @@ function StorefrontApp() {
     prepareReveal();
   }, [viewMode]);
 
+  const [introLeaving, setIntroLeaving] = useState(false);
   useEffect(() => {
-    if (viewMode === 'storefront' && !showIntro) startReveal();
-  }, [viewMode, showIntro]);
+    // Bring products in while the intro curtain is lifting, so the two motions flow into one
+    if (viewMode === 'storefront' && (!showIntro || introLeaving)) startReveal();
+  }, [viewMode, showIntro, introLeaving]);
   const [adminUser, setAdminUser] = useState<any | null>(null);
   const [csrfToken, setCsrfToken] = useState<string>('');
 
@@ -362,6 +364,7 @@ function StorefrontApp() {
         <IntroSequence
           key={`intro-${introKey}`}
           isPageTransition={isPageTransitionIntro}
+          onExitStart={() => setTimeout(() => setIntroLeaving(true), 350)}
           onComplete={() => setShowIntro(false)}
         />
       )}

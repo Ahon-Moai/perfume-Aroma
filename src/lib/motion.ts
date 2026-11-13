@@ -21,7 +21,8 @@ const reducedMotion = () =>
 export function initSmoothScroll() {
   if (lenis || reducedMotion()) return;
   lenis = new Lenis({
-    lerp: 0.1,
+    lerp: 0.085,
+    wheelMultiplier: 1,
     smoothWheel: true,
     syncTouch: false, // phones: keep the natural touch scroll feel
     allowNestedScroll: true, // cart drawer, search, menus keep their own scrolling
@@ -81,16 +82,14 @@ export function prepareReveal() {
   scan();
 
   // Products load from the server and pages change without reloading → watch for new cards
-  let queued = false;
+  let timer = 0;
   mo = new MutationObserver(() => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
-      scan();
-    });
+    window.clearTimeout(timer);
+    timer = window.setTimeout(scan, 120);
   });
-  mo.observe(document.body, { childList: true, subtree: true });
+  // Only watch for added/removed elements (not text changes), and only inside the page content
+  const target = document.getElementById('root') || document.body;
+  mo.observe(target, { childList: true, subtree: true });
 }
 
 /** Call once the intro has finished: starts animating whatever is on screen, then the rest on scroll. */
@@ -109,14 +108,25 @@ export function startReveal() {
         });
       entering.forEach((el, i) => {
         io?.unobserve(el);
-        const delay = Math.min(i, 6) * 80;
-        el.style.setProperty('--pp-d', `${delay}ms`);
-        requestAnimationFrame(() => el.classList.add('pp-in'));
-        // Hand the element back to its normal hover/transition styles afterwards
-        window.setTimeout(() => {
-          el.classList.remove('pp-rv', 'pp-in');
-          el.style.removeProperty('--pp-d');
-        }, 1300 + delay);
+        const delay = Math.min(i, 6) * 85;
+        const go = () => {
+          el.style.setProperty('--pp-d', `${delay}ms`);
+          requestAnimationFrame(() => el.classList.add('pp-in'));
+          // Hand the element back to its normal hover/transition styles afterwards
+          window.setTimeout(() => {
+            el.classList.remove('pp-rv', 'pp-in');
+            el.style.removeProperty('--pp-d');
+          }, 1400 + delay);
+        };
+        // Wait (briefly) for the product photo so the card never slides in empty and "pops" later
+        const img = el.querySelector('img');
+        if (img && !img.complete) {
+          let done = false;
+          const fire = () => { if (!done) { done = true; go(); } };
+          img.addEventListener('load', fire, { once: true });
+          img.addEventListener('error', fire, { once: true });
+          window.setTimeout(fire, 700);
+        } else go();
       });
     },
     { rootMargin: '0px 0px -6% 0px', threshold: 0.05 }
