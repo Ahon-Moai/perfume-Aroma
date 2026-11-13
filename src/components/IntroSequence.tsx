@@ -33,7 +33,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
     }
 
     // Snappier duration on subsequent page transitions (~1.2s), full cinematic on initial load (~2.0s)
-    const duration = isPageTransition ? 1200 : 2000;
+    const duration = isPageTransition ? 1200 : 3200;
     const steps = 100;
     const intervalTime = duration / steps; // ~12ms or ~20ms per tick
 
@@ -46,7 +46,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
           // Brief pause on 99 before triggering exit
           exitTimeout = setTimeout(() => {
             setIsVisible(false);
-          }, 150);
+          }, 500);
           return 99;
         }
         return prev + 1;
@@ -69,20 +69,20 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
 
   // Letters array for staggered sequence animation
   const letters = [
-    { char: 'P', delay: 0.25 },
-    { char: 'U', delay: 0.28 },
-    { char: 'R', delay: 0.31 },
-    { char: 'E', delay: 0.34 },
-    { char: '\u00A0', delay: 0.37 },
-    { char: 'P', delay: 0.40 },
-    { char: 'O', delay: 0.43 },
-    { char: 'R', delay: 0.46 },
-    { char: 'T', delay: 0.49 },
-    { char: 'I', delay: 0.52 },
-    { char: 'O', delay: 0.55 },
-    { char: 'N', delay: 0.58 },
-    { char: 'S', delay: 0.61 },
-    { char: '.', delay: 0.64 },
+    { char: 'P', delay: 0.4 },
+    { char: 'U', delay: 0.45 },
+    { char: 'R', delay: 0.5 },
+    { char: 'E', delay: 0.54 },
+    { char: '\u00A0', delay: 0.59 },
+    { char: 'P', delay: 0.64 },
+    { char: 'O', delay: 0.69 },
+    { char: 'R', delay: 0.74 },
+    { char: 'T', delay: 0.78 },
+    { char: 'I', delay: 0.83 },
+    { char: 'O', delay: 0.88 },
+    { char: 'N', delay: 0.93 },
+    { char: 'S', delay: 0.98 },
+    { char: '.', delay: 1.02 },
   ];
 
   return (
@@ -93,7 +93,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
           initial={{ y: '0%' }}
           animate={{ y: '0%' }}
           exit={{ y: '-100%' }}
-          transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 1.36, ease: [0.76, 0, 0.24, 1] }}
           onClick={handleSkip}
           aria-label="Intro animation. Click to skip."
         >
@@ -106,7 +106,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               initial={{ opacity: 0, scale: 0.88 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.82, y: 60 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.96, ease: [0.22, 1, 0.36, 1] }}
             >
 
               {/* LAYER 1: LEFT-TILTED IMAGE STACK (-15deg rotation) */}
@@ -116,7 +116,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                 initial={{ opacity: 0, scale: 0.85, rotate: 0, x: 0, y: 0 }}
                 animate={{ opacity: 1, scale: 1, rotate: -18, x: -28, y: 12 }}
                 exit={{ rotate: 0, x: 0, y: 40, opacity: 0 }}
-                transition={{ delay: 0.1, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.16, duration: 1.04, ease: [0.22, 1, 0.36, 1] }}
               />
 
               {/* Left Image Card: Monochrome / Fashion Shot */}
@@ -125,7 +125,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                 initial={{ opacity: 0, scale: 0.88, rotate: 0, x: 0, y: 0 }}
                 animate={{ opacity: 1, scale: 1, rotate: -15, x: -22, y: 6 }}
                 exit={{ rotate: 0, x: 0, y: 40, opacity: 0 }}
-                transition={{ delay: 0.2, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.32, duration: 1.04, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div className="w-full h-full bg-neutral-900 overflow-hidden">
                   <img
@@ -143,7 +143,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                 initial={{ opacity: 0, scale: 0.85, rotate: 0, x: 0, y: 0 }}
                 animate={{ opacity: 1, scale: 1, rotate: 18, x: 28, y: 12 }}
                 exit={{ rotate: 0, x: 0, y: 40, opacity: 0 }}
-                transition={{ delay: 0.15, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.24, duration: 1.04, ease: [0.22, 1, 0.36, 1] }}
               />
 
               {/* Right Image Card: Dune Editorial Shot */}
@@ -152,7 +152,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                 initial={{ opacity: 0, scale: 0.88, rotate: 0, x: 0, y: 0 }}
                 animate={{ opacity: 1, scale: 1, rotate: 15, x: 22, y: 6 }}
                 exit={{ rotate: 0, x: 0, y: 40, opacity: 0 }}
-                transition={{ delay: 0.3, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.48, duration: 1.04, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div className="w-full h-full bg-neutral-900 overflow-hidden">
                   <img
@@ -169,7 +169,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                 initial={{ opacity: 0, scale: 0.92, rotate: 0, x: 0, y: 0 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0, x: 0, y: 0 }}
                 exit={{ opacity: 0, scale: 0.88, y: 40 }}
-                transition={{ delay: 0.45, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.72, duration: 1.12, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div className="relative w-full h-full overflow-hidden bg-[#e8e4dc]">
                   <img
@@ -198,7 +198,7 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                     exit={{ y: 80, opacity: 0 }}
                     transition={{
                       delay: item.delay,
-                      duration: 0.55,
+                      duration: 0.88,
                       ease: [0.215, 0.61, 0.355, 1],
                     }}
                   >
@@ -213,8 +213,8 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: 40, opacity: 0 }}
                   transition={{
-                    delay: 0.75,
-                    duration: 0.45,
+                    delay: 1.2,
+                    duration: 0.72,
                   }}
                 >
                   ®
@@ -229,8 +229,8 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{
-                delay: 0.2,
-                duration: 0.5,
+                delay: 0.32,
+                duration: 0.8,
               }}
             >
               {String(counter).padStart(2, '0')}

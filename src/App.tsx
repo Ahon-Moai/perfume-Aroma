@@ -42,7 +42,14 @@ export default function App() {
 }
 
 function StorefrontApp() {
-  const [showIntro, setShowIntro] = useState<boolean>(true);
+  // Show the intro only once per visit (not on every page change or reload in the same visit)
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    try {
+      if (sessionStorage.getItem('pp_intro_seen') === '1') return false;
+      sessionStorage.setItem('pp_intro_seen', '1');
+    } catch {}
+    return true;
+  });
   const [introKey, setIntroKey] = useState<number>(0);
   const [isPageTransitionIntro, setIsPageTransitionIntro] = useState<boolean>(false);
 
@@ -57,11 +64,8 @@ function StorefrontApp() {
   const [route, setRoute] = useState<{ path: 'home' | 'product' | 'collection' | 'admin'; productSlugOrId?: string; collectionSlug?: string }>({ path: 'home' });
 
   // Trigger the editorial intro sequence smartly on page openings and page navigation
-  const triggerPageIntro = () => {
-    setIsPageTransitionIntro(true);
-    setIntroKey((prev) => prev + 1);
-    setShowIntro(true);
-  };
+  // Intro no longer replays on page navigation — it only runs on the first visit
+  const triggerPageIntro = () => {};
 
   // Admin View State
   const [viewMode, setViewMode] = useState<'storefront' | 'admin'>('storefront');
