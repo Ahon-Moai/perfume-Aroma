@@ -32,6 +32,7 @@ import { FragranceProduct, CartItem, JournalArticle } from './types';
 import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMessage } from './services/api';
 import { Shield } from 'lucide-react';
 import { ThemeProvider } from './context/ThemeContext';
+import { initSmoothScroll, prepareReveal, startReveal } from './lib/motion';
 
 export default function App() {
   return (
@@ -69,6 +70,17 @@ function StorefrontApp() {
 
   // Admin View State
   const [viewMode, setViewMode] = useState<'storefront' | 'admin'>('storefront');
+
+  // Smooth scrolling + product/heading entrance animations (storefront only)
+  useEffect(() => {
+    if (viewMode !== 'storefront') return;
+    initSmoothScroll();
+    prepareReveal();
+  }, [viewMode]);
+
+  useEffect(() => {
+    if (viewMode === 'storefront' && !showIntro) startReveal();
+  }, [viewMode, showIntro]);
   const [adminUser, setAdminUser] = useState<any | null>(null);
   const [csrfToken, setCsrfToken] = useState<string>('');
 

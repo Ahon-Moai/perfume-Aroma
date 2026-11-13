@@ -67,24 +67,6 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
     setIsVisible(false);
   };
 
-  // Letters array for staggered sequence animation
-  const letters = [
-    { char: 'P', delay: 0.4 },
-    { char: 'U', delay: 0.45 },
-    { char: 'R', delay: 0.5 },
-    { char: 'E', delay: 0.54 },
-    { char: '\u00A0', delay: 0.59 },
-    { char: 'P', delay: 0.64 },
-    { char: 'O', delay: 0.69 },
-    { char: 'R', delay: 0.74 },
-    { char: 'T', delay: 0.78 },
-    { char: 'I', delay: 0.83 },
-    { char: 'O', delay: 0.88 },
-    { char: 'N', delay: 0.93 },
-    { char: 'S', delay: 0.98 },
-    { char: '.', delay: 1.02 },
-  ];
-
   return (
     <AnimatePresence onExitComplete={handleExitComplete}>
       {isVisible && (
@@ -186,40 +168,30 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete, isPage
 
             </motion.div>
 
-            {/* Oversized PURE PORTIONS. Typography with blend mode negative effect and staggered entrance/exit */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 mix-blend-difference">
-              <h1 className="text-white font-black uppercase tracking-tighter text-[11vw] sm:text-[9.5vw] md:text-[8.5vw] lg:text-[9vw] leading-none flex items-baseline font-sans whitespace-nowrap">
-                {letters.map((item, idx) => (
-                  <motion.span
-                    key={idx}
-                    className="inline-block"
-                    initial={{ y: 65, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: 80, opacity: 0 }}
-                    transition={{
-                      delay: item.delay,
-                      duration: 0.88,
-                      ease: [0.215, 0.61, 0.355, 1],
-                    }}
-                  >
-                    {item.char}
-                  </motion.span>
-                ))}
-
-                {/* Registered Trademark Symbol */}
-                <motion.span
-                  className="text-[0.14em] font-bold self-baseline ml-[0.3vw] tracking-normal inline-block"
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 40, opacity: 0 }}
-                  transition={{
-                    delay: 1.2,
-                    duration: 0.72,
-                  }}
+            {/* Wordmark: PURE PORTIONS / BY ARRINA in brushed silver (Apple-style), lines rise and sharpen */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 px-3 text-center">
+              <div className="overflow-hidden pb-[0.06em]">
+                <motion.h1
+                  className="pp-silver font-black uppercase tracking-[-0.045em] leading-[0.95] whitespace-nowrap font-sans text-[12.5vw] sm:text-[10vw] md:text-[8.5vw] lg:text-[8vw] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]"
+                  initial={{ y: '105%', opacity: 0, filter: 'blur(10px)' }}
+                  animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ y: '-30%', opacity: 0, filter: 'blur(6px)' }}
+                  transition={{ delay: 0.45, duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  ®
-                </motion.span>
-              </h1>
+                  Pure Portions
+                </motion.h1>
+              </div>
+              <div className="overflow-hidden mt-[1.2vw] sm:mt-[0.8vw]">
+                <motion.p
+                  className="pp-silver font-semibold uppercase tracking-[0.42em] pl-[0.42em] whitespace-nowrap font-sans text-[4.6vw] sm:text-[3.4vw] md:text-[2.6vw] lg:text-[2.2vw] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
+                  initial={{ y: '110%', opacity: 0, filter: 'blur(8px)' }}
+                  animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ y: '-30%', opacity: 0, filter: 'blur(6px)' }}
+                  transition={{ delay: 0.85, duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  by Arrina
+                </motion.p>
+              </div>
             </div>
 
             {/* Counter Number Animated 00 - 99 Positioned at Lower Right Composition Area */}
