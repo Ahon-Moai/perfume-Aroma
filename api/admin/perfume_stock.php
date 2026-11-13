@@ -51,8 +51,10 @@ if ($method === 'GET') {
     $inv = $db->query("SELECT * FROM perfume_inventory WHERE product_id IS NOT NULL")->fetchAll();
     $vBy = []; foreach ($vars as $v) $vBy[$v['product_id']][] = ['id' => $v['id'], 'size' => $v['size'], 'ml' => parseDecantMl($v['size']), 'price' => (float)$v['price']];
     $iBy = []; foreach ($inv as $i) $iBy[$i['product_id']] = $i;
+    $clean = function ($v) { $v = (string)$v; for ($i = 0; $i < 6; $i++) { $d = html_entity_decode($v, ENT_QUOTES | ENT_HTML5, 'UTF-8'); if ($d === $v) break; $v = $d; } return $v; };
     $out = [];
     foreach ($products as $p) {
+        $p['brand'] = $clean($p['brand']); $p['name'] = $clean($p['name']);
         $sizes = $vBy[$p['id']] ?? [];
         usort($sizes, fn($a, $b) => $a['ml'] <=> $b['ml']);
         $b = $iBy[$p['id']] ?? null;
