@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Home, LayoutGrid, Search, ShoppingBag, Sparkles } from 'lucide-react';
 
 interface MobileBottomNavProps {
@@ -24,6 +24,21 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   onOpenTesters,
   testersActive = false,
 }) => {
+  // Apple-style: tuck the bar away while scrolling down, bring it back on scroll up
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY.current;
+      if (Math.abs(dy) < 6) return;
+      setHidden(dy > 0 && y > 160);
+      lastY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const navItems: { id: 'home' | 'shop' | 'tester' | 'search' | 'ai'; label: string; icon: any; action: () => void; badge?: number }[] = [
     {
       id: 'home' as const,
@@ -58,24 +73,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   ];
 
   return (
-    <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-[86%] max-w-[340px] md:hidden pointer-events-none pb-[env(safe-area-inset-bottom)] select-none">
+    <div className={`pp-dock fixed bottom-3 left-1/2 z-40 w-[82%] max-w-[320px] md:hidden pointer-events-none pb-[env(safe-area-inset-bottom)] select-none${hidden ? ' is-hidden' : ''}`}>
       {/* Floating Liquid-Glass Pill Outer Wrapper */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="relative pointer-events-auto rounded-full p-[3px] transition-all duration-300 ease-out"
-        style={{
-          /* Apple Liquid Glass styling: realistic translucent substrate + multi-layer specular & ambient illumination */
-          background: 'rgba(255, 255, 255, 0.65)',
-          backdropFilter: 'blur(25px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(25px) saturate(180%)',
-          boxShadow: `
-            0 20px 48px -8px rgba(0, 0, 0, 0.16),
-            0 8px 20px -4px rgba(0, 0, 0, 0.08),
-            0 0 0 1px rgba(255, 255, 255, 0.6) inset,
-            0 1px 2px 0 rgba(255, 255, 255, 0.8) inset
-          `,
-          border: '1px solid rgba(255, 255, 255, 0.45)',
-        }}
+        className="pp-dock__glass relative pointer-events-auto rounded-full p-[3px]"
       >
         {/* Subtle top-edge glass specular curvature sheen */}
         <div
@@ -94,14 +96,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 <button
                   key={item.id}
                   onClick={item.action}
-                  className="relative flex flex-col items-center justify-center flex-1 -my-1 cursor-pointer active:scale-95 touch-manipulation"
+                  className="relative flex flex-col items-center justify-center flex-1 py-1 cursor-pointer active:scale-95 transition-transform touch-manipulation"
                   aria-label="1.5ml testers"
                 >
-                  <span className={`pp-tester-chip${isActive ? ' is-active' : ''}`}>
-                    <span className="pp-tester-chip__ml">1.5</span>
-                    <span className="pp-tester-chip__unit">ml</span>
-                  </span>
-                  <span className="text-[9.5px] tracking-tight mt-0.5 leading-tight font-medium" style={{ color: 'var(--theme-primary)' }}>
+                  <span className={`pp-tester-chip${isActive ? ' is-active' : ''}`}>1.5ml</span>
+                  <span className="text-[9.5px] tracking-tight mt-[3px] leading-tight" style={{ color: isActive ? 'var(--theme-primary)' : 'var(--theme-text-secondary)', fontWeight: isActive ? 600 : 400 }}>
                     Tester
                   </span>
                 </button>
@@ -136,8 +135,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
                 <div className="relative flex items-center justify-center">
                   <Icon
-                    className={`w-[19px] h-[19px] transition-transform duration-300 ease-out ${
-                      isActive ? 'scale-110 stroke-[2.2]' : 'stroke-[1.6] group-hover:scale-105 opacity-70'
+                    className={`w-[18px] h-[18px] transition-transform duration-300 ease-out ${
+                      isActive ? 'stroke-[1.9]' : 'stroke-[1.5] opacity-70'
                     }`}
                     style={{
                       color: isActive ? 'var(--theme-primary)' : 'inherit',
