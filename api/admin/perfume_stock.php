@@ -133,4 +133,35 @@ if ($method === 'POST') {
     jsonResponse(['ml_left' => $new], 200, 'Updated');
 }
 
+if ($method === 'DELETE') {
+    // Permanent delete — only for products already hidden (archived), so a live perfume can't be removed by mistake
+    $pid = sanitizeString($_GET['id'] ?? '');
+    $p = $db->prepare("SELECT id, name, status FROM products WHERE id = ?");
+    $p->execute([$pid]);
+    $row = $p->fetch();
+    if (!$row) jsonError('Perfume not found', 404);
+    if ($row['status'] !== 'archived') jsonError('Hide (archive) the perfume first, then delete it', 400);
+    try {
+        $db->beginTransaction();
+        $inv = $db->prepare("SELECT id FROM perfume_inventory WHERE product_id = ?");
+        $inv->execute([$pid]);
+        foreach ($inv->fetchAll() as $i) {
+            $db->prepare("DELETE FROM inventory_transactions WHERE inventory_id = ?")->execute([$i['id']]);
+            $db->prepare("DELETE FROM perfume_inventory WHERE id = ?")->execute([$i['id']]);
+        }
+        $db->prepare("DELETE FROM product_variants WHERE product_id = ?")->execute([$pid]);
+        $db->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$pid]);
+        $db->prepare("DELETE FROM products WHERE id = ?")->execute([$pid]);
+        try {
+            $db->prepare("INSERT INTO audit_logs (user_id, action, entity, entity_id, details) VALUES (?, 'delete_product', 'products', ?, ?)")
+               ->execute([$admin['id'] ?? null, $pid, 'Deleted archived product: ' . $row['name']]);
+        } catch (\Throwable $e) {}
+        $db->commit();
+        jsonResponse(['deleted' => $pid], 200, 'Deleted');
+    } catch (\Throwable $e) {
+        if ($db->inTransaction()) $db->rollBack();
+        jsonError('Couldn’t delete: ' . $e->getMessage(), 500);
+    }
+}
+
 jsonError('Method not allowed', 405);
