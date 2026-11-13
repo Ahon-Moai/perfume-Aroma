@@ -4,8 +4,7 @@ import { FragranceProduct } from '../types';
 import { categoryOf } from '../lib/brandCategory';
 
 /**
- * "Help me choose" — 5 quick taps, then every perfume in the catalogue that fits the answers,
- * best match first, grouped Middle Eastern → Designer → Niche.
+ * "Help me choose" — 5 quick taps, then the best matches: 4 Middle Eastern, 3 Designer, 2 Niche.
  */
 
 interface PerfumeFinderProps {
@@ -81,8 +80,18 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
   // Every matching perfume, best match first, grouped Middle Eastern → Designer → Niche
   scored.sort((a, b) => b[1] - a[1]);
   const ord = g ? scored.filter((o) => o[0].gender === g).concat(scored.filter((o) => o[0].gender !== g)) : scored;
-  const RK: Record<string, number> = { Arabian: 0, Designer: 1, Niche: 2 };
-  return ord.map((o) => o[0]).sort((x, y) => RK[categoryOf(x.brand)] - RK[categoryOf(y.brand)]);
+  // Best matches per house: 4 Middle Eastern, 3 Designer, 2 Niche (max 2 from one brand)
+  const CAP: Record<string, number> = { Arabian: 4, Designer: 3, Niche: 2 };
+  const G: Record<string, FragranceProduct[]> = { Arabian: [], Designer: [], Niche: [] };
+  const brands: Record<string, number> = {};
+  for (const [p] of ord) {
+    const t = categoryOf(p.brand);
+    const b = p.brand || '';
+    if (G[t].length >= CAP[t] || (brands[b] || 0) >= 2) continue;
+    G[t].push(p);
+    brands[b] = (brands[b] || 0) + 1;
+  }
+  return G.Arabian.concat(G.Designer, G.Niche);
 }
 
 const LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
@@ -171,7 +180,7 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, o
           </div>
         ) : (
           <div className="pp-quiz__in">
-            <p className="mt-5 text-xs font-medium text-neutral-500">{results.length ? `${results.length} perfumes match` : 'Your picks'}</p>
+            <p className="mt-5 text-xs font-medium text-neutral-500">Your picks</p>
             <h3 style={serif} className="mt-1 text-[30px] leading-[1.1] font-semibold">
               {results.length ? 'Made for you.' : 'Nothing matched all your answers.'}
             </h3>
