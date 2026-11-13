@@ -34,7 +34,7 @@ const SECTIONS: { id: keyof Omit<Insights, 'period' | 'total_searches'>; title: 
   { id: 'not_bought', title: 'Searched, not bought', hint: 'Try an offer or a 1.5ml tester', dot: '#B4B2A9' },
 ];
 
-const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
+const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 700 } as const;
 
 export const SearchInsights: React.FC<{ csrfToken: string }> = ({ csrfToken }) => {
   const [period, setPeriod] = useState('30d');
@@ -67,12 +67,12 @@ export const SearchInsights: React.FC<{ csrfToken: string }> = ({ csrfToken }) =
     <div className="max-w-5xl mx-auto px-1 sm:px-2 py-2">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-[10px] tracking-[0.3em] text-neutral-400">SEARCH INSIGHTS</div>
+          <div className="text-[11px] font-semibold tracking-[0.3em] text-neutral-600">SEARCH INSIGHTS</div>
           <div className="flex items-baseline gap-2 mt-2">
             <span style={serif} className="text-5xl leading-none text-neutral-900">
               {loading && !data ? '—' : (data?.total_searches ?? 0).toLocaleString()}
             </span>
-            <span className="text-sm text-neutral-500">searches</span>
+            <span className="text-sm font-medium text-neutral-700">searches</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -81,8 +81,8 @@ export const SearchInsights: React.FC<{ csrfToken: string }> = ({ csrfToken }) =
               <button
                 key={p.id}
                 onClick={() => setPeriod(p.id)}
-                className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                  period === p.id ? 'bg-neutral-900 text-white' : 'text-neutral-500 hover:text-neutral-900'
+                className={`px-3 py-1 text-xs font-semibold rounded-full transition-colors ${
+                  period === p.id ? 'bg-neutral-900 text-white' : 'text-neutral-700 hover:text-neutral-900'
                 }`}
               >
                 {p.label}
@@ -108,44 +108,44 @@ export const SearchInsights: React.FC<{ csrfToken: string }> = ({ csrfToken }) =
           return (
             <section key={sec.id}>
               <div className="flex items-center justify-between">
-                <h3 className="flex items-center gap-2 text-[11px] font-medium tracking-[0.22em] uppercase text-neutral-600">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: sec.dot }} />
+                <h3 className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-neutral-900">
+                  <span className="w-2 h-2 rounded-full" style={{ background: sec.dot }} />
                   {sec.title}
                 </h3>
-                <span className="text-xs text-neutral-400">{items.length}</span>
+                <span className="text-xs font-semibold text-neutral-600">{items.length}</span>
               </div>
-              <p className="text-xs text-neutral-400 mt-1 mb-3">{sec.hint}</p>
+              <p className="text-[13px] font-medium text-neutral-600 mt-1 mb-3">{sec.hint}</p>
               {loading && !data ? (
                 <div className="h-24 rounded-lg bg-neutral-50 animate-pulse" />
               ) : items.length === 0 ? (
-                <div style={serif} className="py-2 border-t border-neutral-100 text-base text-neutral-400">Nothing yet</div>
+                <div style={serif} className="py-2 border-t border-neutral-200 text-lg text-neutral-500">Nothing yet</div>
               ) : (
                 <>
                   {shown.map((it, i) => (
-                    <div key={it.key} className="grid grid-cols-[22px_minmax(0,1fr)_auto] items-baseline gap-2 py-2 border-t border-neutral-100">
-                      <span className="text-[11px] text-neutral-400 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                    <div key={it.key} className="grid grid-cols-[22px_minmax(0,1fr)_auto] items-baseline gap-2 py-2.5 border-t border-neutral-200">
+                      <span className="text-xs font-semibold text-neutral-500 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
                       <span className="min-w-0">
-                        <span style={serif} className="text-[17px] text-neutral-900 truncate block">
+                        <span style={serif} className="text-[19px] leading-snug text-neutral-950 truncate block">
                           {it.name}
                           {sec.id === 'low_stock' && it.stock && (
-                            <span className="ml-2 font-sans text-[10px] tracking-[0.12em] text-red-600">
+                            <span className="ml-2 font-sans text-[11px] font-bold tracking-[0.12em] text-red-600">
                               {it.stock === 'out' ? 'OUT' : 'LOW'}
                             </span>
                           )}
                         </span>
                         {(it.brand || (it.spellings && it.spellings.length > 0)) && (
-                          <span className="block text-[11px] text-neutral-400 truncate">
+                          <span className="block text-xs font-medium text-neutral-600 truncate">
                             {it.brand ? it.brand : `Also typed: ${it.spellings!.slice(0, 3).join(', ')}`}
                           </span>
                         )}
                       </span>
-                      <span className="text-sm text-neutral-500 tabular-nums">{it.count}</span>
+                      <span className="text-base font-bold text-neutral-900 tabular-nums">{it.count}</span>
                     </div>
                   ))}
                   {items.length > 5 && (
                     <button
                       onClick={() => setOpen({ ...open, [sec.id]: !open[sec.id] })}
-                      className="mt-2 text-xs text-neutral-500 hover:text-neutral-900"
+                      className="mt-2 text-xs font-semibold text-neutral-700 hover:text-neutral-950"
                     >
                       {open[sec.id] ? 'Show less' : `Show all ${items.length}`}
                     </button>
@@ -157,7 +157,7 @@ export const SearchInsights: React.FC<{ csrfToken: string }> = ({ csrfToken }) =
         })}
       </div>
 
-      <p className="mt-10 text-[11px] text-neutral-400">
+      <p className="mt-10 text-xs font-medium text-neutral-600">
         A search is counted when a customer stops typing — no Enter needed. Similar spellings are grouped.
       </p>
     </div>
