@@ -343,7 +343,12 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
   const SEASON_OPTIONS = ['Spring', 'Summer', 'Autumn', 'Winter', 'All Seasons'];
   // Opened from a season card on the homepage → show e.g. "Summer Perfumes"
-  const seasonTitle = collectionSlug === 'all' && filters.season.length === 1 && filters.season[0] !== 'All Seasons' ? `${filters.season[0]} Perfumes` : null;
+  const seasonTitle =
+    collectionSlug === 'all' && filters.size.length === 1 && filters.size[0] === '1.5ml' && !filters.season.length
+      ? '1.5ml Testers'
+      : collectionSlug === 'all' && filters.season.length === 1 && filters.season[0] !== 'All Seasons'
+      ? `${filters.season[0]} Perfumes`
+      : null;
 
   const OCCASION_OPTIONS = [
     'Daily / Casual', 'Office / Work', 'Evening / Date Night',
