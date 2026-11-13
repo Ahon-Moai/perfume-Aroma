@@ -196,7 +196,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           <div className="lg:col-span-7 flex flex-col gap-4">
             {/* Main Image Stage */}
             <div
-              className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square border shadow-xs flex items-center justify-center p-6 sm:p-10 overflow-hidden group rounded-xs"
+              className="pp-noborder relative w-full aspect-square sm:aspect-[4/3] lg:aspect-square border shadow-xs flex items-center justify-center p-6 sm:p-10 overflow-hidden group rounded-xs"
               style={{
                 backgroundColor: 'var(--theme-surface-card)',
                 borderColor: 'var(--theme-border-subtle)',
@@ -288,7 +288,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
           {/* B. PRODUCT INFORMATION (Columns 8 to 12 on desktop) */}
           <div
-            className="lg:col-span-5 flex flex-col justify-between space-y-6 p-6 sm:p-8 border shadow-xs rounded-xs"
+            className="pp-noborder lg:col-span-5 flex flex-col justify-between space-y-6 p-6 sm:p-8 border shadow-xs rounded-xs"
             style={{
               backgroundColor: 'var(--theme-surface-card)',
               borderColor: 'var(--theme-border-subtle)',
@@ -326,7 +326,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               {/* Dynamic Price Display */}
               <div
-                className="border p-4 flex items-baseline justify-between rounded-xs"
+                className="pp-noborder border p-4 flex items-baseline justify-between rounded-xs"
                 style={{
                   backgroundColor: 'var(--theme-surface)',
                   borderColor: 'var(--theme-border-subtle)',
@@ -520,7 +520,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       {/* 3. Detailed Additional Product Information Section (Notes, Specs, Maceration Guide) */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div
-          className="border shadow-xs p-6 sm:p-10 lg:p-12 space-y-10 rounded-xs"
+          className="pp-noborder border shadow-xs p-6 sm:p-10 lg:p-12 space-y-10 rounded-xs"
           style={{
             backgroundColor: 'var(--theme-surface-card)',
             borderColor: 'var(--theme-border-subtle)',
@@ -591,7 +591,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               {/* Structured Scent Profile Badge Tags */}
               {((sp.fragranceFamilies && sp.fragranceFamilies.length > 0) || (sp.seasons && sp.seasons.length > 0) || (sp.occasions && sp.occasions.length > 0) || (sp.moods && sp.moods.length > 0)) && (
-                <div className="bg-[#fcfbf9] border border-zinc-200 p-5 space-y-4">
+                <div className="pp-noborder bg-[#fcfbf9] border border-zinc-200 p-5 space-y-4">
                   <h4 className="text-xs font-sans tracking-widest uppercase font-bold text-zinc-900 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-600" />
                     <span>Curated Scent Recommendation Attributes</span>

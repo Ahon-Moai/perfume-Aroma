@@ -250,3 +250,12 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .pp-logo::after, .pp-sparkle, .pp-silver-text, .pp-wordmark::before { animation: none; }
 }
+
+
+/* ===== Seamless product presentation: no frames around perfume photos or their text ===== */
+.pp-noborder { border-color: transparent !important; box-shadow: none !important; }
+main .group:has(img):not(button),
+main .group:has(img):not(button) :is(div, span, p, a, h3, h4) {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
