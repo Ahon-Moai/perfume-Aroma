@@ -27,7 +27,7 @@ export const Hero: React.FC<HeroProps> = ({
     >
       <div className="w-full px-5 sm:px-8 md:px-12">
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
-        <div className="w-full overflow-hidden select-none py-2 sm:py-4">
+        <div className="w-full overflow-x-clip select-none py-2 sm:py-4">
           <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-2 sm:py-4" aria-label="Pure Portions by Arrina">
             <span
               className="pp-wordmark pp-silver-text whitespace-nowrap text-[19vw] sm:text-[15vw] md:text-[12.5vw] lg:text-[11vw]"
