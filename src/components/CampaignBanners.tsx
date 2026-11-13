@@ -12,11 +12,12 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
   const sectionTitle = campaignData?.section_title || 'FOR HIM | HER';
   const forHimTitle = campaignData?.for_him_title || 'For Him';
   const forHimButtonText = campaignData?.for_him_button_text || 'SHOP DECANTS';
-  const forHimImage = campaignData?.for_him_image || IMAGES.campaigns.forHim;
+  // If the admin cleared the image, leave the frame empty (don't fall back to the template photo)
+  const forHimImage = campaignData ? (campaignData.for_him_image || '') : IMAGES.campaigns.forHim;
 
   const forHerTitle = campaignData?.for_her_title || 'For Her';
   const forHerButtonText = campaignData?.for_her_button_text || 'SHOP DECANTS';
-  const forHerImage = campaignData?.for_her_image || IMAGES.campaigns.forHer;
+  const forHerImage = campaignData ? (campaignData.for_her_image || '') : IMAGES.campaigns.forHer;
 
   return (
     <section
@@ -49,14 +50,16 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
               borderColor: 'var(--theme-border-subtle)',
             }}
           >
-            <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
-              <img
-                src={forHimImage}
-                alt={`${forHimTitle} luxury fragrance decants campaign set`}
-                className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-              />
+            <div className={`relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden ${forHimImage ? 'bg-zinc-900' : 'bg-[#f3f3f4]'}`}>
+              {forHimImage && (
+                <img
+                  src={forHimImage}
+                  alt={`${forHimTitle} luxury fragrance decants campaign set`}
+                  className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                />
+              )}
             </div>
 
             {/* Themed Lower Bar */}
@@ -86,14 +89,16 @@ export const CampaignBanners: React.FC<CampaignBannersProps> = ({ onSelectCatego
               borderColor: 'var(--theme-border-subtle)',
             }}
           >
-            <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-zinc-900">
-              <img
-                src={forHerImage}
-                alt={`${forHerTitle} luxury fragrance decants campaign vanity`}
-                className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-              />
+            <div className={`relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden ${forHerImage ? 'bg-zinc-900' : 'bg-[#f3f3f4]'}`}>
+              {forHerImage && (
+                <img
+                  src={forHerImage}
+                  alt={`${forHerTitle} luxury fragrance decants campaign vanity`}
+                  className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                />
+              )}
             </div>
 
             {/* Themed Lower Bar */}
