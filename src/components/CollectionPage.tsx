@@ -50,7 +50,7 @@ const CollectionProductCard: React.FC<{
       <div>
         {/* Product Image Stage */}
         <div
-          className="relative w-full aspect-square border p-3 flex items-center justify-center overflow-hidden mb-3 rounded-xs"
+          className="relative w-full aspect-square p-3 flex items-center justify-center overflow-hidden mb-3"
           style={{
             backgroundColor: 'var(--theme-surface)',
             borderColor: 'var(--theme-border-subtle)',
@@ -712,7 +712,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
       {/* 2. Collection Header Banner & Story */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div
-          className="relative border p-6 sm:p-10 shadow-xs overflow-hidden rounded-xs"
+          className="pp-noborder relative border p-6 sm:p-10 shadow-xs overflow-hidden rounded-xs"
           style={{
             backgroundColor: 'var(--theme-surface-card)',
             borderColor: 'var(--theme-border-subtle)',
@@ -760,7 +760,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Top Control Bar (Mobile filter toggle & Sorting dropdown) */}
         <div
-          className="border p-4 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 rounded-xs"
+          className="pp-noborder border p-4 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 rounded-xs"
           style={{
             backgroundColor: 'var(--theme-surface-card)',
             borderColor: 'var(--theme-border-subtle)',
@@ -812,7 +812,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
         {/* Active Filter Chips Bar */}
         {activeFilterCount > 0 && (
           <div
-            className="border p-3 mb-6 flex flex-wrap items-center gap-2 text-xs rounded-xs"
+            className="pp-noborder border p-3 mb-6 flex flex-wrap items-center gap-2 text-xs rounded-xs"
             style={{
               backgroundColor: 'var(--theme-surface-card)',
               borderColor: 'var(--theme-border-subtle)',
