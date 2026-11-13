@@ -13,7 +13,6 @@ import { SeasonsGallery } from './components/SeasonsGallery';
 import { VideoSection } from './components/VideoSection';
 import { CustomProductSections } from './components/CustomProductSections';
 import { TrustSection } from './components/TrustSection';
-import { FAQSection } from './components/FAQSection';
 import { ReviewsSection } from './components/ReviewsSection';
 import { StudioSection } from './components/StudioSection';
 import { JournalSection } from './components/JournalSection';
@@ -495,9 +494,6 @@ function StorefrontApp() {
               products={products}
               onNavigateToCollection={navigateToCollection}
             />
-
-            {/* I. Black FAQ section */}
-            <FAQSection faqs={homepageData?.faqs} />
 
             {/* J. Customer reviews section */}
             <ReviewsSection reviews={homepageData?.reviews} />

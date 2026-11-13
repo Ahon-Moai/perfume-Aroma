@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { FragranceProduct } from '../types';
 
 interface BrandItem {
@@ -242,40 +242,6 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
               </div>
             );
           })}
-        </div>
-
-        {/* Payments Verification Strip Styled with Accent */}
-        <div
-          className="mt-12 border-2 p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
-          style={{
-            backgroundColor: 'var(--theme-surface-card)',
-            borderColor: 'var(--theme-border)',
-          }}
-        >
-          <div className="space-y-1">
-            <p className="text-[9px] tracking-[0.2em] uppercase font-bold" style={{ color: 'var(--theme-primary)' }}>
-              SECURE PAYMENTS
-            </p>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4" style={{ color: 'var(--theme-primary)' }} />
-              <h4 className="font-sans text-sm font-black uppercase tracking-wider" style={{ color: 'var(--theme-primary)' }}>
-                Verified by SSLCommerz Bangladesh
-              </h4>
-            </div>
-            <p className="text-[11px] opacity-80 font-medium" style={{ color: 'var(--theme-text-secondary)' }}>
-              Visa · Mastercard · Amex · UnionPay · bKash · Nagad · Rocket · Upay + more
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono">
-            <span className="px-2.5 py-1 bg-white border font-bold text-[#1a1f71]" style={{ borderColor: 'var(--theme-border-subtle)' }}>VISA</span>
-            <span className="px-2.5 py-1 bg-white border font-bold text-[#eb001b]" style={{ borderColor: 'var(--theme-border-subtle)' }}>Mastercard</span>
-            <span className="px-2.5 py-1 bg-white border font-bold text-[#006fcf]" style={{ borderColor: 'var(--theme-border-subtle)' }}>AMEX</span>
-            <span className="px-2.5 py-1 bg-[#e2136e] text-white font-bold">bKash</span>
-            <span className="px-2.5 py-1 bg-[#f7931e] text-white font-bold">Nagad</span>
-            <span className="px-2.5 py-1 bg-[#8c3494] text-white font-bold">Rocket</span>
-            <span className="px-2.5 py-1 font-bold border" style={{ backgroundColor: 'var(--theme-surface)', borderColor: 'var(--theme-border)', color: 'var(--theme-primary)' }}>256-BIT SSL ENCRYPTION</span>
-          </div>
         </div>
 
       </div>
