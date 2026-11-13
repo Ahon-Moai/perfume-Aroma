@@ -36,24 +36,19 @@ interface PerfumeFinderProps {
 
 // 8 Questions Configuration
 const FRAGRANCE_FAMILIES = [
-  { id: 'Fresh & Aquatic', label: 'Fresh & Aquatic', desc: 'Ocean air, marine ozones, clean water' },
-  { id: 'Woody & Earthy', label: 'Woody & Earthy', desc: 'Cedarwood, sandalwood, vetiver, damp forest' },
-  { id: 'Sweet & Gourmand', label: 'Sweet & Gourmand', desc: 'Madagascar vanilla, toasted tonka, praline' },
-  { id: 'Floral', label: 'Floral', desc: 'Damask rose, white jasmine, luminous neroli' },
-  { id: 'Citrus & Zesty', label: 'Citrus & Zesty', desc: 'Calabrian bergamot, solar dew, crisp lemon' },
-  { id: 'Spicy & Warm', label: 'Spicy & Warm', desc: 'Cardamom, saffron, cinnamon, golden amber' },
-  { id: 'Musky', label: 'Musky', desc: 'White musk, cashmeran, clean skin intimacies' },
-  { id: 'Oud & Oriental', label: 'Oud & Oriental', desc: 'Smoked royal oud, incenses, dark resins' },
-  { id: 'Aromatic', label: 'Aromatic', desc: 'French lavender, clary sage, herbal vitality' }
+  { id: 'Fresh & Aquatic', label: 'Fresh', desc: 'Clean, citrus, ocean' },
+  { id: 'Sweet & Gourmand', label: 'Sweet', desc: 'Vanilla, caramel' },
+  { id: 'Floral', label: 'Floral', desc: 'Rose, jasmine' },
+  { id: 'Woody & Earthy', label: 'Woody', desc: 'Sandalwood, cedar' },
+  { id: 'Spicy & Warm', label: 'Warm & Spicy', desc: 'Amber, saffron' },
+  { id: 'Oud & Oriental', label: 'Oud', desc: 'Rich, smoky, Arabian' }
 ];
 
 const OCCASIONS = [
-  { id: 'Everyday / Casual', label: 'Everyday / Casual', desc: 'Versatile signature wear for daily routines' },
-  { id: 'Office / Professional', label: 'Office / Professional', desc: 'Crisp, inoffensive, composed sophistication' },
-  { id: 'Date Night', label: 'Date Night', desc: 'Intimate, warm, alluring sillage' },
-  { id: 'Parties & Events', label: 'Parties & Events', desc: 'Social energy, projecting and memorable' },
-  { id: 'Special Occasions', label: 'Special Occasions', desc: 'Black tie, weddings, galas, unforgettable milestones' },
-  { id: 'Gym / Outdoor', label: 'Gym / Outdoor', desc: 'Invigorating, light, fresh athletic endurance' }
+  { id: 'Everyday / Casual', label: 'Everyday', desc: '' },
+  { id: 'Office / Professional', label: 'Office', desc: '' },
+  { id: 'Date Night', label: 'Date night', desc: '' },
+  { id: 'Parties & Events', label: 'Party & events', desc: '' }
 ];
 
 const SEASONS = [
@@ -93,7 +88,8 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
   onAddToCart
 }) => {
   const [step, setStep] = useState<number>(1);
-  const totalSteps = 8;
+  // Kept short on purpose: 3 quick taps → matches
+  const totalSteps = 3;
 
   const [answers, setAnswers] = useState<FinderAnswers>({
     gender: undefined,
@@ -144,18 +140,21 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
 
   const handleGenderSelect = (val: string) => {
     setAnswers((prev) => ({ ...prev, gender: val }));
+    window.setTimeout(() => setStep(2), 220);
   };
 
   const handleFamilyToggle = (id: string) => {
     setAnswers((prev) => {
       const curr = prev.families || [];
-      const next = curr.includes(id) ? curr.filter((f) => f !== id) : [...curr, id];
+      const next = curr.includes(id) ? curr.filter((f) => f !== id) : [...curr.slice(-1), id]; // up to 2
       return { ...prev, families: next };
     });
   };
 
   const handleOccasionSelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, occasion: val }));
+    const next = { ...answers, occasion: val };
+    setAnswers(next);
+    window.setTimeout(() => executeAnalysis(next), 220);
   };
 
   const handleSeasonSelect = (val: string) => {
@@ -196,14 +195,15 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
     handleNext();
   };
 
-  const executeAnalysis = async () => {
+  const executeAnalysis = async (given?: FinderAnswers) => {
+    const use = given || answers;
     setIsAnalyzing(true);
     setAnalysisTextIndex(0);
 
     // Call API and give user a realistic luxury consultant feel
     const [recData] = await Promise.all([
-      getPerfumeRecommendations(answers),
-      new Promise((resolve) => setTimeout(resolve, 2200))
+      getPerfumeRecommendations(use),
+      new Promise((resolve) => setTimeout(resolve, 1200))
     ]);
 
     setIsAnalyzing(false);
@@ -363,7 +363,7 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
                     Question {step} of {totalSteps}
                   </span>
                   <span className="text-[11px] font-semibold tracking-wider uppercase text-zinc-700">
-                    {step === 2 ? 'Multiple Selections Allowed' : 'Select One Option'}
+                    {step === 2 ? 'Up to two' : 'Tap one'}
                   </span>
                 </div>
 
@@ -372,19 +372,19 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
                   <div className="space-y-4">
                     <div>
                       <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        Who are you shopping for?
+                        Who is it for?
                       </h3>
                       <p className="text-xs text-zinc-500 mt-1">
-                        Select who will be wearing this signature fragrance.
+                        Tap one.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <div className="grid grid-cols-2 gap-2.5 pt-2">
                       {[
-                        { id: 'For Him', label: 'For Him', desc: 'Masculine aromatic, smoky, woody notes' },
-                        { id: 'For Her', label: 'For Her', desc: 'Feminine luminous florals, gourmands, soft musks' },
-                        { id: 'Unisex', label: 'Unisex', desc: 'Universal artisanal blends, solar ambers, rich resins' },
-                        { id: "Doesn't matter", label: "Doesn't matter", desc: 'Open to discovering all magnificent creations' }
+                        { id: 'For Him', label: 'Him', desc: '' },
+                        { id: 'For Her', label: 'Her', desc: '' },
+                        { id: 'Unisex', label: 'Unisex', desc: '' },
+                        { id: "Doesn't matter", label: 'Anyone', desc: '' }
                       ].map((opt) => {
                         const isSelected = answers.gender === opt.id;
                         return (
@@ -417,14 +417,14 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
                   <div className="space-y-4">
                     <div>
                       <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        What kind of fragrance do you prefer?
+                        Which scent do you like?
                       </h3>
                       <p className="text-xs text-zinc-500 mt-1">
-                        Select one or more olfactory families that resonate with your taste.
+                        Pick one or two.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
                       {FRAGRANCE_FAMILIES.map((fam) => {
                         const isSelected = (answers.families || []).includes(fam.id);
                         return (
@@ -457,14 +457,14 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
                   <div className="space-y-4">
                     <div>
                       <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        When will you mostly wear it?
+                        Where will you wear it?
                       </h3>
                       <p className="text-xs text-zinc-500 mt-1">
-                        Different moments call for specific projection levels and scent profiles.
+                        Tap one — we’ll show your matches.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <div className="grid grid-cols-2 gap-2.5 pt-2">
                       {OCCASIONS.map((occ) => {
                         const isSelected = answers.occasion === occ.id;
                         return (
