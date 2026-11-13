@@ -462,3 +462,10 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 .pp-finder-hint__ok{align-self:flex-end;margin-top:4px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#111;font-weight:600;background:none;border:0;padding:2px 0;cursor:pointer}
 @keyframes ppHintIn{from{opacity:0;transform:translateY(8px)}}
 @media (prefers-reduced-motion: reduce){.pp-finder-hint{animation:none}}
+
+/* Help-me-choose quiz */
+.pp-quiz{animation:ppQuizUp .42s cubic-bezier(.2,.8,.2,1) both}
+.pp-quiz__in{animation:ppQuizIn .32s ease both}
+@keyframes ppQuizUp{from{transform:translateY(24px);opacity:0}}
+@keyframes ppQuizIn{from{opacity:0;transform:translateX(10px)}}
+@media (prefers-reduced-motion: reduce){.pp-quiz,.pp-quiz__in{animation:none}}

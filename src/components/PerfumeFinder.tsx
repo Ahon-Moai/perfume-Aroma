@@ -1,961 +1,217 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import {
-  Sparkles,
-  ArrowRight,
-  ArrowLeft,
-  X,
-  RotateCcw,
-  Check,
-  ShoppingBag,
-  ExternalLink,
-  Flame,
-  Clock,
-  Compass,
-  Calendar,
-  Layers,
-  HeartHandshake,
-  DollarSign,
-  AlertCircle
-} from 'lucide-react';
-import {
-  FinderAnswers,
-  FinderMetadata,
-  RecommendationResponse,
-  RecommendedPerfume,
-  FragranceProduct
-} from '../types';
-import { fetchFinderMetadata, getPerfumeRecommendations } from '../services/api';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { FragranceProduct } from '../types';
+import { categoryOf } from '../lib/brandCategory';
+
+/**
+ * "Help me choose" — 5 quick taps, 6 picks (3 Middle Eastern, 2 Designer, 1 Niche).
+ * Same quiz as the Perfume Price List page, running on the website's catalogue.
+ */
 
 interface PerfumeFinderProps {
   isOpen: boolean;
   onClose: () => void;
   onNavigateToProduct: (product: FragranceProduct | string) => void;
   onAddToCart: (product: FragranceProduct, size: string, price: number, qty?: number) => void;
+  products?: FragranceProduct[];
 }
 
-// 8 Questions Configuration
-const FRAGRANCE_FAMILIES = [
-  { id: 'Fresh & Aquatic', label: 'Fresh', desc: 'Clean, citrus, ocean' },
-  { id: 'Sweet & Gourmand', label: 'Sweet', desc: 'Vanilla, caramel' },
-  { id: 'Floral', label: 'Floral', desc: 'Rose, jasmine' },
-  { id: 'Woody & Earthy', label: 'Woody', desc: 'Sandalwood, cedar' },
-  { id: 'Spicy & Warm', label: 'Warm & Spicy', desc: 'Amber, saffron' },
-  { id: 'Oud & Oriental', label: 'Oud', desc: 'Rich, smoky, Arabian' }
+type Opt = [string, string, string?];
+const QZ: { k: string; t: string; o: Opt[] }[] = [
+  { k: 'who', t: 'Who is it for?', o: [['her', 'For me — I like feminine scents'], ['him', 'For me — I like masculine scents'], ['gher', 'A gift for her'], ['ghim', 'A gift for him'], ['any', 'Doesn’t matter']] },
+  { k: 'smell', t: 'Which smell do you like most?', o: [['fresh', 'Fresh & clean', 'citrus, sea, after-shower'], ['sweet', 'Sweet & cozy', 'vanilla, caramel, candy'], ['floral', 'Soft & floral', 'rose, jasmine, powdery'], ['warm', 'Warm & strong', 'spicy, amber, oud'], ['woody', 'Woody & classy', 'woods, leather, vetiver']] },
+  { k: 'when', t: 'When will you wear it most?', o: [['day', 'Daily — class, office, outside'], ['night', 'Evenings — dates, parties, dawat'], ['both', 'Both']] },
+  { k: 'sea', t: 'Which weather?', o: [['hot', 'Hot days (summer)'], ['cool', 'Cool days (winter)'], ['all', 'All year']] },
+  { k: 'bud', t: 'Your budget for a 3–5 ml decant?', o: [['b1', 'Up to ৳300'], ['b2', '৳300 – ৳600'], ['b3', 'Above ৳600 is fine']] },
 ];
 
-const OCCASIONS = [
-  { id: 'Everyday / Casual', label: 'Everyday', desc: '' },
-  { id: 'Office / Professional', label: 'Office', desc: '' },
-  { id: 'Date Night', label: 'Date night', desc: '' },
-  { id: 'Parties & Events', label: 'Party & events', desc: '' }
-];
+// Words found in the site's scent families, per answer
+const FAMQ: Record<string, string[]> = {
+  fresh: ['fresh', 'citrus', 'aquatic', 'marine', 'aromatic', 'herbal', 'green', 'lavender'],
+  sweet: ['gourmand', 'sweet', 'vanilla', 'caramel', 'fruity', 'coffee', 'cacao', 'honey'],
+  floral: ['floral', 'rose', 'jasmine', 'powder', 'musk'],
+  warm: ['amber', 'oriental', 'spicy', 'oud', 'tobacco', 'leather', 'smoky'],
+  woody: ['woody', 'wood', 'earthy', 'leather', 'oud', 'vetiver', 'cedar'],
+};
+const HEAVY = ['amber', 'oriental', 'spicy', 'oud', 'tobacco', 'leather', 'gourmand', 'vanilla'];
+const LIGHT = ['fresh', 'citrus', 'aquatic', 'marine', 'aromatic', 'musk'];
 
-const SEASONS = [
-  { id: 'Summer', label: 'Summer', desc: 'Light, effervescent, cooling citrus and aquatic accords' },
-  { id: 'Winter', label: 'Winter', desc: 'Deep, enveloping amber, vanilla, rich woods & spices' },
-  { id: 'Spring', label: 'Spring', desc: 'Fresh floral blooms, green moss, dew and crisp air' },
-  { id: 'Autumn', label: 'Autumn', desc: 'Smoked leaves, cinnamon, golden amber, earthy resins' },
-  { id: 'All Seasons', label: 'All Seasons', desc: 'Versatile year-round signature versatility' }
-];
+const famsOf = (p: FragranceProduct) =>
+  ((p.scentProfile || p.scent_profile)?.fragranceFamilies || []).map((f) => String(f).toLowerCase());
+const seasonsOf = (p: FragranceProduct) =>
+  ((p.scentProfile || p.scent_profile)?.seasons || []).map((s) => String(s).toLowerCase());
+const has = (f: string, words: string[]) => words.some((w) => f.includes(w));
+const ml = (s: string) => parseFloat(String(s).replace(/[^\d.]/g, ''));
 
-const INTENSITIES = [
-  { id: 'Light & Subtle', label: 'Light & Subtle', desc: 'Close skin-scent, delicate and personal' },
-  { id: 'Moderate & Balanced', label: 'Moderate & Balanced', desc: 'Noticeable at conversational arm’s length' },
-  { id: 'Strong & Noticeable', label: 'Strong & Noticeable', desc: 'Leaves a distinct sillage trail as you move' },
-  { id: 'Beast Mode / Powerful Projection', label: 'Beast Mode / Powerful', desc: 'Dominates the room with formidable projection' }
-];
+function minPrice(p: FragranceProduct): number | null {
+  const open = (p.sizes || []).filter((s: any) => !s.soldOut && s.price > 0);
+  const small = open.filter((s) => [3, 5].includes(ml(s.size))).map((s) => s.price);
+  if (small.length) return Math.min(...small);
+  const all = open.map((s) => s.price);
+  return all.length ? Math.min(...all) : null;
+}
 
-const LONGEVITIES = [
-  { id: '2–4 Hours', label: '2–4 Hours', desc: 'Light eau de cologne or subtle freshener' },
-  { id: '4–6 Hours', label: '4–6 Hours', desc: 'Balanced daytime eau de toilette longevity' },
-  { id: '6–8 Hours', label: '6–8 Hours', desc: 'Full workday durability without re-spraying' },
-  { id: '8+ Hours', label: '8+ Hours', desc: 'Concentrated extrait lasting morning through night' }
-];
+function pick(products: FragranceProduct[], A: Record<string, string>): FragranceProduct[] {
+  const g = A.who === 'her' || A.who === 'gher' ? 'Her' : A.who === 'him' || A.who === 'ghim' ? 'Him' : null;
+  const words = FAMQ[A.smell] || [];
+  const scored: [FragranceProduct, number][] = [];
+  for (const p of products) {
+    const fams = famsOf(p);
+    const mp = minPrice(p);
+    if (!fams.length || mp == null) continue;
+    const pg = p.gender || 'Unisex';
+    if (g && pg !== g && pg !== 'Unisex') continue;
+    if (A.bud === 'b1' && mp > 300) continue;
+    if (A.bud === 'b2' && mp > 600) continue;
+    let sc = 0;
+    fams.forEach((f, i) => { if (has(f, words)) sc += (1 / (i + 1)) * (i === 0 ? 1.6 : 1); });
+    if (sc <= 0) continue;
+    const w = seasonsOf(p);
+    const all = w.some((s) => s.includes('all'));
+    if (A.sea === 'hot') sc += all || w.includes('summer') || w.includes('spring') ? 0.5 : -0.4;
+    if (A.sea === 'cool') sc += all || w.includes('winter') || w.includes('autumn') || w.includes('fall') ? 0.5 : -0.4;
+    const top = fams.slice(0, 2);
+    if (A.when === 'day') sc += top.some((f) => has(f, LIGHT)) ? 0.3 : top.some((f) => has(f, HEAVY)) ? -0.25 : 0;
+    if (A.when === 'night') sc += top.some((f) => has(f, HEAVY)) ? 0.3 : 0;
+    if (g && pg === g) sc += 0.15;
+    if (A.bud === 'b3' && categoryOf(p.brand) === 'Designer') sc += 0.2;
+    scored.push([p, sc]);
+  }
+  scored.sort((a, b) => b[1] - a[1]);
+  const ord = g ? scored.filter((o) => o[0].gender === g).concat(scored.filter((o) => o[0].gender !== g)) : scored;
+  const brands: Record<string, number> = {};
+  const G: Record<string, FragranceProduct[]> = { Arabian: [], Designer: [], Niche: [] };
+  const CAP: Record<string, number> = { Arabian: 3, Designer: 2, Niche: 1 };
+  const rest: FragranceProduct[] = [];
+  for (const [p] of ord) {
+    const b = p.brand || '';
+    if ((brands[b] || 0) >= 2) continue;
+    const t = categoryOf(p.brand);
+    if (G[t].length < CAP[t]) { G[t].push(p); brands[b] = (brands[b] || 0) + 1; }
+    else if (rest.length < 6) rest.push(p);
+    if (G.Arabian.length === 3 && G.Designer.length === 2 && G.Niche.length === 1) break;
+  }
+  const out = G.Arabian.concat(G.Designer, G.Niche);
+  for (const p of rest) { if (out.length >= 6) break; if (!out.includes(p)) out.push(p); }
+  const RK: Record<string, number> = { Arabian: 0, Designer: 1, Niche: 2 };
+  return out.sort((x, y) => RK[categoryOf(x.brand)] - RK[categoryOf(y.brand)]);
+}
 
-const EXPERIENCES = [
-  { id: 'Something Safe & Crowd-Pleasing', label: 'Safe & Crowd-Pleasing', desc: 'Universal appeal, universally admired' },
-  { id: 'Something Unique & Different', label: 'Unique & Different', desc: 'Niche, intriguing and unconventional note blends' },
-  { id: 'Compliment Getter', label: 'Compliment Getter', desc: 'Engineered for head-turns and spontaneous praise' },
-  { id: 'Luxury & Sophisticated', label: 'Luxury & Sophisticated', desc: 'Opulent, aristocratic, regal quiet luxury' },
-  { id: 'Bold & Attention-Grabbing', label: 'Bold & Attention-Grabbing', desc: 'Unapologetic, potent, unmistakable presence' }
-];
+const LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
 
-export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({
-  isOpen,
-  onClose,
-  onNavigateToProduct,
-  onAddToCart
-}) => {
-  const [step, setStep] = useState<number>(1);
-  // Kept short on purpose: 3 quick taps → matches
-  const totalSteps = 3;
+export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, onNavigateToProduct, products = [] }) => {
+  const [step, setStep] = useState(0);
+  const [A, setA] = useState<Record<string, string>>({});
 
-  const [answers, setAnswers] = useState<FinderAnswers>({
-    gender: undefined,
-    families: [],
-    occasion: undefined,
-    season: undefined,
-    intensity: undefined,
-    longevity: undefined,
-    budget: undefined,
-    experience: undefined
-  });
-
-  const [metadata, setMetadata] = useState<FinderMetadata | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-  const [analysisTextIndex, setAnalysisTextIndex] = useState<number>(0);
-  const [results, setResults] = useState<RecommendationResponse | null>(null);
-  const [selectedVariants, setSelectedVariants] = useState<{ [productId: string]: string }>({});
-
-  const analysisPhases = [
-    'Consulting artisanal master formulas...',
-    'Analyzing olfactory pyramid preferences...',
-    'Evaluating skin longevity & seasonal projection...',
-    'Cross-referencing live decant inventory...',
-    'Finalizing your personalized compatibility scores...'
-  ];
-
-  // Fetch metadata on mount
+  useEffect(() => { if (isOpen) { setStep(0); setA({}); } }, [isOpen]);
   useEffect(() => {
-    if (isOpen) {
-      fetchFinderMetadata().then((data) => {
-        if (data) setMetadata(data);
-      });
-    }
-  }, [isOpen]);
+    if (!isOpen) return;
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, [isOpen, onClose]);
 
-  // Intermediate Analysis Animation effect
-  useEffect(() => {
-    let interval: any;
-    if (isAnalyzing) {
-      interval = setInterval(() => {
-        setAnalysisTextIndex((prev) => (prev + 1) % analysisPhases.length);
-      }, 700);
-    }
-    return () => clearInterval(interval);
-  }, [isAnalyzing]);
-
+  const results = useMemo(() => (step >= QZ.length ? pick(products, A) : []), [step, A, products]);
   if (!isOpen) return null;
 
-  const handleGenderSelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, gender: val }));
-    window.setTimeout(() => setStep(2), 220);
-  };
-
-  const handleFamilyToggle = (id: string) => {
-    setAnswers((prev) => {
-      const curr = prev.families || [];
-      const next = curr.includes(id) ? curr.filter((f) => f !== id) : [...curr.slice(-1), id]; // up to 2
-      return { ...prev, families: next };
-    });
-  };
-
-  const handleOccasionSelect = (val: string) => {
-    const next = { ...answers, occasion: val };
-    setAnswers(next);
-    window.setTimeout(() => executeAnalysis(next), 220);
-  };
-
-  const handleSeasonSelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, season: val }));
-  };
-
-  const handleIntensitySelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, intensity: val }));
-  };
-
-  const handleLongevitySelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, longevity: val }));
-  };
-
-  const handleBudgetSelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, budget: val }));
-  };
-
-  const handleExperienceSelect = (val: string) => {
-    setAnswers((prev) => ({ ...prev, experience: val }));
-  };
-
-  const handleNext = () => {
-    if (step < totalSteps) {
-      setStep((prev) => prev + 1);
-    } else {
-      executeAnalysis();
-    }
-  };
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep((prev) => prev - 1);
-    }
-  };
-
-  const handleSkip = () => {
-    handleNext();
-  };
-
-  const executeAnalysis = async (given?: FinderAnswers) => {
-    const use = given || answers;
-    setIsAnalyzing(true);
-    setAnalysisTextIndex(0);
-
-    // Call API and give user a realistic luxury consultant feel
-    const [recData] = await Promise.all([
-      getPerfumeRecommendations(use),
-      new Promise((resolve) => setTimeout(resolve, 1200))
-    ]);
-
-    setIsAnalyzing(false);
-    if (recData) {
-      setResults(recData);
-      // Pre-select first purchasable size for each recommended product
-      const defaults: { [id: string]: string } = {};
-      recData.recommendations.forEach((p) => {
-        if (p.sizes && p.sizes.length > 0) {
-          defaults[p.id] = p.sizes[0].size;
-        }
-      });
-      setSelectedVariants(defaults);
-      setStep(totalSteps + 1); // Go to results view
-    }
-  };
-
-  const handleReset = () => {
-    setStep(1);
-    setResults(null);
-    setAnswers({
-      gender: undefined,
-      families: [],
-      occasion: undefined,
-      season: undefined,
-      intensity: undefined,
-      longevity: undefined,
-      budget: undefined,
-      experience: undefined
-    });
-  };
-
-  // Check whether current step has a selection
-  const canContinue = () => {
-    switch (step) {
-      case 1:
-        return !!answers.gender;
-      case 2:
-        return (answers.families || []).length > 0;
-      case 3:
-        return !!answers.occasion;
-      case 4:
-        return !!answers.season;
-      case 5:
-        return !!answers.intensity;
-      case 6:
-        return !!answers.longevity;
-      case 7:
-        return !!answers.budget;
-      case 8:
-        return !!answers.experience;
-      default:
-        return true;
-    }
-  };
+  const answer = (k: string, v: string) => { setA((a) => ({ ...a, [k]: v })); setStep((s) => s + 1); };
+  const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/45 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="relative w-full max-w-3xl bg-white text-zinc-950 border border-zinc-200 shadow-2xl flex flex-col min-h-[580px] max-h-[92vh] overflow-hidden my-auto rounded-none"
-        style={{
-          backgroundColor: 'var(--theme-surface, #FFFFFF)',
-          color: 'var(--theme-primary, #111111)',
-          borderColor: 'var(--theme-border, #E5E5E5)'
-        }}
+        className="pp-quiz relative w-full sm:max-w-md max-h-[92vh] overflow-y-auto bg-white text-neutral-950 rounded-t-[28px] sm:rounded-[28px] px-5 pt-3 pb-7"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-label="Help me choose"
       >
-        {/* Top Header */}
-        <div
-          className="flex items-center justify-between px-6 py-4 border-b shrink-0"
-          style={{ borderColor: 'var(--theme-border-subtle, #EAEAEA)' }}
-        >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-zinc-950 text-white flex items-center justify-center shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            </div>
-            <div>
-              <h2 className="font-serif text-base sm:text-lg tracking-tight uppercase font-medium">
-                Fragrance Consultant
-              </h2>
-              <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono">
-                Intelligent Rule-Based Olfactory Engine
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {step > totalSteps && (
-              <button
-                onClick={handleReset}
-                className="text-xs font-semibold uppercase tracking-wider text-zinc-600 hover:text-black flex items-center gap-1.5 px-3 py-1.5 border border-zinc-300 hover:border-black transition-colors cursor-pointer"
-                title="Start a new fragrance consultation"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Retake</span>
-              </button>
-            )}
-            <button
-              onClick={onClose}
-              className="p-1.5 text-zinc-500 hover:text-zinc-950 transition-colors cursor-pointer"
-              aria-label="Close fragrance finder"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Progress Bar (Only during question stages) */}
-        {step <= totalSteps && !isAnalyzing && (
-          <div className="w-full bg-zinc-100 h-1 shrink-0">
-            <motion.div
-              className="bg-zinc-950 h-1"
-              initial={{ width: 0 }}
-              animate={{ width: `${(step / totalSteps) * 100}%` }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-        )}
-
-        {/* Modal Body Container */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col justify-between">
-          <AnimatePresence mode="wait">
-            {/* Intermediate Luxury Analysis Screen */}
-            {isAnalyzing ? (
-              <motion.div
-                key="analyzing-state"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex-1 flex flex-col items-center justify-center text-center py-16 space-y-6"
-              >
-                <div className="relative">
-                  <div className="w-20 h-20 rounded-full border-2 border-zinc-200 border-t-zinc-950 animate-spin flex items-center justify-center" />
-                  <Sparkles className="w-7 h-7 text-amber-500 absolute inset-0 m-auto animate-pulse" />
-                </div>
-                <div className="space-y-2 max-w-sm">
-                  <h3 className="font-serif text-2xl tracking-tight font-normal">
-                    Crafting Your Profile
-                  </h3>
-                  <p className="text-xs tracking-wider uppercase font-mono text-zinc-500 h-6">
-                    {analysisPhases[analysisTextIndex]}
-                  </p>
-                </div>
-              </motion.div>
-            ) : step <= totalSteps ? (
-              /* Questions 1 - 8 */
-              <motion.div
-                key={`question-${step}`}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.25 }}
-                className="space-y-6 flex-1 flex flex-col"
-              >
-                {/* Step Subheader */}
-                <div className="flex items-center justify-between border-b pb-3 border-zinc-100">
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-400">
-                    Question {step} of {totalSteps}
-                  </span>
-                  <span className="text-[11px] font-semibold tracking-wider uppercase text-zinc-700">
-                    {step === 2 ? 'Up to two' : 'Tap one'}
-                  </span>
-                </div>
-
-                {/* Question 1: Target User */}
-                {step === 1 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        Who is it for?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Tap one.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2.5 pt-2">
-                      {[
-                        { id: 'For Him', label: 'Him', desc: '' },
-                        { id: 'For Her', label: 'Her', desc: '' },
-                        { id: 'Unisex', label: 'Unisex', desc: '' },
-                        { id: "Doesn't matter", label: 'Anyone', desc: '' }
-                      ].map((opt) => {
-                        const isSelected = answers.gender === opt.id;
-                        return (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            onClick={() => handleGenderSelect(opt.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-lg font-medium">{opt.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {opt.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 2: Fragrance Family (Multi-Select) */}
-                {step === 2 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        Which scent do you like?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Pick one or two.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
-                      {FRAGRANCE_FAMILIES.map((fam) => {
-                        const isSelected = (answers.families || []).includes(fam.id);
-                        return (
-                          <button
-                            key={fam.id}
-                            type="button"
-                            onClick={() => handleFamilyToggle(fam.id)}
-                            className={`p-3 text-left border transition-all cursor-pointer flex flex-col justify-between min-h-[82px] ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-sm'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full">
-                              <span className="font-serif text-sm font-semibold">{fam.label}</span>
-                              {isSelected && <Check className="w-3.5 h-3.5 text-amber-300" />}
-                            </div>
-                            <span className={`text-[10px] mt-1 leading-tight ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {fam.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 3: Occasion */}
-                {step === 3 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        Where will you wear it?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Tap one — we’ll show your matches.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2.5 pt-2">
-                      {OCCASIONS.map((occ) => {
-                        const isSelected = answers.occasion === occ.id;
-                        return (
-                          <button
-                            key={occ.id}
-                            type="button"
-                            onClick={() => handleOccasionSelect(occ.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-base font-semibold">{occ.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {occ.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 4: Season */}
-                {step === 4 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        Which season do you prefer wearing it in?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Temperature and humidity deeply influence how fragrance molecules evolve.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      {SEASONS.map((sea) => {
-                        const isSelected = answers.season === sea.id;
-                        return (
-                          <button
-                            key={sea.id}
-                            type="button"
-                            onClick={() => handleSeasonSelect(sea.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-base font-semibold">{sea.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {sea.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 5: Intensity */}
-                {step === 5 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        What intensity do you prefer?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        From intimate skin scents to formidable room-filling presence.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      {INTENSITIES.map((int) => {
-                        const isSelected = answers.intensity === int.id;
-                        return (
-                          <button
-                            key={int.id}
-                            type="button"
-                            onClick={() => handleIntensitySelect(int.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-base font-semibold">{int.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {int.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 6: Longevity */}
-                {step === 6 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        What is your preferred longevity?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        How many hours do you wish the perfume dry-down to linger on skin?
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      {LONGEVITIES.map((lon) => {
-                        const isSelected = answers.longevity === lon.id;
-                        return (
-                          <button
-                            key={lon.id}
-                            type="button"
-                            onClick={() => handleLongevitySelect(lon.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-base font-semibold">{lon.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {lon.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 7: Budget */}
-                {step === 7 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        What's your budget?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        Calculated dynamically from our active decant catalog prices (in {metadata?.currency || 'BDT'}).
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      {[
-                        {
-                          id: 'budget',
-                          label: metadata?.budget_tiers?.budget?.label || 'Budget-friendly',
-                          desc: metadata?.budget_tiers?.budget?.description || 'Under ৳ 450'
-                        },
-                        {
-                          id: 'mid',
-                          label: metadata?.budget_tiers?.mid?.label || 'Mid-range',
-                          desc: metadata?.budget_tiers?.mid?.description || '৳ 450 – ৳ 580'
-                        },
-                        {
-                          id: 'premium',
-                          label: metadata?.budget_tiers?.premium?.label || 'Premium',
-                          desc: metadata?.budget_tiers?.premium?.description || 'Above ৳ 580'
-                        },
-                        {
-                          id: 'any',
-                          label: metadata?.budget_tiers?.any?.label || 'No Budget Limit',
-                          desc: metadata?.budget_tiers?.any?.description || 'Show me the best match regardless of price'
-                        }
-                      ].map((bgt) => {
-                        const isSelected = answers.budget === bgt.id;
-                        return (
-                          <button
-                            key={bgt.id}
-                            type="button"
-                            onClick={() => handleBudgetSelect(bgt.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-base font-semibold">{bgt.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {bgt.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Question 8: Experience */}
-                {step === 8 && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl font-normal text-zinc-950">
-                        What kind of fragrance experience are you looking for?
-                      </h3>
-                      <p className="text-xs text-zinc-500 mt-1">
-                        The emotional impression and olfactory character you want to project.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                      {EXPERIENCES.map((exp) => {
-                        const isSelected = answers.experience === exp.id;
-                        return (
-                          <button
-                            key={exp.id}
-                            type="button"
-                            onClick={() => handleExperienceSelect(exp.id)}
-                            className={`p-4 text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                              isSelected
-                                ? 'border-zinc-950 bg-zinc-950 text-white shadow-md'
-                                : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full mb-1">
-                              <span className="font-serif text-base font-semibold">{exp.label}</span>
-                              {isSelected && <Check className="w-4 h-4 text-amber-300" />}
-                            </div>
-                            <span className={`text-[11px] ${isSelected ? 'text-zinc-300' : 'text-zinc-500'}`}>
-                              {exp.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            ) : (
-              /* Step 9+: Results View */
-              <motion.div
-                key="results-screen"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-8 flex-1"
-              >
-                {/* Heading & Profile Summary */}
-                <div className="text-center max-w-xl mx-auto space-y-2 border-b pb-6 border-zinc-200">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-800 text-[10px] font-mono tracking-widest uppercase mb-1">
-                    <Sparkles className="w-3 h-3 text-amber-500" />
-                    <span>Personal Fragrance Profile Match</span>
-                  </div>
-                  <h3 className="font-serif text-3xl sm:text-4xl text-zinc-950 font-normal">
-                    Your Fragrance Profile
-                  </h3>
-                  <p className="text-xs sm:text-sm text-zinc-600 font-sans leading-relaxed">
-                    Based on your preferences, we've found fragrances from our authentic decant collection that perfectly match your personality and lifestyle.
-                  </p>
-                  {results?.profileSummary && (
-                    <p className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 pt-1">
-                      {results.profileSummary}
-                    </p>
-                  )}
-
-                  {results?.fallbackApplied && (
-                    <div className="mt-3 p-3 bg-amber-50 border border-amber-200 text-amber-900 text-xs text-left flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
-                      <div>
-                        <span className="font-semibold block">Alternative Matches Displayed</span>
-                        <span>
-                          Some criteria were gently broadened to ensure only 100% available and authentic decants are recommended.
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Recommendations List (Top 3-5) */}
-                {results?.recommendations && results.recommendations.length > 0 ? (
-                  <div className="space-y-6">
-                    {results.recommendations.map((perfume, idx) => {
-                      const activeSize = selectedVariants[perfume.id] || (perfume.sizes?.[0]?.size ?? '5ml');
-                      const activeVariant = perfume.sizes?.find((s) => s.size === activeSize) || perfume.sizes?.[0];
-                      const currentPrice = activeVariant ? activeVariant.price : perfume.startingPrice;
-
-                      return (
-                        <div
-                          key={perfume.id}
-                          className="border border-zinc-200 bg-white p-4 sm:p-6 flex flex-col md:flex-row gap-6 hover:shadow-lg transition-shadow relative"
-                        >
-                          {/* Rank & Compatibility Badge */}
-                          <div className="absolute top-4 right-4 flex items-center gap-2">
-                            <span className="bg-zinc-950 text-white text-xs font-mono font-bold px-2.5 py-1 tracking-wider uppercase border border-zinc-800">
-                              {perfume.compatibilityScore}% Match
-                            </span>
-                          </div>
-
-                          {/* Left: Product Imagery */}
-                          <div className="w-full md:w-44 h-48 md:h-auto bg-zinc-50 border border-zinc-100 p-3 shrink-0 flex items-center justify-center relative">
-                            <span className="absolute top-2 left-2 text-[10px] font-mono text-zinc-400">
-                              #{idx + 1}
-                            </span>
-                            <img
-                              src={perfume.image}
-                              alt={perfume.name}
-                              className="max-h-40 max-w-full object-contain mix-blend-multiply"
-                            />
-                          </div>
-
-                          {/* Right: Olfactory Details & Actions */}
-                          <div className="flex-1 flex flex-col justify-between space-y-4">
-                            <div>
-                              <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono">
-                                {perfume.brand} · {perfume.concentration || 'Eau de Parfum'}
-                              </p>
-                              <h4 className="font-serif text-xl sm:text-2xl text-zinc-950 font-normal">
-                                {perfume.name}
-                              </h4>
-                              <p className="text-xs text-zinc-500 font-mono mt-0.5">
-                                Family: <span className="text-zinc-800 font-sans font-medium">{perfume.fragranceFamily}</span>
-                              </p>
-
-                              {/* Why it Matches Card */}
-                              <div className="mt-3 p-3 bg-zinc-50 border border-zinc-200/80 text-xs text-zinc-800 leading-relaxed font-sans">
-                                <span className="font-bold text-zinc-950 block text-[11px] uppercase tracking-wider mb-0.5">
-                                  Why This Matches You:
-                                </span>
-                                {perfume.whyMatches || perfume.explanation}
-                              </div>
-
-                              {/* Accords Preview */}
-                              {perfume.accords && perfume.accords.length > 0 && (
-                                <div className="mt-3 flex flex-wrap gap-1.5 items-center">
-                                  <span className="text-[10px] uppercase font-mono text-zinc-400 mr-1">Accords:</span>
-                                  {perfume.accords.slice(0, 4).map((acc, aIdx) => (
-                                    <span
-                                      key={aIdx}
-                                      style={{ backgroundColor: acc.color ? `${acc.color}33` : '#f4f4f4', borderColor: acc.color || '#ccc' }}
-                                      className="px-2 py-0.5 text-[10px] border font-medium text-zinc-900 uppercase"
-                                    >
-                                      {acc.name}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-
-                              {/* Longevity & Projection Tags */}
-                              <div className="mt-2.5 flex items-center gap-4 text-[11px] text-zinc-500 font-mono">
-                                <span>Longevity: <strong className="text-zinc-800 font-sans">{perfume.longevity}</strong></span>
-                                <span>·</span>
-                                <span>Projection: <strong className="text-zinc-800 font-sans">{perfume.projection}</strong></span>
-                              </div>
-                            </div>
-
-                            {/* Bottom: Decant Size Selector, Price & CTA Buttons */}
-                            <div className="pt-3 border-t border-zinc-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                              {/* Decant Size Selector */}
-                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-mono">Size:</span>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {perfume.sizes.map((s) => (
-                                    <button
-                                      key={s.size}
-                                      onClick={() => setSelectedVariants((prev) => ({ ...prev, [perfume.id]: s.size }))}
-                                      className={`px-2.5 py-1 text-xs font-mono uppercase border transition-colors cursor-pointer ${
-                                        activeSize === s.size
-                                          ? 'border-zinc-950 bg-zinc-950 text-white font-bold'
-                                          : 'border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400'
-                                      }`}
-                                    >
-                                      {s.size}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {/* Price & Action Buttons */}
-                              <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
-                                <div className="text-right">
-                                  <span className="text-base sm:text-lg font-mono font-bold text-zinc-950">
-                                    ৳ {currentPrice}
-                                  </span>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                  <button
-                                    onClick={() => {
-                                      onClose();
-                                      onNavigateToProduct(perfume);
-                                    }}
-                                    className="p-2 border border-zinc-300 hover:border-zinc-950 text-zinc-700 hover:text-black transition-colors cursor-pointer"
-                                    title="View Product Details"
-                                  >
-                                    <ExternalLink className="w-4 h-4" />
-                                  </button>
-
-                                  <button
-                                    onClick={() => {
-                                      onAddToCart(perfume, activeSize, currentPrice, 1);
-                                    }}
-                                    className="px-4 py-2 bg-zinc-950 text-white hover:bg-amber-400 hover:text-black text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1.5"
-                                  >
-                                    <ShoppingBag className="w-3.5 h-3.5" />
-                                    <span>Add Decant</span>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  /* Zero Match Fallback */
-                  <div className="p-8 text-center bg-zinc-50 border border-zinc-200 space-y-4">
-                    <AlertCircle className="w-10 h-10 mx-auto text-zinc-400" />
-                    <h4 className="font-serif text-xl font-normal text-zinc-900">
-                      No Exact Inventory Matches Found
-                    </h4>
-                    <p className="text-xs text-zinc-600 max-w-md mx-auto">
-                      All decants matching your precise constraints are currently reserved or out of stock. Try broadening your preferences or exploring our complete catalog.
-                    </p>
-                    <button
-                      onClick={handleReset}
-                      className="px-6 py-2.5 bg-zinc-950 text-white hover:bg-zinc-800 text-xs uppercase tracking-wider font-semibold cursor-pointer"
-                    >
-                      Adjust Preferences
-                    </button>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Modal Bottom Controls (During Question Flow) */}
-        {step <= totalSteps && !isAnalyzing && (
-          <div
-            className="px-6 py-4 border-t flex items-center justify-between shrink-0 bg-white"
-            style={{ borderColor: 'var(--theme-border-subtle, #EAEAEA)' }}
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-neutral-200 sm:hidden" />
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setStep((s) => Math.max(0, s - 1))}
+            aria-label="Back"
+            className={`w-9 h-9 -ml-2 flex items-center justify-center rounded-full text-neutral-600 ${step === 0 || step >= QZ.length ? 'invisible' : ''}`}
           >
-            {/* Back Button */}
-            {step > 1 ? (
-              <button
-                type="button"
-                onClick={handleBack}
-                className="px-4 py-2 border border-zinc-200 hover:border-zinc-400 text-xs uppercase tracking-wider font-semibold text-zinc-700 transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back</span>
-              </button>
-            ) : (
-              <div />
-            )}
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <span className="text-[10px] font-semibold tracking-[0.3em] text-neutral-500 uppercase">Help me choose</span>
+          <button onClick={onClose} aria-label="Close" className="w-9 h-9 -mr-2 flex items-center justify-center rounded-full text-neutral-600">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-            {/* Right: Skip and Continue */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleSkip}
-                className="px-3 py-2 text-xs uppercase tracking-wider text-zinc-500 hover:text-zinc-950 transition-colors cursor-pointer mr-1"
-              >
-                Skip Question
-              </button>
-
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={!canContinue()}
-                className={`px-6 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
-                  canContinue()
-                    ? 'bg-zinc-950 text-white hover:bg-amber-400 hover:text-black shadow-sm'
-                    : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
-                }`}
-              >
-                <span>{step === totalSteps ? 'Reveal Matches' : 'Continue'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+        {step < QZ.length ? (
+          <div key={step} className="pp-quiz__in">
+            <div className="flex gap-1.5 mt-4">
+              {QZ.map((_, i) => (
+                <i key={i} className={`h-[3px] flex-1 rounded-full ${i <= step ? 'bg-neutral-900' : 'bg-neutral-200'}`} />
+              ))}
             </div>
+            <p className="mt-5 text-xs font-medium text-neutral-500">{step + 1} of {QZ.length}</p>
+            <h3 style={serif} className="mt-1 text-[30px] leading-[1.1] font-semibold">{QZ[step].t}</h3>
+            <div className="mt-5 flex flex-col gap-2">
+              {QZ[step].o.map(([v, label, hint]) => (
+                <button
+                  key={v}
+                  onClick={() => answer(QZ[step].k, v)}
+                  className={`flex items-center justify-between gap-3 text-left rounded-2xl px-4 py-3.5 bg-neutral-50 hover:bg-neutral-100 active:scale-[.99] transition ${A[QZ[step].k] === v ? 'ring-1 ring-neutral-900' : ''}`}
+                >
+                  <span>
+                    <span className="block text-[15px] font-semibold">{label}</span>
+                    {hint && <span className="block text-xs text-neutral-500 mt-0.5">{hint}</span>}
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-neutral-400 shrink-0" />
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="pp-quiz__in">
+            <p className="mt-5 text-xs font-medium text-neutral-500">Your picks</p>
+            <h3 style={serif} className="mt-1 text-[30px] leading-[1.1] font-semibold">
+              {results.length ? 'Made for you.' : 'Nothing matched all your answers.'}
+            </h3>
+            {results.length ? (
+              <div className="mt-4 flex flex-col gap-2">
+                {results.map((p, k) => {
+                  const grp = categoryOf(p.brand);
+                  const head = k === 0 || categoryOf(results[k - 1].brand) !== grp;
+                  const fams = ((p.scentProfile || p.scent_profile)?.fragranceFamilies || []).slice(0, 2).join(' · ');
+                  return (
+                    <React.Fragment key={p.id}>
+                      {head && <p className="mt-2 text-[10px] font-semibold tracking-[0.24em] uppercase text-neutral-500">{LABEL[grp]}</p>}
+                      <button
+                        onClick={() => { onClose(); onNavigateToProduct(p); }}
+                        className="flex items-center gap-3 text-left rounded-2xl p-2.5 pr-3 bg-neutral-50 hover:bg-neutral-100 transition"
+                      >
+                        {p.image ? (
+                          <img src={p.image} alt="" loading="lazy" className="w-14 h-14 rounded-xl object-cover bg-white shrink-0" />
+                        ) : (
+                          <span className="w-14 h-14 rounded-xl bg-neutral-200 shrink-0" />
+                        )}
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-[10px] font-semibold tracking-[0.16em] uppercase text-neutral-500 truncate">{p.brand}</span>
+                          <span style={serif} className="block text-[19px] font-semibold leading-tight truncate">{p.name}</span>
+                          <span className="block text-xs text-neutral-500 truncate">{fams}</span>
+                        </span>
+                        <span className="text-right shrink-0">
+                          <span className="block text-[13px] font-semibold">from ৳{minPrice(p)}</span>
+                          <span className="block text-[11px] text-neutral-500 mt-0.5">View ›</span>
+                        </span>
+                      </button>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-neutral-600">Try a different smell or a bigger budget.</p>
+            )}
+            <p className="mt-5 text-xs text-neutral-500 leading-relaxed">
+              Still unsure? Message us on Facebook, Instagram or WhatsApp — we’ll help you choose.
+            </p>
+            <button onClick={() => { setStep(0); setA({}); }} className="mt-4 w-full rounded-full border border-neutral-300 py-3 text-sm font-semibold">
+              Start again
+            </button>
           </div>
         )}
       </div>
