@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Search, ChevronDown, Plus, X, RefreshCw } from 'lucide-react';
 import { categoryOf } from '../lib/brandCategory';
+import { PerfumeEditor } from './PerfumeEditor';
 
 type Size = { id: string; size: string; ml: number; price: number };
 type Perfume = {
   id: string;
   brand: string;
   name: string;
+  category?: string;
   status: string;
   sizes: Size[];
   bottle_size_ml: number;
@@ -58,6 +60,7 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [showOrder, setShowOrder] = useState(false);
+  const [editing, setEditing] = useState<string | null | undefined>(undefined); // undefined = closed, null = new
   const [limit, setLimit] = useState(40);
 
   const headers = { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken, 'X-Admin-Token': localStorage.getItem('adminToken') || '' };
@@ -101,7 +104,7 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
 
   const houseCount = useMemo(() => {
     const c: Record<string, number> = { all: list.length, Arabian: 0, Designer: 0, Niche: 0 };
-    list.forEach((p) => { c[categoryOf(p.brand)]++; });
+    list.forEach((p) => { c[categoryOf(p.brand, p.category)]++; });
     return c;
   }, [list]);
 
@@ -114,7 +117,7 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
     const t = q.trim().toLowerCase();
     return list
       .map(view)
-      .filter((p) => (filter === 'all' || stateOf(p) === filter) && (house === 'all' || categoryOf(p.brand) === house) && (!t || `${p.brand} ${p.name}`.toLowerCase().includes(t)));
+      .filter((p) => (filter === 'all' || stateOf(p) === filter) && (house === 'all' || categoryOf(p.brand, p.category) === house) && (!t || `${p.brand} ${p.name}`.toLowerCase().includes(t)));
   }, [list, q, filter, house, edits]);
 
   const save = async () => {
@@ -169,6 +172,9 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
           <button onClick={() => setShowOrder(true)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-neutral-900 text-white text-xs font-semibold">
             <Plus className="w-3.5 h-3.5" /> Offline order
           </button>
+          <button onClick={() => setEditing(null)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-neutral-300 text-neutral-900 text-xs font-semibold">
+            <Plus className="w-3.5 h-3.5" /> New perfume
+          </button>
           <div className="inline-flex rounded-full border border-neutral-300 p-0.5">
             {(['all', 'low', 'out'] as const).map((f) => (
               <button key={f} onClick={() => setFilter(f)}
@@ -199,7 +205,7 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
           className="flex-1 bg-transparent outline-none text-sm font-medium text-neutral-900 placeholder:text-neutral-400" />
       </div>
       <div className="flex gap-5 mt-3 text-xs font-semibold">
-        <button onClick={onOpenCatalogue} className="text-neutral-700 underline underline-offset-4 decoration-neutral-300 hover:text-neutral-950">Add perfume / edit details & photos</button>
+        <button onClick={onOpenCatalogue} className="text-neutral-700 underline underline-offset-4 decoration-neutral-300 hover:text-neutral-950">Full catalogue (advanced)</button>
         <button onClick={onOpenHistory} className="text-neutral-500 underline underline-offset-4 decoration-neutral-300 hover:text-neutral-950">Stock history</button>
       </div>
 
@@ -279,6 +285,7 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
                     </div>
                   )}
                   <div className="flex gap-5 mt-4 text-[13px] font-semibold">
+                    <button onClick={() => setEditing(p.id)} className="text-neutral-950 border-b border-neutral-900">Edit perfume</button>
                     <button onClick={() => moveMl(p, 'restock')} className="text-neutral-950 border-b border-neutral-400">+ New bottle</button>
                     <button onClick={() => moveMl(p, 'remove')} className="text-neutral-500 border-b border-neutral-300">− Remove ml</button>
                   </div>
@@ -313,6 +320,11 @@ export const PerfumeStock: React.FC<{ csrfToken: string; onOpenCatalogue: () => 
             )}
           </span>
         </div>
+      )}
+
+      {editing !== undefined && (
+        <PerfumeEditor productId={editing} csrfToken={csrfToken} onClose={() => setEditing(undefined)}
+          onSaved={(text) => { setEditing(undefined); setMsg({ ok: true, text }); load(); }} />
       )}
 
       {showOrder && (

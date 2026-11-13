@@ -16,6 +16,28 @@ import {
   Flame
 } from 'lucide-react';
 import { FragranceProduct, DecantSize, MainAccord } from '../types';
+import { categoryOf } from '../lib/brandCategory';
+
+const HOUSE_LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
+const shortConc = (c?: string) => {
+  const t = (c || '').toLowerCase();
+  if (t.includes('extrait')) return 'Extrait';
+  if (t.includes('toilette') || t === 'edt') return 'EDT';
+  if (t.includes('cologne')) return 'Cologne';
+  if (t === 'parfum') return 'Parfum';
+  return 'EDP';
+};
+const FAMILY_SIMPLE: [string, string, string][] = [
+  ['fresh', 'Fresh', '#2fa8e0'], ['citrus', 'Fresh', '#2fa8e0'], ['aquatic', 'Fresh', '#2fa8e0'],
+  ['gourmand', 'Sweet', '#ff6fa0'], ['sweet', 'Sweet', '#ff6fa0'], ['vanilla', 'Sweet', '#ff6fa0'],
+  ['floral', 'Floral', '#e76fb6'], ['fruity', 'Fruity', '#ff8a3d'], ['wood', 'Woody', '#8a6a4f'],
+  ['amber', 'Warm', '#c7782a'], ['oriental', 'Warm', '#c7782a'], ['spic', 'Warm', '#c7782a'], ['oud', 'Warm', '#c7782a'],
+  ['musk', 'Musky', '#a78bdb'], ['powder', 'Musky', '#a78bdb'], ['aromatic', 'Aromatic', '#4f9a6a'], ['herbal', 'Aromatic', '#4f9a6a'],
+  ['leather', 'Leather', '#7a4b2a'],
+];
+const famMatch = (f: string) => FAMILY_SIMPLE.find(([k]) => f.toLowerCase().includes(k));
+const familyLabel = (f: string) => famMatch(f)?.[1] || f.replace(/\b\w/g, (c) => c.toUpperCase());
+const familyColor = (f: string) => famMatch(f)?.[2] || '#8e8e93';
 
 interface ProductDetailPageProps {
   product: FragranceProduct | null;
@@ -109,6 +131,34 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const currentSize: DecantSize = product.sizes[selectedSizeIndex] || product.sizes[0] || { size: '5ml', price: product.startingPrice };
   const totalPrice = currentSize.price * quantity;
   const isSoldOut = !!currentSize.soldOut;
+
+  // Simple facts for the minimal layout
+  const spx: any = product.scentProfile || product.scent_profile || {};
+  const description = (product.shortDescription || spx.scentDescription || product.description || '').trim();
+  const families = Array.from(
+    new Map(((spx.fragranceFamilies || []) as string[]).map((f) => [familyLabel(f), f])).values()
+  ).slice(0, 4);
+  const noteList: string[] = (product.notes && product.notes.length
+    ? product.notes
+    : [...(product.topNotes || spx.topNotes || []), ...(product.heartNotes || spx.heartNotes || []), ...(product.baseNotes || spx.baseNotes || [])]
+  ).filter(Boolean);
+  const cap = (t: string) => t.replace(/\b\w/g, (c) => c.toUpperCase());
+  const seasons: string[] = (spx.seasons || []).map((x: string) => (x === 'All Seasons' ? 'All year' : x));
+  const dn: string[] = spx.daytimeNighttime || [];
+  const bestFor = dn.length === 0 ? '' : dn.length > 1 ? 'Day & night' : /night/i.test(dn[0]) ? 'Night' : 'Day';
+  const lasts = (() => {
+    const l = String(spx.longevity || '').toLowerCase();
+    if (!l) return '';
+    if (/light|2|soft/.test(l) && !/8|12|long|eternal/.test(l)) return 'Light';
+    if (/moderate|4|6/.test(l) && !/8|12|long|eternal/.test(l)) return 'Moderate';
+    return 'Long-lasting';
+  })();
+  const facts: [string, string][] = ([
+    ['Notes', Array.from(new Set(noteList.map(cap))).slice(0, 6).join(', ')],
+    ['Season', seasons.join(' · ')],
+    ['Best for', bestFor],
+    ['Lasts', lasts],
+  ] as [string, string][]).filter(([, v]) => !!v);
 
   const handleAddToCartClick = () => {
     if (isSoldOut) return;
@@ -270,47 +320,40 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             }}
           >
             <div className="space-y-4">
-              {/* Brand & Concentration Header */}
-              <div
-                className="flex items-center justify-between border-b pb-3"
-                style={{ borderColor: 'var(--theme-border-subtle)' }}
-              >
-                <span
-                  className="text-xs font-sans tracking-[0.2em] uppercase font-bold"
-                  style={{ color: 'var(--theme-secondary)' }}
-                >
-                  {product.brand} · {product.concentration || 'Eau de Parfum'}
-                </span>
-              </div>
-
-              {/* Title & Category */}
+              {/* Minimal premium header: brand · house, name, type · for */}
               <div>
-                <h1
-                  className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal leading-tight"
-                  style={{ color: 'var(--theme-primary)' }}
-                >
-                  {product.name}
-                </h1>
-                <p className="text-xs font-sans tracking-widest uppercase mt-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
-                  Olfactory Family: <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{product.category}</span>
+                <span className="text-[10px] font-sans tracking-[0.3em] uppercase" style={{ color: 'var(--theme-text-secondary)' }}>
+                  {product.brand} · {HOUSE_LABEL[categoryOf(product.brand, product.category)]}
+                </span>
+                <h1 className="pp-pd-name mt-2" style={{ color: 'var(--theme-primary)' }}>{product.name}</h1>
+                <p className="text-[11px] font-sans tracking-[0.08em] uppercase mt-1.5" style={{ color: 'var(--theme-text-secondary)' }}>
+                  {shortConc(product.concentration)}{product.gender ? ` · For ${product.gender}` : ''}
                 </p>
               </div>
 
-              {/* Price */}
-              <div className="flex items-baseline gap-2">
-                <span className="font-serif text-2xl sm:text-3xl font-bold tabular-nums" style={{ color: 'var(--theme-primary)' }}>
-                  ৳ {totalPrice.toLocaleString()}
-                </span>
-                <span className="text-xs font-sans opacity-60" style={{ color: 'var(--theme-text-secondary)' }}>
-                  {currentSize.size}{quantity > 1 ? ` × ${quantity}` : ''}
-                </span>
-              </div>
-
-              {/* Short Description */}
-              {product.shortDescription && (
-                <p className="text-xs sm:text-sm font-sans leading-relaxed pt-1 opacity-85" style={{ color: 'var(--theme-text-secondary)' }}>
-                  {product.shortDescription}
+              {description && (
+                <p className="text-sm font-sans leading-relaxed" style={{ color: 'var(--theme-text-secondary)' }}>
+                  {description}
                 </p>
+              )}
+
+              {families.length > 0 && (
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-sans" style={{ color: 'var(--theme-text-secondary)' }}>
+                  {families.map((f) => (
+                    <span key={f} className="inline-flex items-center gap-1.5">
+                      <i className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: familyColor(f) }} />
+                      {familyLabel(f)}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {facts.length > 0 && (
+                <div className="pp-pd-facts">
+                  {facts.map(([k, v]) => (
+                    <div key={k}><span>{k}</span><b>{v}</b></div>
+                  ))}
+                </div>
               )}
 
               {/* Size selector — compact Apple-style liquid glass pills */}
@@ -399,7 +442,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     ) : (
                       <>
                         <ShoppingBag className="w-4 h-4" />
-                        <span>{isSoldOut ? 'Sold Out' : 'Add To Bag'}</span>
+                        <span>{isSoldOut ? 'Sold Out' : `Add To Bag · ৳ ${totalPrice.toLocaleString()}`}</span>
                       </>
                     )}
                   </button>
@@ -421,465 +464,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* 3. Detailed Additional Product Information Section (Notes, Specs, Maceration Guide) */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-        <div
-          className="pp-noborder border shadow-xs p-6 sm:p-10 lg:p-12 space-y-10 rounded-xs"
-          style={{
-            backgroundColor: 'var(--theme-surface-card)',
-            borderColor: 'var(--theme-border-subtle)',
-          }}
-        >
-
-          {/* Section Navigation Tabs */}
-          <div
-            className="flex items-center gap-6 border-b overflow-x-auto no-scrollbar pb-3"
-            style={{ borderColor: 'var(--theme-border-subtle)' }}
-          >
-            <button
-              onClick={() => setActiveTab('notes')}
-              className="text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 cursor-pointer whitespace-nowrap"
-              style={{
-                borderBottom: activeTab === 'notes' ? '2px solid var(--theme-primary)' : '2px solid transparent',
-                color: activeTab === 'notes' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)',
-              }}
-            >
-              Fragrance Notes & Profile
-            </button>
-            <button
-              onClick={() => setActiveTab('specs')}
-              className="text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 cursor-pointer whitespace-nowrap"
-              style={{
-                borderBottom: activeTab === 'specs' ? '2px solid var(--theme-primary)' : '2px solid transparent',
-                color: activeTab === 'specs' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)',
-              }}
-            >
-              Details & Specifications
-            </button>
-            <button
-              onClick={() => setActiveTab('care')}
-              className="text-xs sm:text-sm font-sans tracking-[0.16em] uppercase font-semibold transition-colors pb-1 cursor-pointer whitespace-nowrap"
-              style={{
-                borderBottom: activeTab === 'care' ? '2px solid var(--theme-primary)' : '2px solid transparent',
-                color: activeTab === 'care' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)',
-              }}
-            >
-              Decant Care & Maceration
-            </button>
-          </div>
-
-          {/* TAB 1: Fragrance Notes Pyramid & Attributes */}
-          {activeTab === 'notes' && (
-            <div className="space-y-10 animate-fade-in">
-              {/* Detailed Description */}
-              <div className="max-w-3xl space-y-3">
-                <h3 className="font-serif text-xl sm:text-2xl text-zinc-950">
-                  The Olfactory Story
-                </h3>
-                <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed font-sans">
-                  {sp.scentDescription || product.description || product.shortDescription || 'Crafted with rare essences sourced directly from master perfumers. Every spray radiates pure elegance and uncompromised sillage.'}
-                </p>
-
-                {sp.recommendationExplanation && (
-                  <div className="bg-amber-50/80 border border-amber-200/90 p-4 rounded-none space-y-1 mt-3">
-                    <span className="text-[10px] font-mono tracking-widest text-amber-900 uppercase font-bold block flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                      Find Your Scent Recommendation Note
-                    </span>
-                    <p className="text-xs text-amber-950 font-sans leading-relaxed">
-                      {sp.recommendationExplanation}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Structured Scent Profile Badge Tags */}
-              {((sp.fragranceFamilies && sp.fragranceFamilies.length > 0) || (sp.seasons && sp.seasons.length > 0) || (sp.occasions && sp.occasions.length > 0) || (sp.moods && sp.moods.length > 0)) && (
-                <div className="pp-noborder bg-[#fcfbf9] border border-zinc-200 p-5 space-y-4">
-                  <h4 className="text-xs font-sans tracking-widest uppercase font-bold text-zinc-900 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-600" />
-                    <span>Curated Scent Recommendation Attributes</span>
-                  </h4>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-                    {sp.fragranceFamilies && sp.fragranceFamilies.length > 0 && (
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">FRAGRANCE FAMILIES</span>
-                        <div className="flex flex-wrap gap-1">
-                          {sp.fragranceFamilies.map((fam, idx) => (
-                            <span key={idx} className="bg-amber-100 text-amber-900 px-2 py-0.5 text-[11px] font-medium border border-amber-200">
-                              {fam}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {sp.seasons && sp.seasons.length > 0 && (
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">SUITABLE SEASONS</span>
-                        <div className="flex flex-wrap gap-1">
-                          {sp.seasons.map((s, idx) => (
-                            <span key={idx} className="bg-zinc-100 text-zinc-800 px-2 py-0.5 text-[11px] font-medium border border-zinc-200">
-                              {s}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {sp.occasions && sp.occasions.length > 0 && (
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">SUITABLE OCCASIONS</span>
-                        <div className="flex flex-wrap gap-1">
-                          {sp.occasions.map((o, idx) => (
-                            <span key={idx} className="bg-zinc-100 text-zinc-800 px-2 py-0.5 text-[11px] font-medium border border-zinc-200">
-                              {o}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {sp.moods && sp.moods.length > 0 && (
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] font-mono uppercase text-zinc-400 block">DESIRED MOOD / IMPRESSION</span>
-                        <div className="flex flex-wrap gap-1">
-                          {sp.moods.map((m, idx) => (
-                            <span key={idx} className="bg-zinc-100 text-zinc-800 px-2 py-0.5 text-[11px] font-medium border border-zinc-200">
-                              {m}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Fragrantica-style Main Accords Stack */}
-              <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between border-b border-zinc-200 pb-2">
-                  <h4 className="text-xs font-sans tracking-widest uppercase font-bold text-zinc-900 flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-amber-700" />
-                    <span>Main Accords</span>
-                  </h4>
-                  <span className="text-[10px] font-mono text-zinc-400 uppercase">
-                    Scent Progression & Intensity
-                  </span>
-                </div>
-
-                {accordsList.length > 0 ? (
-                  <div className="space-y-1.5 max-w-lg pt-1">
-                    {accordsList.map((acc, idx) => (
-                      <div
-                        key={acc.id || idx}
-                        style={{
-                          width: `${Math.max(15, Math.min(100, acc.intensity))}%`,
-                          backgroundColor: acc.color || '#a288e3'
-                        }}
-                        className="h-8 rounded-r-md flex items-center justify-start px-3 text-xs font-sans font-medium text-black shadow-xs transition-all duration-300 hover:opacity-95"
-                      >
-                        <span className="truncate drop-shadow-xs tracking-wide">
-                          {acc.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs text-zinc-500 italic py-2">
-                    No main accords specified for this fragrance.
-                  </p>
-                )}
-
-                {/* Olfactory Pyramid Notes (If configured by admin) */}
-                {((sp.topNotes && sp.topNotes.length > 0) || (sp.heartNotes && sp.heartNotes.length > 0) || (sp.baseNotes && sp.baseNotes.length > 0)) && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-zinc-150">
-                    {/* Top Notes */}
-                    {sp.topNotes && sp.topNotes.length > 0 && (
-                      <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
-                          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                          <span>Top Notes</span>
-                        </div>
-                        <div className="text-xs text-zinc-800 font-sans space-y-1 pt-1">
-                          {sp.topNotes.map((note, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                              <span>{note}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Heart Notes */}
-                    {sp.heartNotes && sp.heartNotes.length > 0 && (
-                      <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
-                          <Droplets className="w-3.5 h-3.5 text-amber-600" />
-                          <span>Heart Notes</span>
-                        </div>
-                        <div className="text-xs text-zinc-800 font-sans space-y-1 pt-1">
-                          {sp.heartNotes.map((note, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
-                              <span>{note}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Base Notes */}
-                    {sp.baseNotes && sp.baseNotes.length > 0 && (
-                      <div className="bg-[#fafaf8] border border-zinc-200 p-5 space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-amber-800 uppercase font-bold">
-                          <Flame className="w-3.5 h-3.5 text-amber-600" />
-                          <span>Base Notes</span>
-                        </div>
-                        <div className="text-xs text-zinc-800 font-sans space-y-1 pt-1">
-                          {sp.baseNotes.map((note, i) => (
-                            <div key={i} className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-zinc-900" />
-                              <span>{note}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Intensity & Performance Attribute Cards */}
-              <div className="space-y-6 pt-6 border-t border-zinc-150">
-                <div className="flex items-center gap-2 text-xs font-sans tracking-widest text-zinc-900 uppercase font-bold">
-                  <Layers className="w-4 h-4 text-amber-700" />
-                  <span>Scent Intensity & Performance Profile</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {attributes.map((attr) => {
-                    const score = ((attr.value / 100) * 10).toFixed(1);
-                    return (
-                      <div
-                        key={attr.id || attr.name}
-                        className="bg-[#fcfbfb] border border-zinc-200/90 rounded-[24px] p-5 flex flex-col justify-between space-y-3 shadow-2xs hover:border-zinc-300 transition-all"
-                      >
-                        <span className="text-[11px] font-sans tracking-widest text-zinc-500 uppercase font-semibold">
-                          {attr.name}
-                        </span>
-
-                        <div className="flex items-baseline gap-0.5">
-                          <span className="text-2xl font-sans text-zinc-950 font-medium tracking-tight">
-                            {score}
-                          </span>
-                          <span className="text-sm font-sans text-zinc-400 font-normal">
-                            /10
-                          </span>
-                        </div>
-
-                        <div className="w-full h-1.5 bg-zinc-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-zinc-950 rounded-full transition-all duration-500"
-                            style={{ width: `${attr.value}%` }}
-                          />
-                        </div>
-
-                        <span className="text-[10px] font-sans font-bold tracking-widest text-zinc-400 uppercase pt-0.5">
-                          1 VOTE
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    onClick={() => showToast('Performance vote submitted!')}
-                    className="w-full border py-3.5 px-6 rounded-full text-xs font-sans font-bold tracking-widest uppercase transition-all shadow-2xs cursor-pointer text-center hover:opacity-90"
-                    style={{
-                      backgroundColor: 'var(--theme-surface)',
-                      borderColor: 'var(--theme-border)',
-                      color: 'var(--theme-primary)',
-                    }}
-                  >
-                    VOTE FOR PERFORMANCE
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: Details & Specifications */}
-          {activeTab === 'specs' && (
-            <div className="space-y-6 animate-fade-in max-w-4xl">
-              <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'var(--theme-primary)' }}>
-                Decant Technical Specifications
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>BRAND HOUSE</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{product.brand}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>CONCENTRATION</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{product.concentration || 'Eau de Parfum'}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>FRAGRANCE FAMILY</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>
-                    {sp.fragranceFamilies && sp.fragranceFamilies.length > 0 ? sp.fragranceFamilies.join(', ') : product.category}
-                  </span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>SUITABLE GENDER</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.genderPositioning || product.gender || 'Unisex'}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>INTENSITY LEVEL</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.intensity || 'Unknown'}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>PROJECTION & SILLAGE</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.projection || 'Unknown'}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>SKIN LONGEVITY</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.longevity || 'Unknown'}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>SWEETNESS LEVEL</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>{sp.sweetness || 'Unknown'}</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>BOTTLE MECHANISM</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>Italian Glass Tube with Precision High-Pressure Spray Head</span>
-                </div>
-
-                <div
-                  className="border p-4 space-y-1 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <span className="text-[10px] font-mono uppercase block opacity-70" style={{ color: 'var(--theme-secondary)' }}>AUTHENTICITY GUARANTEE</span>
-                  <span className="font-semibold" style={{ color: 'var(--theme-primary)' }}>100% Direct-from-Flacon Decant (Zero dilution, zero oils)</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: Care & Maceration Guide */}
-          {activeTab === 'care' && (
-            <div className="space-y-6 animate-fade-in max-w-4xl text-xs sm:text-sm font-sans leading-relaxed opacity-90" style={{ color: 'var(--theme-text-primary)' }}>
-              <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'var(--theme-primary)' }}>
-                Decant Transit Care & Maceration Advice
-              </h3>
-
-              <div className="space-y-4">
-                <div
-                  className="border p-5 space-y-2 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <h4 className="font-semibold uppercase tracking-wide text-xs flex items-center gap-2" style={{ color: 'var(--theme-primary)' }}>
-                    <Clock className="w-4 h-4" style={{ color: 'var(--theme-secondary)' }} />
-                    <span>1. Let the Decant Rest After Delivery</span>
-                  </h4>
-                  <p>
-                    During postal transit and shipping, temperature fluctuations and mechanical shaking temporarily disrupt fragrance oil molecules. Upon opening your parcel, allow the decant bottle to rest undisturbed in a dark, room-temperature room for 24-48 hours before testing on skin.
-                  </p>
-                </div>
-
-                <div
-                  className="border p-5 space-y-2 rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <h4 className="font-semibold uppercase tracking-wide text-xs flex items-center gap-2" style={{ color: 'var(--theme-primary)' }}>
-                    <Info className="w-4 h-4" style={{ color: 'var(--theme-secondary)' }} />
-                    <span>2. Maceration & Oxygen Contact</span>
-                  </h4>
-                  <p>
-                    Freshly decanted fragrances react lightly with small amounts of air inside the glass tube. Over 1-2 weeks of light use, the scent will deepen, rounding out sharp alcohol top notes and unlocking richer base accords.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 

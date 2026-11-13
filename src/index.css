@@ -476,3 +476,9 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 .pp-header.is-glass::before{content:'';position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);pointer-events:none}
 .pp-header.is-hidden{transform:translateY(-105%)}
 @media (prefers-reduced-motion: reduce){.pp-header{transition:none}}
+
+/* Minimal premium product page */
+.pp-pd-name{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(30px,6vw,44px);line-height:1.02;letter-spacing:-.005em}
+.pp-pd-facts{border-top:1px solid var(--theme-border-subtle,#eee)}
+.pp-pd-facts>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--theme-border-subtle,#eee);font-size:12.5px;color:var(--theme-text-secondary,#888)}
+.pp-pd-facts b{font-weight:500;color:var(--theme-primary,#111);text-align:right}

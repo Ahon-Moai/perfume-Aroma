@@ -46,7 +46,7 @@ function ppLog(PDO $db, string $invId, string $type, float $change, float $prev,
 }
 
 if ($method === 'GET') {
-    $products = $db->query("SELECT id, brand, name, slug, image, status FROM products ORDER BY brand ASC, name ASC")->fetchAll();
+    $products = $db->query("SELECT id, brand, name, slug, image, status, category FROM products ORDER BY brand ASC, name ASC")->fetchAll();
     $vars = $db->query("SELECT id, product_id, size, price FROM product_variants")->fetchAll();
     $inv = $db->query("SELECT * FROM perfume_inventory WHERE product_id IS NOT NULL")->fetchAll();
     $vBy = []; foreach ($vars as $v) $vBy[$v['product_id']][] = ['id' => $v['id'], 'size' => $v['size'], 'ml' => parseDecantMl($v['size']), 'price' => (float)$v['price']];
@@ -59,7 +59,7 @@ if ($method === 'GET') {
         usort($sizes, fn($a, $b) => $a['ml'] <=> $b['ml']);
         $b = $iBy[$p['id']] ?? null;
         $out[] = [
-            'id' => $p['id'], 'brand' => $p['brand'], 'name' => $p['name'], 'slug' => $p['slug'],
+            'id' => $p['id'], 'brand' => $p['brand'], 'name' => $p['name'], 'slug' => $p['slug'], 'category' => $p['category'],
             'image' => $p['image'], 'status' => $p['status'], 'sizes' => $sizes,
             'bottle_size_ml' => $b ? (float)$b['bottle_size_ml'] : 100.0,
             'ml_left' => $b ? (float)$b['remaining_ml'] : null,

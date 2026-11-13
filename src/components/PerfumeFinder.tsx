@@ -74,7 +74,7 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
     if (A.when === 'day') sc += top.some((f) => has(f, LIGHT)) ? 0.3 : top.some((f) => has(f, HEAVY)) ? -0.25 : 0;
     if (A.when === 'night') sc += top.some((f) => has(f, HEAVY)) ? 0.3 : 0;
     if (g && pg === g) sc += 0.15;
-    if (A.bud === 'b3' && categoryOf(p.brand) === 'Designer') sc += 0.2;
+    if (A.bud === 'b3' && categoryOf(p.brand, p.category) === 'Designer') sc += 0.2;
     scored.push([p, sc]);
   }
   // Every matching perfume, best match first, grouped Middle Eastern → Designer → Niche
@@ -85,7 +85,7 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
   const G: Record<string, FragranceProduct[]> = { Arabian: [], Designer: [], Niche: [] };
   const brands: Record<string, number> = {};
   for (const [p] of ord) {
-    const t = categoryOf(p.brand);
+    const t = categoryOf(p.brand, p.category);
     const b = p.brand || '';
     if (G[t].length >= CAP[t] || (brands[b] || 0) >= 2) continue;
     G[t].push(p);
@@ -187,8 +187,8 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, o
             {results.length ? (
               <div className="mt-4 flex flex-col gap-2">
                 {results.map((p, k) => {
-                  const grp = categoryOf(p.brand);
-                  const head = k === 0 || categoryOf(results[k - 1].brand) !== grp;
+                  const grp = categoryOf(p.brand, p.category);
+                  const head = k === 0 || categoryOf(results[k - 1].brand, results[k - 1].category) !== grp;
                   const fams = ((p.scentProfile || p.scent_profile)?.fragranceFamilies || []).slice(0, 2).join(' · ');
                   return (
                     <React.Fragment key={p.id}>

@@ -14,7 +14,9 @@ export const NICHE_HOUSES = new Set([
   'INITIO', 'MONTALE', 'AMOUAGE', 'NISHANE', 'BYREDO', 'LE LABO', 'MAISON MARGIELA', 'DIPTYQUE', 'JO MALONE',
 ]);
 
-export const categoryOf = (brand: string): BrandCategory => {
+/** A product's own house (set in the admin) wins; otherwise the brand lists decide. */
+export const categoryOf = (brand: string, category?: string | null): BrandCategory => {
+  if (category === 'Arabian' || category === 'Designer' || category === 'Niche') return category;
   const n = brand.replace(/&(amp;)+/gi, '&').trim().toUpperCase();
   if (DESIGNER_HOUSES.has(n)) return 'Designer';
   if (NICHE_HOUSES.has(n)) return 'Niche';
