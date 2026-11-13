@@ -4,8 +4,8 @@ import { FragranceProduct } from '../types';
 import { categoryOf } from '../lib/brandCategory';
 
 /**
- * "Help me choose" — 5 quick taps, 6 picks (3 Middle Eastern, 2 Designer, 1 Niche).
- * Same quiz as the Perfume Price List page, running on the website's catalogue.
+ * "Help me choose" — 5 quick taps, then every perfume in the catalogue that fits the answers,
+ * best match first, grouped Middle Eastern → Designer → Niche.
  */
 
 interface PerfumeFinderProps {
@@ -78,24 +78,11 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
     if (A.bud === 'b3' && categoryOf(p.brand) === 'Designer') sc += 0.2;
     scored.push([p, sc]);
   }
+  // Every matching perfume, best match first, grouped Middle Eastern → Designer → Niche
   scored.sort((a, b) => b[1] - a[1]);
   const ord = g ? scored.filter((o) => o[0].gender === g).concat(scored.filter((o) => o[0].gender !== g)) : scored;
-  const brands: Record<string, number> = {};
-  const G: Record<string, FragranceProduct[]> = { Arabian: [], Designer: [], Niche: [] };
-  const CAP: Record<string, number> = { Arabian: 3, Designer: 2, Niche: 1 };
-  const rest: FragranceProduct[] = [];
-  for (const [p] of ord) {
-    const b = p.brand || '';
-    if ((brands[b] || 0) >= 2) continue;
-    const t = categoryOf(p.brand);
-    if (G[t].length < CAP[t]) { G[t].push(p); brands[b] = (brands[b] || 0) + 1; }
-    else if (rest.length < 6) rest.push(p);
-    if (G.Arabian.length === 3 && G.Designer.length === 2 && G.Niche.length === 1) break;
-  }
-  const out = G.Arabian.concat(G.Designer, G.Niche);
-  for (const p of rest) { if (out.length >= 6) break; if (!out.includes(p)) out.push(p); }
   const RK: Record<string, number> = { Arabian: 0, Designer: 1, Niche: 2 };
-  return out.sort((x, y) => RK[categoryOf(x.brand)] - RK[categoryOf(y.brand)]);
+  return ord.map((o) => o[0]).sort((x, y) => RK[categoryOf(x.brand)] - RK[categoryOf(y.brand)]);
 }
 
 const LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
@@ -184,7 +171,7 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, o
           </div>
         ) : (
           <div className="pp-quiz__in">
-            <p className="mt-5 text-xs font-medium text-neutral-500">Your picks</p>
+            <p className="mt-5 text-xs font-medium text-neutral-500">{results.length ? `${results.length} perfumes match` : 'Your picks'}</p>
             <h3 style={serif} className="mt-1 text-[30px] leading-[1.1] font-semibold">
               {results.length ? 'Made for you.' : 'Nothing matched all your answers.'}
             </h3>
