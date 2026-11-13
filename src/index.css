@@ -398,7 +398,7 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 .pp-wordmark.is-touching + .pp-sub .pp-silver-text { animation: none !important; transition: background-position .08s linear; }
 .pp-wordmark.is-touching::before {
   animation: none; opacity: 1;
-  text-shadow: 0 0 5px rgba(255,255,255,1), 0 0 14px rgba(170,185,215,.75), 0 0 28px rgba(150,165,200,.45);
+  text-shadow: 0 0 4px rgba(255,255,255,1), 0 0 10px rgba(170,185,215,.75), 0 0 18px rgba(150,165,200,.4);
   transition: opacity .2s;
 }
 .pp-wordmark.is-releasing { transition: background-position .9s cubic-bezier(.2,.8,.2,1); }
