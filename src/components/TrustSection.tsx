@@ -172,12 +172,12 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
           />
 
           {/* Perfume Brands Image Boxes Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
             {brandsList.map((brand) => (
               <div
                 key={brand.slug}
                 onClick={() => handleBrandClick(brand.slug)}
-                className="group cursor-pointer p-1 flex flex-col justify-between transition-all duration-300"
+                className="group cursor-pointer flex flex-col transition-all duration-300"
                 style={{
                   backgroundColor: 'var(--theme-surface-card)',
                   borderColor: 'var(--theme-border)',
@@ -186,11 +186,7 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
                 {/* Typographic brand tile (name set in a refined typeface — no logos copied) */}
                 <div className="pp-brand-tile">
                   <span className={`pp-brand-name ${brandStyle(brand.name)}`}>{brand.name}</span>
-                </div>
-                <div className="pt-2.5 text-center">
-                  <span className="text-[10px] tracking-[0.18em] uppercase" style={{ color: 'var(--theme-text-secondary)' }}>
-                    {brand.count} {brand.count === 1 ? 'edition' : 'editions'}
-                  </span>
+                  <span className="pp-brand-count">{brand.count}</span>
                 </div>
               </div>
             ))}
