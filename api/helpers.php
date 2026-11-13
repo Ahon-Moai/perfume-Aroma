@@ -115,7 +115,15 @@ function requireAdminAuth() {
 // Sanitize string
 function sanitizeString($val) {
     if (is_null($val)) return null;
-    return htmlspecialchars(trim((string)$val), ENT_QUOTES, 'UTF-8');
+    // Store plain text. The storefront (React) escapes on display, so encoding here made
+    // "&" grow into "&amp;amp;amp;..." every time something was saved.
+    $s = trim((string)$val);
+    for ($i = 0; $i < 8; $i++) {
+        $decoded = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        if ($decoded === $s) break;
+        $s = $decoded;
+    }
+    return trim(strip_tags($s));
 }
 
 // Slugify string

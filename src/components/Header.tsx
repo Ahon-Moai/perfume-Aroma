@@ -373,7 +373,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <p className="font-bold tracking-wider uppercase text-xs">Customer Care & Studio</p>
                 <p>Location: Dhaka, Bangladesh · Nationwide delivery</p>
-                <p>Email: {storeSettings?.contact_email || ''}</p>
+                {storeSettings?.contact_email && /@/.test(storeSettings.contact_email) && <p>Email: {storeSettings.contact_email}</p>}
                 <p>Phone: {storeSettings?.contact_phone || '+880 1972-911234'}</p>
               </div>
             </div>

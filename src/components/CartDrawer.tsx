@@ -10,6 +10,7 @@ interface CartDrawerProps {
   onUpdateQty: (productId: string, size: string, delta: number) => void;
   onRemoveItem: (productId: string, size: string) => void;
   onClearCart?: () => void;
+  storeSettings?: any;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -18,7 +19,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   items,
   onUpdateQty,
   onRemoveItem,
-  onClearCart
+  onClearCart,
+  storeSettings
 }) => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [customerName, setCustomerName] = useState('');
@@ -34,10 +36,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   if (!isOpen) return null;
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const freeShippingThreshold = 3000;
+  const num = (v: any, d: number) => (v !== undefined && v !== null && v !== '' && !isNaN(Number(v)) ? Number(v) : d);
+  const feeDhaka = num(storeSettings?.shipping_fee_dhaka, 70);
+  const feeOutside = num(storeSettings?.shipping_fee_outside_dhaka, 130);
+  const freeShippingThreshold = num(storeSettings?.free_shipping_threshold, 3000);
   const progressPercent = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
 
-  const shippingFee = subtotal >= freeShippingThreshold ? 0 : (cityZone === 'outside_dhaka' ? 130 : 70);
+  const shippingFee = subtotal >= freeShippingThreshold ? 0 : (cityZone === 'outside_dhaka' ? feeOutside : feeDhaka);
   const estimatedTotal = subtotal + shippingFee;
 
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
@@ -307,8 +312,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       color: 'var(--theme-text-primary)',
                     }}
                   >
-                    <option value="inside_dhaka">Inside Dhaka (৳ 70)</option>
-                    <option value="outside_dhaka">Outside Dhaka (৳ 130)</option>
+                    <option value="inside_dhaka">Inside Dhaka (৳ {feeDhaka})</option>
+                    <option value="outside_dhaka">Outside Dhaka (৳ {feeOutside})</option>
                   </select>
                 </div>
 

@@ -88,7 +88,7 @@ export const StudioSection: React.FC<StudioSectionProps> = ({ socialCards }) => 
                         className="text-[10px] font-mono font-medium"
                         style={{ color: 'var(--theme-text-primary)' }}
                       >
-                        {card.handle}
+                        @pure_portions_by_arrina
                       </span>
                       <Instagram className="w-3 h-3 opacity-60" style={{ color: 'var(--theme-secondary)' }} />
                     </div>

@@ -553,6 +553,7 @@ function StorefrontApp() {
         onUpdateQty={handleUpdateQty}
         onRemoveItem={handleRemoveFromCart}
         onClearCart={() => setCart([])}
+        storeSettings={storeSettings}
       />
 
       <SearchModal
