@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, X, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import { FragranceProduct } from '../types';
-import { trackSearchSubmission } from '../services/searchTracker';
+import { trackSearchSubmission, trackSearchWhenIdle } from '../services/searchTracker';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -27,6 +27,21 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onSelectProduct
 }) => {
   const [query, setQuery] = useState('');
+
+  // Record what the customer looked for once they stop typing — most mobile shoppers never press Enter
+  useEffect(() => {
+    if (!isOpen) return;
+    const q = query.trim().toLowerCase();
+    if (q.length < 2) return;
+    const count = products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.brand.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.notes?.some((n) => n.toLowerCase().includes(q))
+    ).length;
+    trackSearchWhenIdle(query, count);
+  }, [query, isOpen, products]);
 
   if (!isOpen) return null;
 

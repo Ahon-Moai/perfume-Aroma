@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { FragranceProduct, Collection, FilterState, DecantSize } from '../types';
 import { fetchCollectionBySlug, fetchPublicProducts } from '../services/api';
-import { trackSearchSubmission } from '../services/searchTracker';
+import { trackSearchSubmission, trackSearchWhenIdle } from '../services/searchTracker';
 
 const getSprayEstimate = (sizeStr: string): string => {
   const match = sizeStr.match(/(\d+(\.\d+)?)/);
@@ -404,7 +404,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
         <input
           type="text"
           value={filters.search}
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          onChange={(e) => { setFilters({ ...filters, search: e.target.value }); trackSearchWhenIdle(e.target.value); }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               const term = filters.search.trim();

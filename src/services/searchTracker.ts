@@ -21,9 +21,9 @@ export const trackSearchSubmission = async (params: {
 
     if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
       const blob = new Blob([payload], { type: 'application/json' });
-      navigator.sendBeacon('/api/search_track.php', blob);
+      navigator.sendBeacon('/api/search_track2.php', blob);
     } else {
-      fetch('/api/search_track.php', {
+      fetch('/api/search_track2.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload,
@@ -35,4 +35,18 @@ export const trackSearchSubmission = async (params: {
   } catch (err) {
     // Fail silently
   }
+};
+
+/** Records a search once the customer stops typing (no Enter needed). */
+let pendingTimer: ReturnType<typeof setTimeout> | undefined;
+let lastTracked = '';
+export const trackSearchWhenIdle = (term: string, resultCount?: number, delay = 1500) => {
+  if (pendingTimer) clearTimeout(pendingTimer);
+  const t = term.trim();
+  if (t.length < 2) return;
+  pendingTimer = setTimeout(() => {
+    if (t.toLowerCase() === lastTracked) return;
+    lastTracked = t.toLowerCase();
+    trackSearchSubmission({ term: t, resultCount });
+  }, delay);
 };
