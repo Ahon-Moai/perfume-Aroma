@@ -448,6 +448,7 @@ function StorefrontApp() {
               onNavigateToCollection={navigateToCollection}
               heroData={homepageData?.sections?.hero?.content}
               seasonsData={homepageData?.sections?.seasons_gallery?.content}
+              onOpenTesters={openTesters}
             />
 
             {/* C. Oversized category marquee */}
