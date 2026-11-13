@@ -28,24 +28,23 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="w-full px-5 sm:px-8 md:px-12">
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
         <div className="w-full overflow-hidden select-none py-2 sm:py-4">
-          <h1 className="w-full text-center select-none flex flex-col items-center justify-center" aria-label="Pure Portions by Arrina">
-            {/* Line 1: script, like the logo */}
-            <span className="pp-script pp-silver-text block leading-[1.15] whitespace-nowrap text-[19vw] sm:text-[15vw] md:text-[12.5vw] lg:text-[11vw] px-[0.12em]">
+          <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-3 sm:py-6" aria-label="Pure Portions by Arrina">
+            <span
+              className="pp-wordmark pp-silver-text whitespace-nowrap text-[15.5vw] sm:text-[12vw] md:text-[10vw] lg:text-[8.6vw]"
+              data-text="Pure Portions"
+            >
               Pure Portions
             </span>
-            {/* Line 2: — BY ARRINA — */}
-            <span className="pp-serif-caps flex items-center justify-center gap-3 sm:gap-5 -mt-[1.5vw] whitespace-nowrap text-[5vw] sm:text-[3.6vw] md:text-[2.8vw] lg:text-[2.4vw] tracking-[0.38em] pl-[0.38em] text-[#6b6d74]">
-              <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
-              <span className="pp-silver-text">By Arrina</span>
-              <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
+            <span className="pp-sub mt-[2.2vw] sm:mt-[1.6vw] whitespace-nowrap text-[3.1vw] sm:text-[2.2vw] md:text-[1.6vw] lg:text-[1.25vw]">
+              By Arrina
             </span>
           </h1>
         </div>
 
         {/* Thick Solid Horizontal Divider */}
         <div
-          className="w-full h-[2px] sm:h-[2.5px] mt-3 sm:mt-4 mb-6 sm:mb-8"
-          style={{ backgroundImage: 'linear-gradient(90deg, transparent, #8e9098 15%, #d9dadf 50%, #8e9098 85%, transparent)' }}
+          className="w-full h-px mt-4 sm:mt-6 mb-6 sm:mb-8"
+          style={{ backgroundImage: 'linear-gradient(90deg, transparent, #b8bbc3 20%, #e4e6ea 50%, #b8bbc3 80%, transparent)' }}
         />
 
         {/* Editorial Information Section */}
