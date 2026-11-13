@@ -91,7 +91,7 @@ export const REVIEWS_LIST: ReviewItem[] = [
 export const SOCIAL_CARDS: SocialCard[] = [
   {
     id: 'soc-1',
-    handle: '@pureportionsbyarrina',
+    handle: '@pure_portions_by_arrina',
     image: '/src/assets/images/studio_social_travertine_1791908203434.jpg',
     likes: 223,
     comments: 2,
@@ -99,7 +99,7 @@ export const SOCIAL_CARDS: SocialCard[] = [
   },
   {
     id: 'soc-2',
-    handle: '@pureportionsbyarrina',
+    handle: '@pure_portions_by_arrina',
     image: '/src/assets/images/studio_social_hand_decant_1791908204628.jpg',
     likes: 234,
     comments: 1,
@@ -107,7 +107,7 @@ export const SOCIAL_CARDS: SocialCard[] = [
   },
   {
     id: 'soc-3',
-    handle: '@pureportionsbyarrina',
+    handle: '@pure_portions_by_arrina',
     image: '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg',
     likes: 86,
     comments: 8,
@@ -115,7 +115,7 @@ export const SOCIAL_CARDS: SocialCard[] = [
   },
   {
     id: 'soc-4',
-    handle: '@pureportionsbyarrina',
+    handle: '@pure_portions_by_arrina',
     image: '/src/assets/images/studio_social_amber_spray_1791908204588.jpg',
     likes: 85,
     comments: 5,

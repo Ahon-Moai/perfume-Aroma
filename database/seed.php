@@ -491,10 +491,10 @@ foreach ($journalList as $a) {
 }
 
 $socialList = [
-  ['soc-1', '@pureportionsbyarrina', '/src/assets/images/studio_social_travertine_1791908203434.jpg', 223, 2, 'REALITY ≠ REVIEWS'],
-  ['soc-2', '@pureportionsbyarrina', '/src/assets/images/studio_social_hand_decant_1791908204628.jpg', 234, 1, 'AUTHENTIC DECANTS'],
-  ['soc-3', '@pureportionsbyarrina', '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg', 86, 8, 'AUTHENTIC DECANTS'],
-  ['soc-4', '@pureportionsbyarrina', '/src/assets/images/studio_social_amber_spray_1791908204588.jpg', 85, 5, 'STUDIO AROMA']
+  ['soc-1', '@pure_portions_by_arrina', '/src/assets/images/studio_social_travertine_1791908203434.jpg', 223, 2, 'REALITY ≠ REVIEWS'],
+  ['soc-2', '@pure_portions_by_arrina', '/src/assets/images/studio_social_hand_decant_1791908204628.jpg', 234, 1, 'AUTHENTIC DECANTS'],
+  ['soc-3', '@pure_portions_by_arrina', '/src/assets/images/studio_social_gold_flacon_1791908204833.jpg', 86, 8, 'AUTHENTIC DECANTS'],
+  ['soc-4', '@pure_portions_by_arrina', '/src/assets/images/studio_social_amber_spray_1791908204588.jpg', 85, 5, 'STUDIO AROMA']
 ];
 
 $db->exec("DELETE FROM social_cards");

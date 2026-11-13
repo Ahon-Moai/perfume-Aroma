@@ -166,7 +166,7 @@ export const StudioSection: React.FC<StudioSectionProps> = ({ socialCards }) => 
 
             <div className="pt-2">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/pure_portions_by_arrina"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 border px-4 py-2.5 text-xs font-sans tracking-wide transition-all group rounded-xs hover:opacity-90"
@@ -176,7 +176,7 @@ export const StudioSection: React.FC<StudioSectionProps> = ({ socialCards }) => 
                   color: 'var(--theme-primary)',
                 }}
               >
-                <span className="font-bold" style={{ color: 'var(--theme-secondary)' }}>@pureportionsbyarrina</span>
+                <span className="font-bold" style={{ color: 'var(--theme-secondary)' }}>@pure_portions_by_arrina</span>
                 <span>Follow on Instagram</span>
                 <span className="text-xs group-hover:translate-x-0.5 transition-transform">↗</span>
               </a>
