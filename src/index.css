@@ -320,3 +320,9 @@ main button.uppercase:not(.pp-glass-pill), main a.uppercase.inline-flex {
   letter-spacing: 0.16em;
   font-weight: 500 !important;
 }
+/* Sub-headings & small caps labels: lighter and quieter */
+main p.uppercase, main span.uppercase.font-bold, main span.uppercase.font-black {
+  font-weight: 400 !important;
+  letter-spacing: 0.12em !important;
+}
+main h2 ~ p.uppercase, main h2 + p { opacity: 0.65; font-size: 11px !important; }
