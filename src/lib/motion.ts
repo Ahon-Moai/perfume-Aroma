@@ -34,6 +34,21 @@ export function initSmoothScroll() {
   requestAnimationFrame(raf);
 }
 
+/**
+ * Jump to the top when opening a new page (brand, product, collection, home).
+ * Goes through Lenis when it is active: otherwise Lenis keeps animating toward the old
+ * scroll position and the new (shorter) page ends up scrolled to the bottom.
+ */
+export function scrollToTop() {
+  if (lenis) {
+    lenis.scrollTo(0, { immediate: true, force: true });
+    // pages change height when products load → make Lenis re-measure on the next frames
+    requestAnimationFrame(() => lenis?.resize());
+    window.setTimeout(() => lenis?.resize(), 400);
+  }
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+}
+
 function inHorizontalScroller(el: Element): boolean {
   let p = el.parentElement;
   for (let i = 0; i < 6 && p && p.tagName !== 'MAIN'; i++) {

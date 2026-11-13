@@ -32,7 +32,7 @@ import { FragranceProduct, CartItem, JournalArticle } from './types';
 import { fetchPublicProducts, fetchHomepageData, fetchStoreSettings, getErrorMessage } from './services/api';
 import { Shield } from 'lucide-react';
 import { ThemeProvider } from './context/ThemeContext';
-import { initSmoothScroll, prepareReveal, startReveal } from './lib/motion';
+import { initSmoothScroll, prepareReveal, startReveal, scrollToTop } from './lib/motion';
 
 export default function App() {
   return (
@@ -204,7 +204,7 @@ function StorefrontApp() {
       window.history.pushState({}, '', targetUrl);
     }
     setRoute({ path: 'product', productSlugOrId: slugOrId });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
     if (isNewPage) {
       triggerPageIntro();
     }
@@ -217,7 +217,7 @@ function StorefrontApp() {
       window.history.pushState({}, '', targetUrl);
     }
     setRoute({ path: 'collection', collectionSlug: slug });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
     if (isNewPage) {
       triggerPageIntro();
     }
@@ -229,7 +229,7 @@ function StorefrontApp() {
     window.history.pushState({}, '', '/collections/all?size=1.5ml');
     setRoute({ path: 'collection', collectionSlug: 'all' });
     setCollectionKey((k) => k + 1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
   };
 
   const navigateToHome = () => {
@@ -238,7 +238,7 @@ function StorefrontApp() {
       window.history.pushState({}, '', '/');
     }
     setRoute({ path: 'home' });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
     if (isNewPage) {
       triggerPageIntro();
     }

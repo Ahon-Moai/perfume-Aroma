@@ -1,3 +1,4 @@
+import { scrollToTop } from '../lib/motion';
 import React, { useState, useEffect } from 'react';
 import {
   ChevronRight,
@@ -100,7 +101,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     setSelectedSizeIndex(0);
     setQuantity(1);
     setAdded(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
   }, [product.id]);
 
   const activeImage = galleryImages[selectedImageIndex] || product.image;
