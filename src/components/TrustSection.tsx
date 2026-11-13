@@ -34,6 +34,16 @@ const BRAND_FALLBACK_IMAGES: Record<string, string> = {
 const slugify = (text: string) =>
   text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
+
+// Designer / niche houses get an elegant serif; Arabian houses a wide, light sans.
+const SERIF_HOUSES = new Set([
+  'CHANEL', 'DIOR', 'GUCCI', 'PRADA', 'YVES SAINT LAURENT', 'VALENTINO', 'VERSACE', 'BURBERRY', 'KENZO',
+  'GIORGIO ARMANI', 'CAROLINA HERRERA', 'DOLCE & GABBANA', 'CHLOÉ', 'CALVIN KLEIN', 'JEAN PAUL GAULTIER',
+  'CREED', 'XERJOFF', 'MANCERA', 'NARCISO RODRIGUEZ', 'VIKTOR & ROLF', 'ELIZABETH ARDEN', 'KAYALI',
+  'ARIANA GRANDE', 'ESSENTIAL PARFUMS', 'TOM FORD', 'HERMÈS', 'HERMES', 'PARFUMS DE MARLY', 'MAISON MARGIELA',
+]);
+const brandStyle = (name: string) => (SERIF_HOUSES.has(name.trim().toUpperCase()) ? 'is-serif' : 'is-sans');
+
 export const TrustSection: React.FC<TrustSectionProps> = ({
   storeSettings,
   products = [],
@@ -167,52 +177,20 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
               <div
                 key={brand.slug}
                 onClick={() => handleBrandClick(brand.slug)}
-                className="group cursor-pointer border-2 p-3 sm:p-4 flex flex-col justify-between transition-all duration-300 shadow-sm hover:opacity-90"
+                className="group cursor-pointer p-1 flex flex-col justify-between transition-all duration-300"
                 style={{
                   backgroundColor: 'var(--theme-surface-card)',
                   borderColor: 'var(--theme-border)',
                 }}
               >
-                {/* Brand Perfume Image Box */}
-                <div
-                  className="relative w-full aspect-square border overflow-hidden flex items-center justify-center p-3 mb-3"
-                  style={{
-                    backgroundColor: 'var(--theme-surface)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  <img
-                    src={brand.image}
-                    alt={brand.name}
-                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div
-                    className="absolute top-2 right-2 text-[9px] font-mono font-bold px-1.5 py-0.5 uppercase transition-colors"
-                    style={{
-                      backgroundColor: 'var(--theme-btn-bg)',
-                      color: 'var(--theme-btn-text)',
-                    }}
-                  >
-                    {brand.count} {brand.count === 1 ? 'Ed.' : 'Eds.'}
-                  </div>
+                {/* Typographic brand tile (name set in a refined typeface — no logos copied) */}
+                <div className="pp-brand-tile">
+                  <span className={`pp-brand-name ${brandStyle(brand.name)}`}>{brand.name}</span>
                 </div>
-
-                {/* Brand Name & Action */}
-                <div className="pt-1 text-center">
-                  <h4
-                    className="font-sans font-black text-xs sm:text-sm uppercase tracking-wider truncate transition-colors"
-                    style={{ color: 'var(--theme-primary)' }}
-                  >
-                    {brand.name}
-                  </h4>
-                  <div
-                    className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest mt-1.5 transition-colors"
-                    style={{ color: 'var(--theme-secondary)' }}
-                  >
-                    <span>EXPLORE</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                <div className="pt-2.5 text-center">
+                  <span className="text-[10px] tracking-[0.18em] uppercase" style={{ color: 'var(--theme-text-secondary)' }}>
+                    {brand.count} {brand.count === 1 ? 'edition' : 'editions'}
+                  </span>
                 </div>
               </div>
             ))}

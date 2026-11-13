@@ -413,3 +413,18 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 @media (prefers-reduced-motion: reduce) { .pp-sprig-sway { animation: none; } .pp-flourish-line { animation: none; stroke-dashoffset: 0; } }
 
 .pp-silver-text.is-touching { animation: none !important; transition: background-position .08s linear; }
+
+
+/* ===== Shop by brands: typographic tiles ===== */
+.pp-brand-tile {
+  position: relative; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center;
+  padding: 10px 12px; border-radius: 4px; overflow: hidden; text-align: center;
+  background: linear-gradient(180deg, #fafafa, #f2f2f3);
+  transition: background .5s cubic-bezier(.2,.8,.2,1);
+}
+.group:hover .pp-brand-tile { background: linear-gradient(180deg, #f6f6f7, #ececee); }
+.pp-brand-name { color: #1c1d21; line-height: 1.15; word-break: break-word; transition: letter-spacing .5s cubic-bezier(.2,.8,.2,1); }
+.pp-brand-name.is-serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: clamp(15px, 4.4vw, 22px); letter-spacing: .14em; text-transform: uppercase; }
+.pp-brand-name.is-sans { font-family: 'Urbanist', system-ui, sans-serif; font-weight: 300; font-size: clamp(13px, 3.8vw, 18px); letter-spacing: .32em; padding-left: .32em; text-transform: uppercase; }
+.group:hover .pp-brand-name.is-serif { letter-spacing: .18em; }
+.group:hover .pp-brand-name.is-sans { letter-spacing: .38em; }
