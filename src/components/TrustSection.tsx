@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShieldCheck, ArrowRight } from 'lucide-react';
 import { FragranceProduct } from '../types';
 
@@ -44,11 +44,39 @@ const SERIF_HOUSES = new Set([
 ]);
 const brandStyle = (name: string) => (SERIF_HOUSES.has(name.trim().toUpperCase()) ? 'is-serif' : 'is-sans');
 
+
+// Brand categories shown on the homepage. Brands not listed fall back to "Arabian"
+// (most of the catalogue); edit these lists to re-categorise a house.
+type BrandCategory = 'Designer' | 'Niche' | 'Arabian';
+const DESIGNER_HOUSES = new Set([
+  'JEAN PAUL GAULTIER', 'GUCCI', 'PRADA', 'YVES SAINT LAURENT', 'ARIANA GRANDE', 'ELIZABETH ARDEN',
+  'CAROLINA HERRERA', 'NARCISO RODRIGUEZ', 'VALENTINO', 'CHANEL', 'VERSACE', 'BURBERRY', 'KENZO',
+  'DOLCE & GABBANA', 'CHLOÉ', 'CHLOE', 'CALVIN KLEIN', 'DIOR', 'GIORGIO ARMANI', 'VIKTOR & ROLF',
+  'HUGO BOSS', 'TOM FORD', 'HERMÈS', 'HERMES', 'MONTBLANC', 'AZZARO', 'PACO RABANNE', 'RABANNE', 'GIVENCHY',
+]);
+const NICHE_HOUSES = new Set([
+  'CREED', 'XERJOFF', 'MANCERA', 'KAYALI', 'ESSENTIAL PARFUMS', 'PARFUMS DE MARLY', 'MAISON FRANCIS KURKDJIAN',
+  'INITIO', 'MONTALE', 'AMOUAGE', 'NISHANE', 'BYREDO', 'LE LABO', 'MAISON MARGIELA', 'DIPTYQUE', 'JO MALONE',
+]);
+const categoryOf = (name: string): BrandCategory => {
+  const n = name.trim().toUpperCase();
+  if (DESIGNER_HOUSES.has(n)) return 'Designer';
+  if (NICHE_HOUSES.has(n)) return 'Niche';
+  return 'Arabian';
+};
+const CATEGORY_ORDER: BrandCategory[] = ['Designer', 'Niche', 'Arabian'];
+const CATEGORY_NOTE: Record<BrandCategory, string> = {
+  Designer: 'Fashion-house icons',
+  Niche: 'Artisan & rare',
+  Arabian: 'Middle-Eastern craft',
+};
+
 export const TrustSection: React.FC<TrustSectionProps> = ({
   storeSettings,
   products = [],
   onNavigateToCollection
 }) => {
+  const [brandCat, setBrandCat] = useState<'All' | BrandCategory>('All');
   const feeDhaka = storeSettings?.shipping_fee_dhaka || '70';
   const feeOutside = storeSettings?.shipping_fee_outside_dhaka || '130';
   const freeThreshold = storeSettings?.free_shipping_threshold || '3000';
@@ -171,26 +199,49 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
             style={{ backgroundColor: 'var(--theme-primary)' }}
           />
 
-          {/* Perfume Brands Image Boxes Grid */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
-            {brandsList.map((brand) => (
-              <div
-                key={brand.slug}
-                onClick={() => handleBrandClick(brand.slug)}
-                className="group cursor-pointer flex flex-col transition-all duration-300"
-                style={{
-                  backgroundColor: 'var(--theme-surface-card)',
-                  borderColor: 'var(--theme-border)',
-                }}
+          {/* Category switch: All / Designer / Niche / Arabian */}
+          <div className="pp-glass-group pp-brand-tabs mb-5" role="tablist" aria-label="Brand category">
+            {(['All', ...CATEGORY_ORDER] as const).map((c) => (
+              <button
+                key={c}
+                type="button"
+                role="tab"
+                aria-selected={brandCat === c}
+                onClick={() => setBrandCat(c)}
+                className={`pp-glass-pill${brandCat === c ? ' is-active' : ''}`}
               >
-                {/* Typographic brand tile (name set in a refined typeface — no logos copied) */}
-                <div className="pp-brand-tile">
-                  <span className={`pp-brand-name ${brandStyle(brand.name)}`}>{brand.name}</span>
-                  <span className="pp-brand-count">{brand.count}</span>
-                </div>
-              </div>
+                <span className="pp-glass-pill__size">{c}</span>
+              </button>
             ))}
           </div>
+
+          {/* Brands grouped by category */}
+          {CATEGORY_ORDER.filter((c) => brandCat === 'All' || brandCat === c).map((cat) => {
+            const list = brandsList.filter((b) => categoryOf(b.name) === cat);
+            if (!list.length) return null;
+            return (
+              <div key={cat} className="mb-7">
+                <div className="flex items-baseline justify-between mb-2.5">
+                  <span className="pp-brand-cat">{cat}</span>
+                  <span className="pp-brand-cat-note">{CATEGORY_NOTE[cat]} · {list.length} houses</span>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
+                  {list.map((brand) => (
+                  <div
+                    key={brand.slug}
+                    onClick={() => handleBrandClick(brand.slug)}
+                    className="group cursor-pointer flex flex-col transition-all duration-300"
+                  >
+                    <div className="pp-brand-tile">
+                      <span className={`pp-brand-name ${brandStyle(brand.name)}`}>{brand.name}</span>
+                      <span className="pp-brand-count">{brand.count}</span>
+                    </div>
+                  </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Payments Verification Strip Styled with Accent */}

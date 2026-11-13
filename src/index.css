@@ -440,3 +440,10 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 .pp-brand-count {
   margin-top: 5px; font-size: 9px; letter-spacing: .12em; color: #8a8d95; font-variant-numeric: tabular-nums;
 }
+
+
+/* ===== Shop by brands: category tabs + group headings ===== */
+.pp-brand-tabs { max-width: 420px; }
+.pp-brand-tabs .pp-glass-pill { padding: 8px 6px; }
+.pp-brand-cat { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 20px; letter-spacing: .06em; color: #111214; }
+.pp-brand-cat-note { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a8d95; }
