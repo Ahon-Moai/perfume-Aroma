@@ -1,3 +1,4 @@
+import logoRound from '../assets/brand/logo-round.webp';
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Search, Palette, Check, ChevronDown } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -68,11 +69,11 @@ export const Header: React.FC<HeaderProps> = ({
                 onNavigateHome();
               }
             }}
-            className="text-3xl sm:text-4xl font-black tracking-[-0.15em] hover:opacity-85 transition-opacity inline-flex items-center select-none"
-            style={{ color: 'var(--theme-primary)' }}
-            aria-label="Home"
+            className="pp-logo w-12 h-12 sm:w-14 sm:h-14 hover:scale-[1.04] transition-transform duration-300 select-none"
+            aria-label="Pure Portions by Arrina — Home"
           >
-            ++
+            <img src={logoRound} alt="Pure Portions by Arrina" width={56} height={56} decoding="async" />
+            <span className="pp-sparkle" style={{ top: '14%', right: '16%' }} aria-hidden="true" />
           </a>
         </div>
 
@@ -251,7 +252,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="flex items-center justify-between border-b pb-4"
                 style={{ borderColor: 'var(--theme-border-subtle)' }}
               >
-                <span className="text-3xl font-black tracking-[-0.15em]">++</span>
+                <span className="pp-logo w-11 h-11"><img src={logoRound} alt="Pure Portions by Arrina" width={44} height={44} /></span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-1 hover:opacity-70 transition-opacity cursor-pointer"

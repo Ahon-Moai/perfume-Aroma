@@ -28,28 +28,24 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="w-full px-5 sm:px-8 md:px-12">
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
         <div className="w-full overflow-hidden select-none py-2 sm:py-4">
-          <h1
-            className="w-full text-center font-black tracking-tight uppercase leading-[0.88] select-none flex flex-col items-center justify-center"
-            style={{ color: 'var(--theme-primary)' }}
-          >
-            {/* Line 1: Pure Portions */}
-            <span className="block text-[11.5vw] sm:text-[11vw] md:text-[10vw] lg:text-[9.5vw] tracking-[-0.035em] whitespace-nowrap">
+          <h1 className="w-full text-center select-none flex flex-col items-center justify-center" aria-label="Pure Portions by Arrina">
+            {/* Line 1: script, like the logo */}
+            <span className="pp-script pp-silver-text block leading-[1.15] whitespace-nowrap text-[19vw] sm:text-[15vw] md:text-[12.5vw] lg:text-[11vw] px-[0.12em]">
               Pure Portions
             </span>
-            {/* Line 2: By Arrina with trademark */}
-            <span className="relative inline-flex items-center justify-center text-[10vw] sm:text-[9.5vw] md:text-[8.5vw] lg:text-[8vw] tracking-[-0.03em] whitespace-nowrap mt-1 sm:mt-2">
-              <span>By Arrina</span>
-              <span className="text-[3vw] sm:text-[2.5vw] md:text-[2vw] font-bold align-top -mt-3 sm:-mt-5 md:-mt-6 ml-1 sm:ml-1.5 inline-block">
-                ®
-              </span>
+            {/* Line 2: — BY ARRINA — */}
+            <span className="pp-serif-caps flex items-center justify-center gap-3 sm:gap-5 -mt-[1.5vw] whitespace-nowrap text-[5vw] sm:text-[3.6vw] md:text-[2.8vw] lg:text-[2.4vw] tracking-[0.38em] pl-[0.38em] text-[#6b6d74]">
+              <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
+              <span className="pp-silver-text">By Arrina</span>
+              <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
             </span>
           </h1>
         </div>
 
         {/* Thick Solid Horizontal Divider */}
         <div
-          className="w-full h-[3.5px] sm:h-[4.5px] md:h-[5.5px] mt-2 sm:mt-3 mb-6 sm:mb-8"
-          style={{ backgroundColor: 'var(--theme-primary)' }}
+          className="w-full h-[2px] sm:h-[2.5px] mt-3 sm:mt-4 mb-6 sm:mb-8"
+          style={{ backgroundImage: 'linear-gradient(90deg, transparent, #8e9098 15%, #d9dadf 50%, #8e9098 85%, transparent)' }}
         />
 
         {/* Editorial Information Section */}

@@ -353,9 +353,8 @@ function StorefrontApp() {
 
   return (
     <div
-      className="min-h-screen font-sans flex flex-col relative transition-colors duration-250"
+      className="pp-marble-bg min-h-screen font-sans flex flex-col relative transition-colors duration-250"
       style={{
-        backgroundColor: 'var(--theme-bg)',
         color: 'var(--theme-text-primary)',
       }}
     >
