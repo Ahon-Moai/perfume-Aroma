@@ -163,7 +163,7 @@ $products = [
     'sizes' => [
       ['size' => '3ml', 'price' => 661],
       ['size' => '5ml', 'price' => 990],
-      ['size' => '9ml', 'price' => 1650],
+      ['size' => '10ml', 'price' => 1650],
       ['size' => '15ml', 'price' => 2580]
     ]
   ],
@@ -207,7 +207,7 @@ $products = [
     'sizes' => [
       ['size' => '3ml', 'price' => 661],
       ['size' => '5ml', 'price' => 990],
-      ['size' => '9ml', 'price' => 1650],
+      ['size' => '10ml', 'price' => 1650],
       ['size' => '15ml', 'price' => 2580]
     ]
   ],
@@ -251,7 +251,7 @@ $products = [
     'sizes' => [
       ['size' => '3ml', 'price' => 302],
       ['size' => '5ml', 'price' => 470],
-      ['size' => '9ml', 'price' => 790],
+      ['size' => '10ml', 'price' => 790],
       ['size' => '15ml', 'price' => 1250]
     ]
   ],
@@ -295,7 +295,7 @@ $products = [
     'sizes' => [
       ['size' => '3ml', 'price' => 411],
       ['size' => '5ml', 'price' => 640],
-      ['size' => '9ml', 'price' => 1080],
+      ['size' => '10ml', 'price' => 1080],
       ['size' => '15ml', 'price' => 1690]
     ]
   ],
@@ -339,7 +339,7 @@ $products = [
     'sizes' => [
       ['size' => '3ml', 'price' => 336],
       ['size' => '5ml', 'price' => 520],
-      ['size' => '9ml', 'price' => 880],
+      ['size' => '10ml', 'price' => 880],
       ['size' => '15ml', 'price' => 1390]
     ]
   ]

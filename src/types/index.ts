@@ -1,5 +1,5 @@
 export interface DecantSize {
-  size: string; // e.g. "3ml", "5ml", "9ml", "15ml"
+  size: string; // e.g. "1.5ml", "3ml", "5ml", "10ml", "15ml", "30ml"
   price: number; // in BDT (৳)
   image?: string; // custom size/bottle image URL
 }

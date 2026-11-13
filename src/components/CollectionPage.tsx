@@ -296,9 +296,21 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
     if (filters.newArrival) queryParams.new_arrival = '1';
     if (filters.search) queryParams.search = filters.search;
 
+    // "1.5ML TESTER" / "10 ML" → "1.5ml" / "10ml"
+    const normSize = (v: string) => {
+      const m = String(v || '').toLowerCase().replace(/\s+/g, '').match(/(\d+(?:\.\d+)?)ml/);
+      return m ? `${m[1]}ml` : String(v || '').toLowerCase();
+    };
+    const wantedSizes = filters.size.map(normSize);
+
     fetchPublicProducts(queryParams).then((prods) => {
       if (isMounted) {
-        setFilteredProducts(prods || []);
+        let list = prods || [];
+        // Size filter: keep perfumes that are actually sold in the chosen size(s)
+        if (wantedSizes.length) {
+          list = list.filter((p) => (p.sizes || []).some((s) => wantedSizes.includes(normSize(s.size))));
+        }
+        setFilteredProducts(list);
         setLoadingProducts(false);
       }
     });
@@ -338,7 +350,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
     'Formal / Black Tie', 'Party / Nightout', 'Gym / Sport', 'Special Occasions'
   ];
 
-  const SIZE_OPTIONS = ['3ml', '5ml', '9ml', '10ml', '15ml'];
+  const SIZE_OPTIONS = ['1.5ml', '3ml', '5ml', '10ml', '15ml', '30ml'];
 
   const CONCENTRATION_OPTIONS = ['EDT', 'EDP', 'Parfum', 'Extrait'];
 
