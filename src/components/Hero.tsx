@@ -40,12 +40,12 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="w-full px-5 sm:px-8 md:px-12">
         {/* Announcement: 1.5ml testers */}
         {onOpenTesters && (
-          <div className="flex justify-center pt-3 sm:pt-5">
+          <div className="flex justify-center pt-3 sm:pt-5 pb-2 sm:pb-3">
             <button type="button" onClick={onOpenTesters} className="pp-announce" aria-label="See all 1.5ml testers">
               <span className="pp-announce__tag">New</span>
               <span className="pp-announce__text">
-                Try before you commit — <strong>1.5ml testers</strong>
-                {testerFrom > 0 && <span className="pp-announce__price"> from ৳{testerFrom}</span>}
+                <strong>1.5ml testers</strong>
+                <span className="pp-announce__price"> · try any scent{testerFrom > 0 ? ` from ৳${testerFrom}` : ''}</span>
               </span>
               <span className="pp-announce__arrow" aria-hidden="true">→</span>
             </button>
