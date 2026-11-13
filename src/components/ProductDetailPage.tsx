@@ -209,30 +209,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 referrerPolicy="no-referrer"
               />
 
-              {/* Badges Overlay */}
-              <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
-                <span
-                  className="text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 shadow-sm rounded-xs"
-                  style={{
-                    backgroundColor: 'var(--theme-primary)',
-                    color: '#FFFFFF',
-                  }}
-                >
-                  100% AUTHENTIC ATOMIZER
-                </span>
-                {product.gender && (
-                  <span
-                    className="border text-[9px] font-sans font-semibold tracking-wider uppercase px-2.5 py-0.5 w-fit rounded-xs"
-                    style={{
-                      backgroundColor: 'var(--theme-surface)',
-                      borderColor: 'var(--theme-border-subtle)',
-                      color: 'var(--theme-secondary)',
-                    }}
-                  >
-                    {product.gender} EDITION
-                  </span>
-                )}
-              </div>
 
               {/* Share Floating Action */}
               <button
@@ -252,12 +228,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 )}
               </button>
 
-              <div
-                className="absolute bottom-4 right-4 text-[9px] font-mono tracking-widest uppercase opacity-70"
-                style={{ color: 'var(--theme-text-secondary)' }}
-              >
-                FINE MIST DISPERSION GLASS BOTTLE
-              </div>
             </div>
 
             {/* Thumbnail Navigation Row */}
@@ -306,9 +276,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 >
                   {product.brand} · {product.concentration || 'Eau de Parfum'}
                 </span>
-                <span className="text-[10px] font-mono uppercase opacity-60" style={{ color: 'var(--theme-text-secondary)' }}>
-                  ID: {product.id}
-                </span>
               </div>
 
               {/* Title & Category */}
@@ -324,31 +291,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </p>
               </div>
 
-              {/* Dynamic Price Display */}
-              <div
-                className="pp-noborder border p-4 flex items-baseline justify-between rounded-xs"
-                style={{
-                  backgroundColor: 'var(--theme-surface)',
-                  borderColor: 'var(--theme-border-subtle)',
-                }}
-              >
-                <div>
-                  <span className="text-[10px] font-sans tracking-widest uppercase block opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
-                    PRICE FOR {currentSize.size} ({quantity}x)
-                  </span>
-                  <span
-                    className="font-serif text-2xl sm:text-3xl font-bold tabular-nums"
-                    style={{ color: 'var(--theme-primary)' }}
-                  >
-                    ৳ {totalPrice.toLocaleString()}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="inline-flex items-center gap-1.5 text-[10px] font-sans text-emerald-700 bg-emerald-50 px-2.5 py-1 border border-emerald-200 uppercase font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    In Stock • Freshly Decanted
-                  </span>
-                </div>
+              {/* Price */}
+              <div className="flex items-baseline gap-2">
+                <span className="font-serif text-2xl sm:text-3xl font-bold tabular-nums" style={{ color: 'var(--theme-primary)' }}>
+                  ৳ {totalPrice.toLocaleString()}
+                </span>
+                <span className="text-xs font-sans opacity-60" style={{ color: 'var(--theme-text-secondary)' }}>
+                  {currentSize.size}{quantity > 1 ? ` × ${quantity}` : ''}
+                </span>
               </div>
 
               {/* Short Description */}
@@ -358,67 +308,30 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </p>
               )}
 
-              {/* Decant Volume / Size Option Visual Cards Selector */}
-              <div
-                className="space-y-3 pt-3 border-t"
-                style={{ borderColor: 'var(--theme-border-subtle)' }}
-              >
-                <div className="flex items-center justify-between text-xs font-sans">
-                  <span
-                    className="font-bold tracking-widest uppercase text-xs"
-                    style={{ color: 'var(--theme-secondary)' }}
-                  >
-                    SELECT SIZE
-                  </span>
-                  <span className="text-xs opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
-                    Selected: <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>{currentSize.size}</span>
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {/* Size selector — compact Apple-style liquid glass pills */}
+              <div className="space-y-2.5 pt-1">
+                <span className="text-[11px] font-sans tracking-[0.2em] uppercase opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
+                  Size
+                </span>
+                <div className="pp-glass-group" role="radiogroup" aria-label="Choose size">
                   {product.sizes.map((s, idx) => {
                     const isSelected = selectedSizeIndex === idx;
-                    const sizeImage = s.image || activeImage;
-
                     return (
                       <button
                         key={s.size || idx}
-                        onClick={() => setSelectedSizeIndex(idx)}
-                        className="group relative flex flex-col overflow-hidden rounded-xl border transition-all duration-200 text-left cursor-pointer"
-                        style={{
-                          backgroundColor: 'var(--theme-surface-card)',
-                          borderColor: isSelected ? 'var(--theme-primary)' : 'var(--theme-border-subtle)',
-                          boxShadow: isSelected ? '0 0 0 2px var(--theme-primary)' : 'none',
+                        type="button"
+                        role="radio"
+                        aria-checked={isSelected}
+                        data-size={s.size}
+                        onClick={() => {
+                          setSelectedSizeIndex(idx);
+                          // Hook for the upcoming 3D bottle: listen for 'pp:size-select' to animate on size change
+                          window.dispatchEvent(new CustomEvent('pp:size-select', { detail: { size: s.size, index: idx, price: s.price } }));
                         }}
+                        className={`pp-glass-pill${isSelected ? ' is-active' : ''}`}
                       >
-                        {/* Variant Picture Container */}
-                        <div
-                          className="w-full aspect-square p-3 flex items-center justify-center overflow-hidden"
-                          style={{ backgroundColor: 'var(--theme-surface)' }}
-                        >
-                          <img
-                            src={sizeImage}
-                            alt={s.size}
-                            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-
-                        {/* Label Banner */}
-                        <div
-                          className="w-full py-2 px-2 text-center transition-colors"
-                          style={{
-                            backgroundColor: isSelected ? 'var(--theme-primary)' : 'var(--theme-surface)',
-                            color: isSelected ? '#FFFFFF' : 'var(--theme-text-primary)',
-                          }}
-                        >
-                          <span className="text-xs font-bold font-sans tracking-wide uppercase block">
-                            {s.size}
-                          </span>
-                          <span className="text-[11px] font-mono font-medium block opacity-90 mt-0.5">
-                            ৳ {s.price}
-                          </span>
-                        </div>
+                        <span className="pp-glass-pill__size">{s.size}</span>
+                        <span className="pp-glass-pill__price">৳{s.price}</span>
                       </button>
                     );
                   })}
@@ -497,21 +410,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </button>
               </div>
 
-              {/* Guarantee & Authenticity Badges */}
-              <div className="pt-4 border-t border-zinc-150 space-y-2 text-[11px] font-sans text-zinc-600">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>100% Genuine Perfume extracted directly from brand flacon.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <PackageCheck className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>Transit-safe shrink-sealed glass tube with high-pressure fine spray nozzle.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Droplets className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span>Free nationwide delivery on orders over ৳ 3,000.</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
