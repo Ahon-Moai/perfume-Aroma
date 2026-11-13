@@ -46,7 +46,7 @@ function ppLog(PDO $db, string $invId, string $type, float $change, float $prev,
 }
 
 if ($method === 'GET') {
-    $products = $db->query("SELECT id, brand, name, slug, image, status FROM products ORDER BY brand ASC, name ASC")->fetchAll();
+    $products = $db->query("SELECT id, brand, name, slug, image, status, category FROM products ORDER BY brand ASC, name ASC")->fetchAll();
     $vars = $db->query("SELECT id, product_id, size, price FROM product_variants")->fetchAll();
     $inv = $db->query("SELECT * FROM perfume_inventory WHERE product_id IS NOT NULL")->fetchAll();
     $vBy = []; foreach ($vars as $v) $vBy[$v['product_id']][] = ['id' => $v['id'], 'size' => $v['size'], 'ml' => parseDecantMl($v['size']), 'price' => (float)$v['price']];
@@ -59,7 +59,7 @@ if ($method === 'GET') {
         usort($sizes, fn($a, $b) => $a['ml'] <=> $b['ml']);
         $b = $iBy[$p['id']] ?? null;
         $out[] = [
-            'id' => $p['id'], 'brand' => $p['brand'], 'name' => $p['name'], 'slug' => $p['slug'],
+            'id' => $p['id'], 'brand' => $p['brand'], 'name' => $p['name'], 'slug' => $p['slug'], 'category' => $p['category'],
             'image' => $p['image'], 'status' => $p['status'], 'sizes' => $sizes,
             'bottle_size_ml' => $b ? (float)$b['bottle_size_ml'] : 100.0,
             'ml_left' => $b ? (float)$b['remaining_ml'] : null,
@@ -131,6 +131,37 @@ if ($method === 'POST') {
         $note !== '' ? $note : ($action === 'restock' ? 'New bottle' : 'Removed (spill / tester)'), $who);
     $db->commit();
     jsonResponse(['ml_left' => $new], 200, 'Updated');
+}
+
+if ($method === 'DELETE') {
+    // Permanent delete — only for products already hidden (archived), so a live perfume can't be removed by mistake
+    $pid = sanitizeString($_GET['id'] ?? '');
+    $p = $db->prepare("SELECT id, name, status FROM products WHERE id = ?");
+    $p->execute([$pid]);
+    $row = $p->fetch();
+    if (!$row) jsonError('Perfume not found', 404);
+    if ($row['status'] !== 'archived') jsonError('Hide (archive) the perfume first, then delete it', 400);
+    try {
+        $db->beginTransaction();
+        $inv = $db->prepare("SELECT id FROM perfume_inventory WHERE product_id = ?");
+        $inv->execute([$pid]);
+        foreach ($inv->fetchAll() as $i) {
+            $db->prepare("DELETE FROM inventory_transactions WHERE inventory_id = ?")->execute([$i['id']]);
+            $db->prepare("DELETE FROM perfume_inventory WHERE id = ?")->execute([$i['id']]);
+        }
+        $db->prepare("DELETE FROM product_variants WHERE product_id = ?")->execute([$pid]);
+        $db->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$pid]);
+        $db->prepare("DELETE FROM products WHERE id = ?")->execute([$pid]);
+        try {
+            $db->prepare("INSERT INTO audit_logs (user_id, action, entity, entity_id, details) VALUES (?, 'delete_product', 'products', ?, ?)")
+               ->execute([$admin['id'] ?? null, $pid, 'Deleted archived product: ' . $row['name']]);
+        } catch (\Throwable $e) {}
+        $db->commit();
+        jsonResponse(['deleted' => $pid], 200, 'Deleted');
+    } catch (\Throwable $e) {
+        if ($db->inTransaction()) $db->rollBack();
+        jsonError('Couldn’t delete: ' . $e->getMessage(), 500);
+    }
 }
 
 jsonError('Method not allowed', 405);
