@@ -5,6 +5,26 @@
 
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/inventory_helpers.php';
+
+/** ml left in each product's bottle (null when not tracked). */
+function ppMlLeft(PDO $db, array $ids): array {
+    if (empty($ids)) return [];
+    $in = implode(',', array_fill(0, count($ids), '?'));
+    $st = $db->prepare("SELECT product_id, remaining_ml FROM perfume_inventory WHERE product_id IN ($in)");
+    $st->execute(array_values($ids));
+    $m = [];
+    foreach ($st->fetchAll() as $r) $m[$r['product_id']] = (float)$r['remaining_ml'];
+    return $m;
+}
+
+/** Marks sizes the bottle can no longer fill. */
+function ppApplySoldOut(array $sizes, ?float $left): array {
+    foreach ($sizes as &$sz) {
+        $sz['soldOut'] = $left !== null && parseDecantMl((string)$sz['size']) > $left;
+    }
+    return $sizes;
+}
 
 sendCorsAndHeaders();
 
@@ -86,7 +106,7 @@ if ($id || $slug) {
         'attributes' => $attributes,
         'scentProfile' => $scentProfile,
         'scent_profile' => $scentProfile,
-        'sizes' => $sizes,
+        'sizes' => ppApplySoldOut($sizes, ppMlLeft($db, [$product['id']])[$product['id']] ?? null),
         'shortDescription' => $product['short_description'],
         'description' => $product['description'],
         'inventoryQty' => (int)$product['inventory_qty']
@@ -366,7 +386,8 @@ if (!empty($productIds)) {
     }
 }
 
-$formattedList = array_map(function($p) use ($variantsByProduct, $imagesByProduct) {
+$mlLeftMap = ppMlLeft($db, array_column($products ?? [], 'id'));
+$formattedList = array_map(function($p) use ($variantsByProduct, $imagesByProduct, $mlLeftMap) {
     $notes = json_decode($p['notes'] ?? '[]', true) ?: [];
     $topNotes = json_decode($p['top_notes'] ?? '[]', true) ?: [];
     $heartNotes = json_decode($p['heart_notes'] ?? '[]', true) ?: [];
@@ -378,6 +399,8 @@ $formattedList = array_map(function($p) use ($variantsByProduct, $imagesByProduc
     if (empty($sizes)) {
         $sizes = [['size' => '5ml', 'price' => (float)$p['starting_price'], 'stock_qty' => (int)$p['inventory_qty']]];
     }
+
+    $sizes = ppApplySoldOut($sizes, $mlLeftMap[$p['id']] ?? null);
 
     $additionalImages = $imagesByProduct[$p['id']] ?? [];
     $allImages = array_values(array_unique(array_filter(array_merge([$p['image']], $additionalImages))));

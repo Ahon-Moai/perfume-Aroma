@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { SearchInsights } from './SearchInsights';
+import { PerfumeStock } from './PerfumeStock';
 import { ProductManager } from './ProductManager';
 import { CollectionManager } from './CollectionManager';
 import { OrderManager } from './OrderManager';
@@ -47,7 +48,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   onLogout,
   onSwitchToStorefront
 }) => {
-  const [activeTab, setActiveTab] = useState<'analytics' | 'search_analytics' | 'products' | 'inventory' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'search_analytics' | 'perfumes' | 'products' | 'inventory' | 'collections' | 'orders' | 'customers' | 'homepage' | 'settings' | 'media'>('analytics');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
@@ -63,8 +64,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const navItems = [
     { id: 'analytics', label: 'Analytics & Insights', icon: BarChart3, desc: 'Sales performance & metrics' },
     { id: 'search_analytics', label: 'Search Analytics', icon: Search, desc: 'What customers look for' },
-    { id: 'products', label: 'Products & Catalogue', icon: Package, desc: 'Manage catalogue & variants' },
-    { id: 'inventory', label: 'ML Perfume Inventory', icon: FlaskConical, desc: 'Track bottle ML & stock ledger' },
+    { id: 'perfumes', label: 'Perfumes & Stock', icon: FlaskConical, desc: 'Prices, ml left & offline orders' },
     { id: 'collections', label: 'Collections & Categories', icon: Layers, desc: 'Organize store taxonomy' },
     { id: 'orders', label: 'Orders & Invoices', icon: ShoppingBag, desc: 'Track customer orders' },
     { id: 'customers', label: 'Customer Directory', icon: Users, desc: 'Customer accounts & contact' },
@@ -364,6 +364,18 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         }`}>
           {activeTab === 'analytics' && <AnalyticsDashboard csrfToken={csrfToken} />}
           {activeTab === 'search_analytics' && <SearchInsights csrfToken={csrfToken} />}
+          {activeTab === 'perfumes' && (
+            <PerfumeStock
+              csrfToken={csrfToken}
+              onOpenCatalogue={() => setActiveTab('products')}
+              onOpenHistory={() => setActiveTab('inventory')}
+            />
+          )}
+          {(activeTab === 'products' || activeTab === 'inventory') && (
+            <button onClick={() => setActiveTab('perfumes')} className="mb-4 text-xs font-semibold text-neutral-600 hover:text-neutral-950">
+              ← Back to Perfumes & Stock
+            </button>
+          )}
           {activeTab === 'products' && <ProductManager csrfToken={csrfToken} />}
           {activeTab === 'inventory' && <InventoryManager csrfToken={csrfToken} />}
           {activeTab === 'collections' && <CollectionManager csrfToken={csrfToken} />}

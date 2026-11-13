@@ -447,3 +447,7 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 .pp-brand-tabs .pp-glass-pill { padding: 8px 6px; }
 .pp-brand-cat { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 20px; letter-spacing: .06em; color: #111214; }
 .pp-brand-cat-note { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a8d95; }
+
+/* Sold-out size pill: bottle can't fill it */
+.pp-glass-pill.is-soldout{opacity:.38;cursor:not-allowed;text-decoration:line-through}
+.pp-glass-pill.is-soldout .pp-glass-pill__price{text-decoration:none;font-size:9px;letter-spacing:.06em}

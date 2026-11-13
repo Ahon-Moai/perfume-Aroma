@@ -14,6 +14,7 @@ interface OrderItem {
 interface Order {
   id: number;
   order_number: string;
+  source?: string;
   customer_name: string;
   customer_phone: string;
   customer_email?: string;
@@ -179,7 +180,14 @@ export const OrderManager: React.FC<OrderManagerProps> = ({ csrfToken }) => {
             ) : (
               orders.map((o) => (
                 <tr key={o.id} className="hover:bg-[#F8F8F8] transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-semibold text-[#111111]">{o.order_number}</td>
+                  <td className="py-3.5 px-4 font-mono font-semibold text-[#111111]">
+                    {o.order_number}
+                    {o.source && o.source !== 'website' && (
+                      <span className="ml-2 font-sans text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700">
+                        {o.source.replace('_', ' ')}
+                      </span>
+                    )}
+                  </td>
                   <td className="py-3.5 px-4 text-[#111111]">{o.customer_name}</td>
                   <td className="py-3.5 px-4 text-[#737373] font-mono">{o.customer_phone}</td>
                   <td className="py-3.5 px-4 capitalize text-[#737373]">{o.city_zone.replace('_', ' ')}</td>

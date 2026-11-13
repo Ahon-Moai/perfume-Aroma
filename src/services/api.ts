@@ -153,7 +153,8 @@ export async function submitOrder(orderPayload: {
     quantity: number;
   }>;
 }) {
-  const res = await fetch(`${API_BASE_URL}/orders.php`, {
+  // orders2: takes the ml out of the bottle the moment the order is placed
+  const res = await fetch(`${API_BASE_URL}/orders2.php`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

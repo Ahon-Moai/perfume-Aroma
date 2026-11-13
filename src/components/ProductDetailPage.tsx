@@ -98,7 +98,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // Reset image and size selection when product changes
   useEffect(() => {
     setSelectedImageIndex(0);
-    setSelectedSizeIndex(0);
+    const firstOpen = product.sizes.findIndex((s) => !s.soldOut);
+    setSelectedSizeIndex(firstOpen >= 0 ? firstOpen : 0);
     setQuantity(1);
     setAdded(false);
     scrollToTop();
@@ -107,14 +108,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const activeImage = galleryImages[selectedImageIndex] || product.image;
   const currentSize: DecantSize = product.sizes[selectedSizeIndex] || product.sizes[0] || { size: '5ml', price: product.startingPrice };
   const totalPrice = currentSize.price * quantity;
+  const isSoldOut = !!currentSize.soldOut;
 
   const handleAddToCartClick = () => {
+    if (isSoldOut) return;
     onAddToCart(product, currentSize.size, currentSize.price, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };
 
   const handleBuyNowClick = () => {
+    if (isSoldOut) return;
     onBuyNow(product, currentSize.size, currentSize.price, quantity);
   };
 
@@ -323,16 +327,19 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         type="button"
                         role="radio"
                         aria-checked={isSelected}
+                        aria-disabled={s.soldOut || undefined}
+                        disabled={!!s.soldOut}
                         data-size={s.size}
                         onClick={() => {
+                          if (s.soldOut) return;
                           setSelectedSizeIndex(idx);
                           // Hook for the upcoming 3D bottle: listen for 'pp:size-select' to animate on size change
                           window.dispatchEvent(new CustomEvent('pp:size-select', { detail: { size: s.size, index: idx, price: s.price } }));
                         }}
-                        className={`pp-glass-pill${isSelected ? ' is-active' : ''}`}
+                        className={`pp-glass-pill${isSelected ? ' is-active' : ''}${s.soldOut ? ' is-soldout' : ''}`}
                       >
                         <span className="pp-glass-pill__size">{s.size}</span>
-                        <span className="pp-glass-pill__price">৳{s.price}</span>
+                        <span className="pp-glass-pill__price">{s.soldOut ? 'Sold out' : `৳${s.price}`}</span>
                       </button>
                     );
                   })}
@@ -377,7 +384,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   {/* Add to Bag Button */}
                   <button
                     onClick={handleAddToCartClick}
-                    disabled={added}
+                    disabled={added || isSoldOut}
                     className="flex-1 py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:opacity-90 rounded-xs"
                     style={{
                       backgroundColor: 'var(--theme-btn-bg)',
@@ -392,7 +399,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     ) : (
                       <>
                         <ShoppingBag className="w-4 h-4" />
-                        <span>Add To Bag</span>
+                        <span>{isSoldOut ? 'Sold Out' : 'Add To Bag'}</span>
                       </>
                     )}
                   </button>
@@ -401,7 +408,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 {/* Buy Now Direct Button */}
                 <button
                   onClick={handleBuyNowClick}
-                  className="w-full py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md font-semibold rounded-xs hover:opacity-90"
+                  disabled={isSoldOut}
+                  className="w-full disabled:opacity-40 disabled:cursor-not-allowed py-3.5 px-6 text-xs font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md font-semibold rounded-xs hover:opacity-90"
                   style={{
                     backgroundColor: 'var(--theme-secondary)',
                     color: '#FFFFFF',
