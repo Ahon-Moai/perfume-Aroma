@@ -15,7 +15,6 @@ import { CustomProductSections } from './components/CustomProductSections';
 import { TrustSection } from './components/TrustSection';
 import { ReviewsSection } from './components/ReviewsSection';
 import { StudioSection } from './components/StudioSection';
-import { JournalSection } from './components/JournalSection';
 import { Footer } from './components/Footer';
 import { ProductDetailPage } from './components/ProductDetailPage';
 import { CollectionPage } from './components/CollectionPage';
@@ -501,11 +500,7 @@ function StorefrontApp() {
             {/* K. Our Studio social-content section */}
             <StudioSection socialCards={homepageData?.socialCards} />
 
-            {/* L. Editorial blog and fragrance guides */}
-            <JournalSection
-              onReadArticle={handleReadArticle}
-              articles={homepageData?.articles}
-            />
+
           </>
         )}
       </main>
