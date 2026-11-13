@@ -230,7 +230,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
       if (isMounted) {
         if (col) {
           setCollection(col);
-          document.title = `${col.title} Collection — Pure Portions by Arrina`;
+          document.title = `Pure Portions by Arrina`;
         } else {
           // Fallback title formatting
           const formattedTitle = ucwords(collectionSlug.replace(/-/g, ' '));
@@ -240,7 +240,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             slug: collectionSlug,
             description: `Curated ${formattedTitle} luxury decant selections.`
           });
-          document.title = `${formattedTitle} — Pure Portions by Arrina`;
+          document.title = `Pure Portions by Arrina`;
         }
         setLoadingCollection(false);
       }
