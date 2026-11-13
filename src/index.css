@@ -469,3 +469,10 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 @keyframes ppQuizUp{from{transform:translateY(24px);opacity:0}}
 @keyframes ppQuizIn{from{opacity:0;transform:translateX(10px)}}
 @media (prefers-reduced-motion: reduce){.pp-quiz,.pp-quiz__in{animation:none}}
+
+/* Top bar: hides on scroll down, returns on scroll up, liquid glass when off the top */
+.pp-header{background:var(--theme-surface,#fff);border-bottom:1px solid var(--theme-border-subtle,#eee);transform:translateY(0);transition:transform .45s cubic-bezier(.2,.8,.2,1),background-color .35s ease,box-shadow .35s ease,border-color .35s ease,-webkit-backdrop-filter .35s ease,backdrop-filter .35s ease;will-change:transform}
+.pp-header.is-glass{background:rgba(255,255,255,.62);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border-bottom-color:rgba(255,255,255,.55);box-shadow:0 1px 0 rgba(0,0,0,.05),0 10px 30px -18px rgba(0,0,0,.25)}
+.pp-header.is-glass::before{content:'';position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);pointer-events:none}
+.pp-header.is-hidden{transform:translateY(-105%)}
+@media (prefers-reduced-motion: reduce){.pp-header{transition:none}}

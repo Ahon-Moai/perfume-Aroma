@@ -29,6 +29,24 @@ export const Header: React.FC<HeaderProps> = ({
 
   const { theme, setTheme, themes, currentTheme } = useTheme();
 
+  // Hide while scrolling down, glide back on scroll up; liquid glass once off the top
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const lastY = useRef(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 12);
+      const dy = y - lastY.current;
+      if (Math.abs(dy) < 6) return;
+      setHidden(dy > 0 && y > 120);
+      lastY.current = y;
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,11 +69,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header
-      className="sticky top-0 z-40 w-full border-b transition-colors duration-200"
-      style={{
-        backgroundColor: 'var(--theme-surface)',
-        borderColor: 'var(--theme-border-subtle)',
-      }}
+      className={`pp-header sticky top-0 z-40 w-full${scrolled ? ' is-glass' : ''}${hidden && !mobileMenuOpen ? ' is-hidden' : ''}`}
     >
       {/* Main Top Navigation matching reference */}
       <div className="w-full px-5 sm:px-8 md:px-12 pt-5 pb-3 flex items-center justify-between">
