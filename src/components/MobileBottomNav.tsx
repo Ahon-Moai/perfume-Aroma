@@ -39,6 +39,22 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // One-time hint so first-time visitors know "AI" is a scent finder
+  const HINT_KEY = 'pp_finder_hint_seen';
+  const [hint, setHint] = useState(false);
+  useEffect(() => {
+    let seen = false;
+    try { seen = localStorage.getItem(HINT_KEY) === '1'; } catch {}
+    if (seen) return;
+    const show = window.setTimeout(() => setHint(true), 2500);
+    const hide = window.setTimeout(() => closeHint(), 14000);
+    return () => { window.clearTimeout(show); window.clearTimeout(hide); };
+  }, []);
+  const closeHint = () => {
+    setHint(false);
+    try { localStorage.setItem(HINT_KEY, '1'); } catch {}
+  };
+
   const navItems: { id: 'home' | 'shop' | 'tester' | 'search' | 'ai'; label: string; icon: any; action: () => void; badge?: number }[] = [
     {
       id: 'home' as const,
@@ -68,12 +84,20 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
       id: 'ai' as const,
       label: 'AI',
       icon: Sparkles,
-      action: onSelectAI,
+      action: () => { closeHint(); onSelectAI(); },
     },
   ];
 
   return (
     <div className={`pp-dock fixed bottom-3 left-1/2 z-40 w-[82%] max-w-[320px] md:hidden pointer-events-none pb-[env(safe-area-inset-bottom)] select-none${hidden ? ' is-hidden' : ''}`}>
+      {hint && !hidden && (
+        <div className="pp-finder-hint pointer-events-auto" role="status">
+          <span className="pp-finder-hint__eyebrow">Scent Finder</span>
+          <span className="pp-finder-hint__title">New to perfume?</span>
+          <span className="pp-finder-hint__text">Tap <b>AI</b>, pick your mood — we’ll match your scent.</span>
+          <button type="button" onClick={closeHint} className="pp-finder-hint__ok">Got it</button>
+        </div>
+      )}
       {/* Floating Liquid-Glass Pill Outer Wrapper */}
       <nav
         aria-label="Mobile Bottom Navigation"

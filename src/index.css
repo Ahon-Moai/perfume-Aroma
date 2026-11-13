@@ -451,3 +451,14 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 /* Sold-out size pill: bottle can't fill it */
 .pp-glass-pill.is-soldout{opacity:.38;cursor:not-allowed;text-decoration:line-through}
 .pp-glass-pill.is-soldout .pp-glass-pill__price{text-decoration:none;font-size:9px;letter-spacing:.06em}
+
+/* One-time "Scent Finder" hint above the AI button */
+.pp-finder-hint{position:absolute;right:-2px;bottom:calc(100% + 12px);width:210px;display:flex;flex-direction:column;gap:2px;padding:12px 14px 10px;border-radius:18px;background:rgba(255,255,255,.94);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 14px 34px -14px rgba(0,0,0,.35);animation:ppHintIn .55s cubic-bezier(.2,.8,.2,1) both}
+.pp-finder-hint:after{content:'';position:absolute;right:24px;bottom:-5px;width:10px;height:10px;background:rgba(255,255,255,.94);transform:rotate(45deg);box-shadow:.5px .5px 0 rgba(0,0,0,.06)}
+.pp-finder-hint__eyebrow{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:#8a8a8f}
+.pp-finder-hint__title{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:19px;line-height:1.1;color:#111}
+.pp-finder-hint__text{font-size:12px;line-height:1.45;color:#555}
+.pp-finder-hint__text b{color:#111;font-weight:600}
+.pp-finder-hint__ok{align-self:flex-end;margin-top:4px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#111;font-weight:600;background:none;border:0;padding:2px 0;cursor:pointer}
+@keyframes ppHintIn{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion: reduce){.pp-finder-hint{animation:none}}
