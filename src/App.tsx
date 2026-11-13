@@ -223,6 +223,15 @@ function StorefrontApp() {
     }
   };
 
+  // Bottom bar "1.5ml Tester" → all perfumes available as 1.5ml testers
+  const [collectionKey, setCollectionKey] = useState(0);
+  const openTesters = () => {
+    window.history.pushState({}, '', '/collections/all?size=1.5ml');
+    setRoute({ path: 'collection', collectionSlug: 'all' });
+    setCollectionKey((k) => k + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const navigateToHome = () => {
     const isNewPage = route.path !== 'home';
     if (window.location.pathname !== '/' && window.location.hash !== '#admin') {
@@ -405,6 +414,7 @@ function StorefrontApp() {
         {route.path === 'collection' && route.collectionSlug ? (
           /* Dedicated Collection / Category Filter Page */
           <CollectionPage
+            key={`col-${route.collectionSlug}-${collectionKey}`}
             collectionSlug={route.collectionSlug}
             allProducts={products}
             onNavigateHome={navigateToHome}
@@ -527,6 +537,8 @@ function StorefrontApp() {
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
         onSelectAI={() => setIsFinderOpen(true)}
+        onOpenTesters={openTesters}
+        testersActive={route.path === 'collection' && route.collectionSlug === 'all' && /(^|[?&])size=1\.5ml/i.test(window.location.search)}
       />
 
       {/* Interactive Drawers & Search Modal */}

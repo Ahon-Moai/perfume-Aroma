@@ -327,3 +327,28 @@ main p.uppercase, main span.uppercase.font-bold, main span.uppercase.font-black 
 }
 main h2 ~ p.uppercase, main h2 + p { opacity: 0.65; font-size: 11px !important; }
 main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
+
+
+/* ===== Bottom bar: 1.5ml Tester chip ===== */
+.pp-tester-chip {
+  position: relative; display: inline-flex; align-items: baseline; justify-content: center; gap: 1px;
+  width: 42px; height: 42px; border-radius: 9999px; margin-top: -14px;
+  background: radial-gradient(120% 120% at 30% 20%, #3a3c42 0%, #111214 60%, #000 100%);
+  color: #fff; padding-top: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.25), 0 0 0 3px rgba(255,255,255,.9);
+  overflow: hidden;
+}
+.pp-tester-chip::after { /* light sweep */
+  content: ""; position: absolute; inset: -30%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.55) 50%, transparent 60%);
+  transform: translateX(-120%); animation: pp-glint 4.8s cubic-bezier(.45,0,.25,1) .8s infinite;
+}
+.pp-tester-chip::before { /* soft halo pulse to draw the eye */
+  content: ""; position: absolute; inset: -6px; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(17,17,17,.35); animation: pp-tester-pulse 2.8s ease-out infinite;
+}
+@keyframes pp-tester-pulse { 0% { box-shadow: 0 0 0 0 rgba(17,17,17,.28); } 70%, 100% { box-shadow: 0 0 0 10px rgba(17,17,17,0); } }
+.pp-tester-chip__ml { font-size: 13px; font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+.pp-tester-chip__unit { font-size: 8.5px; font-weight: 500; opacity: .8; line-height: 1; }
+.pp-tester-chip.is-active { box-shadow: 0 6px 16px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.25), 0 0 0 3px #fff, 0 0 0 4.5px #111; }
+@media (prefers-reduced-motion: reduce) { .pp-tester-chip::after, .pp-tester-chip::before { animation: none; } }

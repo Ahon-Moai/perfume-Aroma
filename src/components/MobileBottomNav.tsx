@@ -9,6 +9,8 @@ interface MobileBottomNavProps {
   onOpenSearch: () => void;
   onOpenCart: () => void;
   onSelectAI: () => void;
+  onOpenTesters?: () => void;
+  testersActive?: boolean;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
@@ -19,13 +21,27 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   onOpenSearch,
   onOpenCart,
   onSelectAI,
+  onOpenTesters,
+  testersActive = false,
 }) => {
-  const navItems: { id: 'shop' | 'search' | 'ai'; label: string; icon: any; action: () => void; badge?: number }[] = [
+  const navItems: { id: 'home' | 'shop' | 'tester' | 'search' | 'ai'; label: string; icon: any; action: () => void; badge?: number }[] = [
+    {
+      id: 'home' as const,
+      label: 'Home',
+      icon: Home,
+      action: onNavigateHome,
+    },
     {
       id: 'shop' as const,
       label: 'Shop',
       icon: LayoutGrid,
       action: onNavigateShop,
+    },
+    {
+      id: 'tester' as const,
+      label: 'Tester',
+      icon: null,
+      action: onOpenTesters || onNavigateShop,
     },
     {
       id: 'search' as const,
@@ -42,11 +58,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   ];
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-md md:hidden pointer-events-none pb-[env(safe-area-inset-bottom)] select-none">
+    <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-[86%] max-w-[340px] md:hidden pointer-events-none pb-[env(safe-area-inset-bottom)] select-none">
       {/* Floating Liquid-Glass Pill Outer Wrapper */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="relative pointer-events-auto rounded-full p-[5px] transition-all duration-300 ease-out"
+        className="relative pointer-events-auto rounded-full p-[3px] transition-all duration-300 ease-out"
         style={{
           /* Apple Liquid Glass styling: realistic translucent substrate + multi-layer specular & ambient illumination */
           background: 'rgba(255, 255, 255, 0.65)',
@@ -71,13 +87,32 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <div className="relative flex items-center justify-between gap-1">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = item.id === 'tester' ? testersActive : activeTab === item.id && !testersActive;
+
+            if (item.id === 'tester') {
+              return (
+                <button
+                  key={item.id}
+                  onClick={item.action}
+                  className="relative flex flex-col items-center justify-center flex-1 -my-1 cursor-pointer active:scale-95 touch-manipulation"
+                  aria-label="1.5ml testers"
+                >
+                  <span className={`pp-tester-chip${isActive ? ' is-active' : ''}`}>
+                    <span className="pp-tester-chip__ml">1.5</span>
+                    <span className="pp-tester-chip__unit">ml</span>
+                  </span>
+                  <span className="text-[9.5px] tracking-tight mt-0.5 leading-tight font-medium" style={{ color: 'var(--theme-primary)' }}>
+                    Tester
+                  </span>
+                </button>
+              );
+            }
 
             return (
               <button
                 key={item.id}
                 onClick={item.action}
-                className="group relative flex flex-col items-center justify-center flex-1 py-1.5 px-1 rounded-full transition-all duration-300 ease-out cursor-pointer active:scale-95 touch-manipulation"
+                className="group relative flex flex-col items-center justify-center flex-1 py-1 px-0.5 rounded-full transition-all duration-300 ease-out cursor-pointer active:scale-95 touch-manipulation"
                 style={
                   isActive
                     ? {
