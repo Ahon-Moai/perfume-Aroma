@@ -1,6 +1,6 @@
 import logoRound from '../assets/brand/logo-round.webp';
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Search, Palette, Check, ChevronDown } from 'lucide-react';
+import { X, Search, Palette, Check, ChevronDown, ShoppingBag, Menu as MenuIcon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface HeaderProps {
@@ -79,7 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Center: Desktop Navigation Links (Shop, Explore Decants, About Us) */}
         <nav
-          className="hidden md:flex items-center gap-8 lg:gap-12 text-lg lg:text-xl font-medium tracking-tight"
+          className="hidden md:flex items-center gap-8 lg:gap-12 text-[13px] font-normal tracking-[0.14em] uppercase"
           style={{ color: 'var(--theme-primary)' }}
         >
           <button
@@ -123,115 +123,25 @@ export const Header: React.FC<HeaderProps> = ({
           className="flex items-center gap-4 sm:gap-6 text-lg lg:text-xl font-medium tracking-tight"
           style={{ color: 'var(--theme-primary)' }}
         >
-          {/* Theme Selector Popover (Desktop) */}
-          <div className="relative hidden md:block" ref={dropdownRef}>
-            <button
-              onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs sm:text-sm font-semibold tracking-wider uppercase hover:opacity-80 transition-all cursor-pointer"
-              style={{
-                borderColor: 'var(--theme-primary)',
-                color: 'var(--theme-primary)',
-                backgroundColor: 'transparent',
-              }}
-              aria-label="Select colour theme"
-              aria-expanded={themeDropdownOpen}
-            >
-              {/* Swatch mini preview of active theme */}
-              <div className="flex -space-x-1 items-center">
-                <span
-                  className="w-2.5 h-2.5 rounded-full border border-black/20"
-                  style={{ backgroundColor: currentTheme.colors.primary }}
-                />
-                <span
-                  className="w-2.5 h-2.5 rounded-full border border-black/20"
-                  style={{ backgroundColor: currentTheme.colors.secondary }}
-                />
-                <span
-                  className="w-2.5 h-2.5 rounded-full border border-black/20"
-                  style={{ backgroundColor: currentTheme.colors.accent }}
-                />
-              </div>
-              <span className="text-[11px] lg:text-xs font-bold">{currentTheme.name}</span>
-              <ChevronDown className="w-3.5 h-3.5 opacity-70" />
-            </button>
-
-            {/* Dropdown Menu */}
-            {themeDropdownOpen && (
-              <div
-                className="absolute right-0 mt-2 w-64 rounded-xl shadow-xl border p-2 z-50 backdrop-blur-md"
-                style={{
-                  backgroundColor: 'var(--theme-surface-card)',
-                  borderColor: 'var(--theme-border-subtle)',
-                }}
-              >
-                <div
-                  className="px-3 py-2 text-[10px] uppercase font-bold tracking-widest border-b mb-1"
-                  style={{
-                    color: 'var(--theme-text-secondary)',
-                    borderColor: 'var(--theme-border-subtle)',
-                  }}
-                >
-                  Choose Palette
-                </div>
-                <div className="space-y-1">
-                  {themes.map((t) => {
-                    const isSelected = t.id === theme;
-                    return (
-                      <button
-                        key={t.id}
-                        onClick={() => {
-                          setTheme(t.id);
-                          setThemeDropdownOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                          isSelected ? 'font-bold' : 'hover:opacity-80'
-                        }`}
-                        style={{
-                          backgroundColor: isSelected ? 'var(--theme-surface)' : 'transparent',
-                          color: 'var(--theme-primary)',
-                        }}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          {/* 3 Color Swatch Pills */}
-                          <div className="flex items-center -space-x-1">
-                            <span
-                              className="w-3.5 h-3.5 rounded-full border border-black/20"
-                              style={{ backgroundColor: t.colors.primary }}
-                            />
-                            <span
-                              className="w-3.5 h-3.5 rounded-full border border-black/20"
-                              style={{ backgroundColor: t.colors.secondary }}
-                            />
-                            <span
-                              className="w-3.5 h-3.5 rounded-full border border-black/20"
-                              style={{ backgroundColor: t.colors.accent }}
-                            />
-                          </div>
-                          <span>{t.name}</span>
-                        </div>
-                        {isSelected && <Check className="w-4 h-4 ml-2" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-
           <button
             onClick={onOpenCart}
-            className="hover:opacity-75 transition-opacity cursor-pointer inline-flex items-center gap-1"
+            className="relative p-1.5 hover:opacity-70 transition-opacity cursor-pointer inline-flex items-center"
             aria-label={`Shopping Bag (${cartCount})`}
           >
-            Bag ({cartCount})
+            <ShoppingBag className="w-[22px] h-[22px]" strokeWidth={1.4} />
+            {cartCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 rounded-full bg-[#111] text-white text-[10px] leading-[17px] text-center font-medium tabular-nums">
+                {cartCount}
+              </span>
+            )}
           </button>
 
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="hover:opacity-75 transition-opacity cursor-pointer"
+            className="p-1.5 hover:opacity-70 transition-opacity cursor-pointer inline-flex items-center"
             aria-label="Open Navigation Menu"
           >
-            Menu
+            <MenuIcon className="w-[24px] h-[24px]" strokeWidth={1.3} />
           </button>
         </div>
       </div>
@@ -383,7 +293,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="pt-6 border-t text-xs opacity-80 flex justify-between items-center"
               style={{ borderColor: 'var(--theme-border-subtle)' }}
             >
-              <span>VISIT ++ WEBSITE</span>
+              <span>INSTAGRAM</span>
               <span>© 2026</span>
             </div>
           </div>

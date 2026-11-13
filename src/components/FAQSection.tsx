@@ -34,7 +34,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
               className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold"
               style={{ color: 'var(--theme-primary)' }}
             >
-              ++ QUESTIONS & CLARIFICATIONS
+              QUESTIONS & ANSWERS
             </span>
           </div>
 
@@ -81,7 +81,6 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
                       aria-expanded={isOpen}
                     >
                       <div className="flex items-center gap-3 pr-2">
-                        <span className="font-bold text-sm sm:text-base" style={{ color: 'var(--theme-primary)' }}>++</span>
                         <span
                           className="font-sans text-xs sm:text-sm font-bold group-hover:opacity-75 uppercase tracking-wide transition-opacity"
                           style={{ color: 'var(--theme-primary)' }}

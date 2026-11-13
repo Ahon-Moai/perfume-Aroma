@@ -41,7 +41,7 @@ const CollectionProductCard: React.FC<{
   return (
     <div
       onClick={() => onNavigateToProduct(product)}
-      className="group transition-all flex flex-col justify-between p-4 shadow-xs cursor-pointer border rounded-xs"
+      className="pp-card-min group transition-all flex flex-col justify-between p-2 cursor-pointer"
       style={{
         backgroundColor: 'var(--theme-surface-card)',
         borderColor: 'var(--theme-border-subtle)',
@@ -98,23 +98,23 @@ const CollectionProductCard: React.FC<{
         </div>
 
         {/* Product Info */}
-        <div className="space-y-1">
-          <span className="text-[9px] font-sans tracking-widest text-amber-800 font-bold uppercase block">
+        <div className="space-y-1 text-center">
+          <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.22em] text-zinc-500 uppercase block">
             {product.brand}
           </span>
           <h3
-            className="font-serif text-sm sm:text-base text-zinc-950 font-normal leading-snug line-clamp-1 group-hover:text-amber-800 transition-colors"
+            className="font-serif text-sm sm:text-base text-zinc-950 font-normal leading-snug line-clamp-1"
           >
             {product.name}
           </h3>
-          <p className="text-[10px] font-sans text-zinc-500 uppercase truncate">
-            {product.category}
+          <p className="text-xs font-sans text-zinc-500 tabular-nums">
+            From <span className="text-zinc-950">৳ {Math.min(...(product.sizes && product.sizes.length ? product.sizes.map((x) => Number(x.price) || 0) : [product.startingPrice]))}</span>
           </p>
         </div>
       </div>
 
       {/* Sizes Dropdown & Price CTA */}
-      <div className="pt-3 mt-3 border-t border-zinc-150 space-y-2.5" onClick={(e) => e.stopPropagation()}>
+      <div className="pp-min-hide pt-3 mt-3 border-t border-zinc-150 space-y-2.5" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-baseline justify-between">
           <span className="text-[10px] text-zinc-400 font-mono uppercase">Price:</span>
           <p className="text-zinc-900 font-sans tabular-nums">

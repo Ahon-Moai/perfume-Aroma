@@ -30,7 +30,7 @@ const NewArrivalProductCard: React.FC<{
 
   return (
     <div
-      className="group flex flex-col justify-between cursor-pointer transition-all h-full p-2.5 rounded-xs border"
+      className="pp-card-min group flex flex-col justify-between cursor-pointer transition-all h-full p-2"
       style={{
         backgroundColor: 'var(--theme-surface-card)',
         borderColor: 'var(--theme-border-subtle)',
@@ -75,7 +75,7 @@ const NewArrivalProductCard: React.FC<{
         {/* Product Info */}
         <div className="pt-3.5 text-center flex flex-col items-center">
           <span
-            className="text-[9px] sm:text-[10px] tracking-[0.2em] font-sans uppercase font-bold"
+            className="text-[9px] sm:text-[10px] tracking-[0.22em] font-sans uppercase font-normal"
             style={{ color: 'var(--theme-secondary)' }}
           >
             {product.brand}
@@ -86,15 +86,14 @@ const NewArrivalProductCard: React.FC<{
           >
             {product.name}
           </h3>
-          <p className="text-[12px] sm:text-xs font-sans mt-0.5 tabular-nums">
-            <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>৳ {selectedSize.price}</span>
-            <span className="text-[10px] sm:text-[11px] ml-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>({selectedSize.size})</span>
+          <p className="text-[12px] sm:text-xs font-sans mt-0.5 tabular-nums" style={{ color: 'var(--theme-text-secondary)' }}>
+            From <span style={{ color: 'var(--theme-primary)' }}>৳ {Math.min(...(product.sizes && product.sizes.length ? product.sizes.map((x) => Number(x.price) || 0) : [product.startingPrice]))}</span>
           </p>
         </div>
       </div>
 
       {/* Size Dropdown Selector */}
-      <div className="mt-3 px-1" onClick={(e) => e.stopPropagation()}>
+      <div className="pp-min-hide mt-3 px-1" onClick={(e) => e.stopPropagation()}>
         <div className="relative">
           <select
             value={selectedSize.size}

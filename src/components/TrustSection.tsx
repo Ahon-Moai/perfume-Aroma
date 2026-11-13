@@ -141,7 +141,7 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
                 className="text-[11px] sm:text-xs tracking-[0.25em] uppercase font-bold"
                 style={{ color: 'var(--theme-primary)' }}
               >
-                ++ THE ATELIER HOUSES
+                THE HOUSES
               </span>
               <h3
                 className="font-sans font-black text-2xl sm:text-3xl md:text-4xl uppercase tracking-tight mt-1"
@@ -229,7 +229,7 @@ export const TrustSection: React.FC<TrustSectionProps> = ({
         >
           <div className="space-y-1">
             <p className="text-[9px] tracking-[0.2em] uppercase font-bold" style={{ color: 'var(--theme-primary)' }}>
-              ++ SECURE TRANSACTIONS
+              SECURE PAYMENTS
             </p>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4" style={{ color: 'var(--theme-primary)' }} />

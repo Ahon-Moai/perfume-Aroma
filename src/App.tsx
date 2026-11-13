@@ -369,23 +369,7 @@ function StorefrontApp() {
         />
       )}
 
-      {/* Admin Quick Switch floating button for store manager */}
-      <button
-        onClick={() => {
-          setViewMode('admin');
-          window.location.hash = '#admin';
-        }}
-        className="fixed bottom-6 left-6 z-40 px-3 py-2 border shadow-2xl text-[10px] font-sans tracking-widest uppercase flex items-center gap-2 transition-all cursor-pointer hover:opacity-90"
-        style={{
-          backgroundColor: 'var(--theme-primary)',
-          color: '#FFFFFF',
-          borderColor: 'var(--theme-border-subtle)',
-        }}
-        title="Open Admin CMS Dashboard"
-      >
-        <Shield className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">ADMIN CMS</span>
-      </button>
+
 
       {/* Toast Notification */}
       {toastMessage && (

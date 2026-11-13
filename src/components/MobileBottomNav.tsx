@@ -20,13 +20,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   onOpenCart,
   onSelectAI,
 }) => {
-  const navItems = [
-    {
-      id: 'home' as const,
-      label: 'Home',
-      icon: Home,
-      action: onNavigateHome,
-    },
+  const navItems: { id: 'shop' | 'search' | 'ai'; label: string; icon: any; action: () => void; badge?: number }[] = [
     {
       id: 'shop' as const,
       label: 'Shop',
@@ -38,13 +32,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
       label: 'Search',
       icon: Search,
       action: onOpenSearch,
-    },
-    {
-      id: 'bag' as const,
-      label: 'Bag',
-      icon: ShoppingBag,
-      action: onOpenCart,
-      badge: cartCount > 0 ? cartCount : undefined,
     },
     {
       id: 'ai' as const,

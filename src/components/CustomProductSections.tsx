@@ -31,7 +31,7 @@ const CustomProductCard: React.FC<{
 
   return (
     <div
-      className="group p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 shadow-xs hover:shadow-xl relative h-full rounded-xs border"
+      className="pp-card-min group p-2 sm:p-3 flex flex-col justify-between transition-all duration-300 relative h-full"
       style={{
         backgroundColor: 'var(--theme-surface-card)',
         borderColor: 'var(--theme-border-subtle)',
@@ -70,13 +70,13 @@ const CustomProductCard: React.FC<{
         </div>
 
         {/* Product Details */}
-        <div className="mt-4 space-y-1.5 text-left">
+        <div className="mt-3 space-y-1 text-center">
           <div
-            className="flex items-center justify-between text-[10px] font-sans uppercase tracking-widest font-bold"
+            className="flex items-center justify-center text-[10px] font-sans uppercase tracking-[0.22em] font-normal"
             style={{ color: 'var(--theme-secondary)' }}
           >
             <span>{product.brand}</span>
-            <span className="opacity-80">{product.concentration || 'Eau de Parfum'}</span>
+            <span className="pp-min-hide opacity-80">{product.concentration || 'Eau de Parfum'}</span>
           </div>
 
           <h3
@@ -87,13 +87,12 @@ const CustomProductCard: React.FC<{
             {product.name}
           </h3>
 
-          <p className="text-xs font-serif font-medium tabular-nums">
-            <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>৳ {selectedSize.price}</span>
-            <span className="text-[10px] font-sans font-normal ml-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>({selectedSize.size})</span>
+          <p className="text-xs font-sans tabular-nums" style={{ color: 'var(--theme-text-secondary)' }}>
+            From <span style={{ color: 'var(--theme-primary)' }}>৳ {Math.min(...(product.sizes && product.sizes.length ? product.sizes.map((x) => Number(x.price) || 0) : [product.startingPrice]))}</span>
           </p>
 
           {/* Size & Price Dropdown Selector */}
-          <div className="pt-1.5" onClick={(e) => e.stopPropagation()}>
+          <div className="pp-min-hide pt-1.5" onClick={(e) => e.stopPropagation()}>
             <div className="relative">
               <select
                 value={selectedSize.size}
@@ -122,7 +121,7 @@ const CustomProductCard: React.FC<{
           </div>
 
           {product.notes && product.notes.length > 0 && (
-            <p className="text-[11px] font-sans line-clamp-1 pt-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
+            <p className="pp-min-hide text-[11px] font-sans line-clamp-1 pt-1 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
               {product.notes.join(' · ')}
             </p>
           )}
@@ -131,7 +130,7 @@ const CustomProductCard: React.FC<{
 
       {/* Action Bar */}
       <div
-        className="mt-4 pt-3 border-t flex items-center gap-2"
+        className="pp-min-hide mt-4 pt-3 border-t flex items-center gap-2"
         style={{ borderColor: 'var(--theme-border-subtle)' }}
       >
         <button
