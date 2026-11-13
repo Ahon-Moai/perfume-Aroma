@@ -19,13 +19,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') jsonError('Method not allow
 
 $db = Database::getConnection();
 $period = $_GET['period'] ?? '30d';
-$start = new DateTime('now');
+// Use the database clock: PHP and MySQL run in different time zones on this host
+$dbNow = $db->query($db->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite' ? "SELECT datetime('now')" : "SELECT NOW()")->fetchColumn();
+$start = new DateTime($dbNow);
 if ($period === 'today') $start->setTime(0, 0, 0);
 elseif ($period === '7d') $start->modify('-6 days')->setTime(0, 0, 0);
 elseif ($period === 'all') $start = new DateTime('2000-01-01');
 else { $period = '30d'; $start->modify('-29 days')->setTime(0, 0, 0); }
 $s = $start->format('Y-m-d H:i:s');
-$e = (new DateTime('now'))->setTime(23, 59, 59)->format('Y-m-d H:i:s');
+$e = (new DateTime($dbNow))->setTime(23, 59, 59)->format('Y-m-d H:i:s');
 
 $total = $db->prepare("SELECT COUNT(*) FROM search_logs WHERE created_at BETWEEN ? AND ?");
 $total->execute([$s, $e]);
