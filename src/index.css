@@ -20,7 +20,7 @@
   Theme CSS Variables
   Theme 1 (Default): Monochrome Ivory
     - Primary: #111111 (Black)
-    - Background/Surface: #F2EEE5 (Ivory)
+    - Background/Surface: #FFFFFF (White)
     - Card/Surface Light: #FFFFFF (White)
   Theme 2: Burgundy Romance
     - Primary: #650F25 (Burgundy)
@@ -38,7 +38,7 @@
 [data-theme="monochrome-ivory"] {
   --theme-primary: #111111;
   --theme-secondary: #333333;
-  --theme-surface: #F2EEE5;
+  --theme-surface: #FFFFFF;
   --theme-surface-card: #FFFFFF;
   --theme-bg: #FFFFFF;
   --theme-text-primary: #111111;
@@ -49,10 +49,10 @@
   --theme-btn-bg: #111111;
   --theme-btn-text: #FFFFFF;
   --theme-footer-bg: #111111;
-  --theme-footer-text: #F2EEE5;
+  --theme-footer-text: #FFFFFF;
   --theme-swatch-1: #111111;
   --theme-swatch-2: #FFFFFF;
-  --theme-swatch-3: #F2EEE5;
+  --theme-swatch-3: #FFFFFF;
 }
 
 [data-theme="burgundy-romance"] {
