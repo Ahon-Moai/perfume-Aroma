@@ -14,6 +14,7 @@ interface PerfumeFinderProps {
   onNavigateToProduct: (product: FragranceProduct | string) => void;
   onAddToCart: (product: FragranceProduct, size: string, price: number, qty?: number) => void;
   products?: FragranceProduct[];
+  onOpenCart?: () => void;
 }
 
 type Opt = [string, string, string?];
@@ -99,11 +100,13 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
 
 const LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
 
-export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, onNavigateToProduct, products = [] }) => {
+export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, onNavigateToProduct, onAddToCart, products = [], onOpenCart }) => {
   const [step, setStep] = useState(0);
   const [A, setA] = useState<Record<string, string>>({});
+  const [sizeOf, setSizeOf] = useState<Record<string, string>>({});
+  const [added, setAdded] = useState<Record<string, boolean>>({});
 
-  useEffect(() => { if (isOpen) { setStep(0); setA({}); } }, [isOpen]);
+  useEffect(() => { if (isOpen) { setStep(0); setA({}); setSizeOf({}); setAdded({}); } }, [isOpen]);
   useEffect(() => {
     if (!isOpen) return;
     const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -113,6 +116,20 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, o
 
   const results = useMemo(() => (step >= QZ.length ? pick(products, A) : []), [step, A, products]);
   if (!isOpen) return null;
+
+  const openSizes = (p: FragranceProduct) => (p.sizes || []).filter((z: any) => !z.soldOut && z.price > 0);
+  const chosen = (p: FragranceProduct) => {
+    const open = openSizes(p);
+    return open.find((z) => z.size === sizeOf[p.id]) || open.find((z) => ml(z.size) === 5) || open[0];
+  };
+  const addOne = (p: FragranceProduct) => {
+    const z = chosen(p);
+    if (!z) return;
+    onAddToCart(p, z.size, z.price, 1);
+    setAdded((a) => ({ ...a, [p.id]: true }));
+  };
+  const addAll = () => results.forEach((p) => { if (!added[p.id]) addOne(p); });
+  const allTotal = results.reduce((n, p) => n + (chosen(p)?.price || 0), 0);
 
   const answer = (k: string, v: string) => { setA((a) => ({ ...a, [k]: v })); setStep((s) => s + 1); };
   const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
@@ -180,31 +197,62 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, o
                   return (
                     <React.Fragment key={p.id}>
                       {head && <p className="mt-2 text-[10px] font-semibold tracking-[0.24em] uppercase text-neutral-500">{LABEL[grp]}</p>}
-                      <button
-                        onClick={() => { onClose(); onNavigateToProduct(p); }}
-                        className="flex items-center gap-3 text-left rounded-2xl p-2.5 pr-3 bg-neutral-50 hover:bg-neutral-100 transition"
-                      >
-                        {p.image ? (
-                          <img src={p.image} alt="" loading="lazy" className="w-14 h-14 rounded-xl object-cover bg-white shrink-0" />
-                        ) : (
-                          <span className="w-14 h-14 rounded-xl bg-neutral-200 shrink-0" />
-                        )}
-                        <span className="min-w-0 flex-1">
-                          <span className="block text-[10px] font-semibold tracking-[0.16em] uppercase text-neutral-500 truncate">{p.brand}</span>
-                          <span style={serif} className="block text-[19px] font-semibold leading-tight truncate">{p.name}</span>
-                          <span className="block text-xs text-neutral-500 truncate">{fams}</span>
-                        </span>
-                        <span className="text-right shrink-0">
-                          <span className="block text-[13px] font-semibold">from ৳{minPrice(p)}</span>
-                          <span className="block text-[11px] text-neutral-500 mt-0.5">View ›</span>
-                        </span>
-                      </button>
+                      <div className="rounded-2xl p-2.5 pr-3 bg-neutral-50">
+                        <button onClick={() => { onClose(); onNavigateToProduct(p); }} className="w-full flex items-center gap-3 text-left">
+                          {p.image ? (
+                            <img src={p.image} alt="" loading="lazy" className="w-14 h-14 rounded-xl object-cover bg-white shrink-0" />
+                          ) : (
+                            <span className="w-14 h-14 rounded-xl bg-neutral-200 shrink-0" />
+                          )}
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-[10px] font-semibold tracking-[0.16em] uppercase text-neutral-500 truncate">{p.brand}</span>
+                            <span style={serif} className="block text-[19px] font-semibold leading-tight truncate">{p.name}</span>
+                            <span className="block text-xs text-neutral-500 truncate">{fams}</span>
+                          </span>
+                          <span className="text-[11px] text-neutral-500 shrink-0">Details ›</span>
+                        </button>
+                        <div className="flex flex-wrap items-center gap-1.5 mt-2.5 pl-[68px]">
+                          {openSizes(p).map((z) => {
+                            const on = chosen(p)?.size === z.size;
+                            return (
+                              <button
+                                key={z.size}
+                                onClick={() => { setSizeOf((m) => ({ ...m, [p.id]: z.size })); setAdded((a) => ({ ...a, [p.id]: false })); }}
+                                className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border transition ${on ? 'bg-neutral-900 text-white border-neutral-900' : 'bg-white border-neutral-200 text-neutral-700'}`}
+                              >
+                                {String(z.size).toLowerCase()} · ৳{z.price}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="flex justify-end mt-2">
+                          <button
+                            onClick={() => addOne(p)}
+                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${added[p.id] ? 'bg-emerald-600 text-white' : 'bg-neutral-900 text-white'}`}
+                          >
+                            {added[p.id] ? 'Added ✓' : `Add ${String(chosen(p)?.size || '').toLowerCase()} to bag`}
+                          </button>
+                        </div>
+                      </div>
                     </React.Fragment>
                   );
                 })}
               </div>
             ) : (
               <p className="mt-3 text-sm text-neutral-600">Try a different smell or a bigger budget.</p>
+            )}
+            {results.length > 1 && (
+              <button
+                onClick={addAll}
+                className="mt-4 w-full rounded-full bg-neutral-900 text-white py-3.5 text-sm font-semibold"
+              >
+                {results.every((p) => added[p.id]) ? 'All added to your bag ✓' : `Add all ${results.length} to bag · ৳${allTotal}`}
+              </button>
+            )}
+            {onOpenCart && Object.values(added).some(Boolean) && (
+              <button onClick={() => { onClose(); onOpenCart(); }} className="mt-2 w-full rounded-full border border-neutral-900 py-3 text-sm font-semibold">
+                View bag & checkout
+              </button>
             )}
             <p className="mt-5 text-xs text-neutral-500 leading-relaxed">
               Still unsure? Message us on Facebook, Instagram or WhatsApp — we’ll help you choose.

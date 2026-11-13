@@ -558,6 +558,7 @@ function StorefrontApp() {
         onNavigateToProduct={(p) => navigateToProduct(p)}
         onAddToCart={(p, size, price, qty) => handleAddToCart(p, size, price, qty || 1)}
         products={products}
+        onOpenCart={() => { setIsFinderOpen(false); setIsCartOpen(true); }}
       />
     </div>
   );
