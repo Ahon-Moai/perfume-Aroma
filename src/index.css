@@ -239,11 +239,11 @@ html.lenis, html.lenis body { height: auto; }
 /* polished silver text that catches the light now and then */
 .pp-silver-text {
   background-image: linear-gradient(105deg,
-    #2f3136 0%, #55585f 26%, #3a3c42 42%, #c9ccd3 50%, #45484e 58%, #2e3035 74%, #5a5d64 100%);
+    #1c1d21 0%, #3b3e44 24%, #24262a 42%, #c3c7cf 50%, #2f3237 58%, #1b1c20 76%, #44474d 100%);
   background-size: 300% 100%;
   background-position: 100% 0;
   -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: #3a3c42;
+  -webkit-text-fill-color: transparent; color: #2a2c31;
   animation: pp-text-glint 6s cubic-bezier(.45,0,.25,1) 1.6s infinite;
 }
 @keyframes pp-text-glint { 0% { background-position: 100% 0; } 30%, 100% { background-position: 0% 0; } }
@@ -385,8 +385,20 @@ main h1.font-serif { font-weight: 300 !important; letter-spacing: 0.04em; }
 }
 .pp-announce__text { overflow: hidden; text-overflow: ellipsis; }
 .pp-announce__text strong { font-weight: 600; }
-.pp-announce__price { color: #6b6d74; }
+.pp-announce__dot { color: #a0a3aa; margin: 0 2px; }
 .pp-announce__arrow { transition: transform .35s cubic-bezier(.2,.8,.2,1); opacity: .7; }
 .pp-announce:hover .pp-announce__arrow { transform: translateX(3px); }
 @media (max-width: 380px) { .pp-announce { font-size: 11.5px; gap: 8px; } }
 @media (prefers-reduced-motion: reduce) { .pp-announce::after { animation: none; } }
+
+
+/* ===== Wordmark reacts to touch: light follows the finger, glow brightens ===== */
+.pp-wordmark { touch-action: pan-y; cursor: default; }
+.pp-wordmark.is-touching,
+.pp-wordmark.is-touching + .pp-sub .pp-silver-text { animation: none !important; transition: background-position .08s linear; }
+.pp-wordmark.is-touching::before {
+  animation: none; opacity: 1;
+  text-shadow: 0 0 5px rgba(255,255,255,1), 0 0 14px rgba(170,185,215,.75), 0 0 28px rgba(150,165,200,.45);
+  transition: opacity .2s;
+}
+.pp-wordmark.is-releasing { transition: background-position .9s cubic-bezier(.2,.8,.2,1); }

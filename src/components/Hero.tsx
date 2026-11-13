@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FragranceProduct, SeasonsGalleryData } from '../types';
 import { SeasonsGallery } from './SeasonsGallery';
 
@@ -27,6 +27,31 @@ export const Hero: React.FC<HeroProps> = ({
     if (t) testerPrices.push(Number(t.price) || 0);
   }
   const testerCount = testerPrices.length;
+
+  // Touch/hover the wordmark: the light band follows the finger and the glow brightens
+  const markRef = useRef<HTMLSpanElement>(null);
+  const subRef = useRef<HTMLSpanElement>(null);
+  const followLight = (clientX: number) => {
+    const el = markRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const fx = Math.min(Math.max(clientX - r.left, 0), r.width);
+    // gradient is 300% wide with its highlight in the middle → keep the highlight under the finger
+    const p = (0.75 - fx / (2 * r.width)) * 100;
+    el.classList.remove('is-releasing');
+    el.classList.add('is-touching');
+    el.style.backgroundPosition = `${p}% 0`;
+    const sub = subRef.current;
+    if (sub) sub.style.backgroundPosition = `${p}% 0`;
+  };
+  const releaseLight = () => {
+    const el = markRef.current;
+    if (!el) return;
+    el.classList.add('is-releasing');
+    el.classList.remove('is-touching');
+    el.style.backgroundPosition = '';
+    if (subRef.current) subRef.current.style.backgroundPosition = '';
+  };
   const testerFrom = testerCount ? Math.min(...testerPrices.filter((n) => n > 0)) : 0;
 
   return (
@@ -44,8 +69,7 @@ export const Hero: React.FC<HeroProps> = ({
             <button type="button" onClick={onOpenTesters} className="pp-announce" aria-label="See all 1.5ml testers">
               <span className="pp-announce__tag">New</span>
               <span className="pp-announce__text">
-                <strong>1.5ml testers</strong>
-                <span className="pp-announce__price"> · try any scent{testerFrom > 0 ? ` from ৳${testerFrom}` : ''}</span>
+                Wear it before you own it <span className="pp-announce__dot">·</span> <strong>1.5ml testers</strong>
               </span>
               <span className="pp-announce__arrow" aria-hidden="true">→</span>
             </button>
@@ -56,14 +80,22 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="w-full overflow-x-clip select-none py-2 sm:py-4">
           <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-2 sm:py-4" aria-label="Pure Portions by Arrina">
             <span
+              ref={markRef}
               className="pp-wordmark pp-silver-text whitespace-nowrap text-[19vw] sm:text-[15vw] md:text-[12.5vw] lg:text-[11vw]"
               data-text="Pure Portions"
+              onPointerDown={(e) => followLight(e.clientX)}
+              onPointerMove={(e) => followLight(e.clientX)}
+              onPointerUp={releaseLight}
+              onPointerLeave={releaseLight}
+              onPointerCancel={releaseLight}
+              onTouchMove={(e) => e.touches[0] && followLight(e.touches[0].clientX)}
+              onTouchEnd={releaseLight}
             >
               Pure Portions
             </span>
             <span className="pp-sub flex items-center justify-center gap-3 sm:gap-5 -mt-[1.5vw] whitespace-nowrap text-[5vw] sm:text-[3.6vw] md:text-[2.8vw] lg:text-[2.4vw]">
               <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
-              <span className="pp-silver-text">By Arrina</span>
+              <span ref={subRef} className="pp-silver-text">By Arrina</span>
               <span className="inline-block h-px w-[7vw] sm:w-[5vw] bg-current opacity-70" aria-hidden="true" />
             </span>
           </h1>
