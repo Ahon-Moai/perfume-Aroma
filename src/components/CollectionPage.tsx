@@ -330,6 +330,8 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
   ];
 
   const SEASON_OPTIONS = ['Spring', 'Summer', 'Autumn', 'Winter', 'All Seasons'];
+  // Opened from a season card on the homepage → show e.g. "Summer Perfumes"
+  const seasonTitle = collectionSlug === 'all' && filters.season.length === 1 && filters.season[0] !== 'All Seasons' ? `${filters.season[0]} Perfumes` : null;
 
   const OCCASION_OPTIONS = [
     'Daily / Casual', 'Office / Work', 'Evening / Date Night',
@@ -680,7 +682,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             </span>
             <ChevronRight className="w-3 h-3 shrink-0 opacity-50" />
             <span className="font-bold truncate text-[11px]" style={{ color: 'var(--theme-primary)' }}>
-              {collection?.title || ucwords(collectionSlug.replace(/-/g, ' '))}
+              {seasonTitle || collection?.title || ucwords(collectionSlug.replace(/-/g, ' '))}
             </span>
           </div>
 
@@ -725,7 +727,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
               className="font-serif text-3xl sm:text-4xl font-normal leading-tight"
               style={{ color: 'var(--theme-primary)' }}
             >
-              {collection?.title || ucwords(collectionSlug.replace(/-/g, ' '))}
+              {seasonTitle || collection?.title || ucwords(collectionSlug.replace(/-/g, ' '))}
             </h1>
             <p
               className="text-xs sm:text-sm font-sans leading-relaxed opacity-85"

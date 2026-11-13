@@ -55,11 +55,26 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({
   const cardsContent = (
     <div className="flex sm:grid sm:grid-cols-4 gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar pb-3 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
       {seasonCards.map((card) => {
-        const seasonSlug = card.id.replace('season-', '').toLowerCase();
+        // Map the card to a season (SUMMER → Summer) and open all perfumes filtered to that season
+        const seasonName = (() => {
+          const raw = `${card.name || ''} ${card.id || ''}`.toLowerCase();
+          if (raw.includes('summer')) return 'Summer';
+          if (raw.includes('winter')) return 'Winter';
+          if (raw.includes('autumn') || raw.includes('fall')) return 'Autumn';
+          if (raw.includes('spring')) return 'Spring';
+          return '';
+        })();
+        const openSeason = () => {
+          if (!onNavigateToCollection) return onExploreClick?.();
+          if (seasonName) {
+            window.history.pushState({}, '', `/collections/all?season=${encodeURIComponent(seasonName)}`);
+          }
+          onNavigateToCollection('all');
+        };
         return (
           <div
             key={card.id}
-            onClick={() => onNavigateToCollection ? onNavigateToCollection(seasonSlug) : onExploreClick?.()}
+            onClick={openSeason}
             className="flex-shrink-0 w-[240px] sm:w-auto relative group overflow-hidden bg-zinc-950 cursor-pointer aspect-[3/4] sm:aspect-[9/13]"
           >
             <img
