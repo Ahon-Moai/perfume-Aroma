@@ -112,6 +112,7 @@ const GlassRail: React.FC<Props> = ({ products, badge, highlightFirst = true, au
                         disabled={s.soldOut}
                         tabIndex={isOpen ? 0 : -1}
                         className={`pp-sotw__chip ${si === sel ? 'is-on' : ''}`}
+                        style={{ '--ci': si } as React.CSSProperties}
                         onClick={(e) => { e.stopPropagation(); setSizeSel({ ...sizeSel, [id]: si }); }}
                       >
                         <b>{s.size.toUpperCase()}</b>
