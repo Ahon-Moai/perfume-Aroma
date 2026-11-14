@@ -31,14 +31,15 @@ const ScentOfTheWeek: React.FC<Props> = ({ products, onSelectProduct, onAddToCar
       const p = byId.get(String(it.product_id));
       if (p && !out.includes(p)) out.push(p);
     });
-    // Quiet weeks: top up with one of each gender so the row never looks empty
-    if (out.length < 6) {
-      for (const g of ['Unisex', 'Him', 'Her', 'Unisex', 'Him', 'Her']) {
-        if (out.length >= 6) break;
-        const p = products.find((x) => (x.gender || 'Unisex') === g && !out.includes(x) && x.image);
-        if (p) out.push(p);
-      }
+    // Quiet weeks: top up so him / her / unisex stay balanced (2 each)
+    const gOf = (x: FragranceProduct) => x.gender || 'Unisex';
+    for (const g of ['Her', 'Unisex', 'Him', 'Her', 'Unisex', 'Him']) {
+      if (out.length >= 6) break;
+      if (out.filter((x) => gOf(x) === g).length >= 2) continue;
+      const p = products.find((x) => gOf(x) === g && !out.includes(x) && x.image);
+      if (p) out.push(p);
     }
+    for (const p of products) { if (out.length >= 6) break; if (!out.includes(p) && p.image) out.push(p); }
     return out.slice(0, 6);
   }, [data, products]);
 
