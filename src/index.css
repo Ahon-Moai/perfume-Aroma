@@ -650,6 +650,6 @@ circle.pp-leaf{transform-origin:center}
 .pp-niche .pp-sotw__add{width:28px;height:28px}
 .pp-niche .pp-sotw__chip{padding:4px 8px}
 .pp-niche .pp-sotw__buy{height:30px;flex-basis:30px;font-size:10px;letter-spacing:.1em}
-.pp-niche .pp-sotw__card.is-open .pp-sotw__img{transform:translateX(-50%) translateY(-26px) scale(.62)}
+.pp-niche .pp-sotw__card.is-open .pp-sotw__img{transform:translateX(-50%) translateY(-36px) scale(.54)}
 .pp-niche .pp-sotw__card.is-open .pp-sotw__name{font-size:15px;margin-bottom:6px}
 @media (min-width:768px){.pp-niche__title em{font-size:52px}.pp-niche__title span{font-size:18px}.pp-niche .pp-sotw__card{flex-basis:220px}}
