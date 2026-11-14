@@ -573,3 +573,16 @@ circle.pp-leaf{transform-origin:center}
 .pp-sotw__buy{display:flex;align-items:center;justify-content:center;gap:6px;height:40px;flex:0 0 40px;border-radius:999px;border:0;background:#141414;color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
 .pp-sotw__buy:disabled{opacity:.4}
 .pp-sotw__card.is-open .pp-sotw__img{transform:translateX(-50%) translateY(-18px) scale(.9)}
+/* Compact open state so the bottle stays visible */
+.pp-sotw__brand,.pp-sotw__name{transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.pp-sotw__card.is-open .pp-sotw__brand{max-height:0;opacity:0;margin:0;overflow:hidden}
+.pp-sotw__card.is-open .pp-sotw__name{font-size:19px;margin:0 0 8px}
+.pp-sotw__card.is-open .pp-sotw__glass{padding:11px 12px 10px}
+.pp-sotw__card.is-open .pp-sotw__add{width:30px;height:30px}
+.pp-sotw__card.is-open .pp-sotw__g{padding:3px 9px;font-size:10.5px}
+.pp-sotw__card.is-open .pp-sotw__sizes{margin-top:9px;gap:8px}
+.pp-sotw__chip{padding:5px 10px;border-radius:12px}
+.pp-sotw__chip b{font-size:11px}.pp-sotw__chip span{font-size:10px}
+.pp-sotw__buy{height:34px;flex-basis:34px;font-size:11px}
+.pp-sotw__img{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.pp-sotw__card.is-open .pp-sotw__img{transform:translateX(-50%) translateY(-42px) scale(.72)}
