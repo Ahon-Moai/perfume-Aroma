@@ -299,7 +299,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </span>
                   <span className="pp-strip__names">
                     {families.map((f, i) => (
-                      <span key={f} style={{ animationDelay: `${0.7 + i * 0.08}s` }}>{familyLabel(f)}</span>
+                      <span key={f} style={{ width: `${STRIP_W[families.length - 1][i]}%`, animationDelay: `${0.7 + i * 0.08}s` }}>{familyLabel(f)}</span>
                     ))}
                   </span>
                 </button>

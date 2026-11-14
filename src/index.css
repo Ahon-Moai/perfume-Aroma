@@ -540,8 +540,8 @@ circle.pp-leaf{transform-origin:center}
 .pp-strip__label{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#6b6a66;margin-bottom:8px;font-weight:600}
 .pp-strip__bar{display:flex;gap:2px;height:7px;border-radius:7px;overflow:hidden}
 .pp-strip__seg{height:100%;width:0;flex:0 0 auto;animation:ppStripGrow .9s cubic-bezier(.2,.8,.2,1) forwards}
-.pp-strip__names{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;font-weight:600;color:#1d1d1b}
-.pp-strip__names span{opacity:0;animation:ppFadeUp .4s ease forwards}
+.pp-strip__names{display:flex;gap:2px;margin-top:8px;font-size:12px;font-weight:600;color:#1d1d1b}
+.pp-strip__names span{opacity:0;flex:0 0 auto;white-space:nowrap;overflow:visible;animation:ppFadeUp .4s ease forwards}
 @keyframes ppStripIn{from{opacity:0;transform:translateY(120%) scale(.96)}to{opacity:1;transform:none}}
 @keyframes ppStripOut{to{opacity:0;transform:translateY(16px) scale(.98)}}
 @keyframes ppStripGrow{to{width:var(--w)}}
