@@ -605,8 +605,8 @@ circle.pp-leaf{transform-origin:center}
 .pp-niche__head{text-align:center;padding:0 24px;margin:0 auto 26px;max-width:640px}
 .pp-niche__eyebrow{font-size:10px;letter-spacing:.34em;text-transform:uppercase;font-weight:600;color:#8c8578}
 .pp-niche__title{margin:14px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;line-height:1;color:#141414;letter-spacing:-.01em}
-.pp-niche__title span{display:block;font-size:22px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:#3a3833;animation:ppWordUp .9s cubic-bezier(.2,.8,.2,1) both}
-.pp-niche__title em{display:block;margin-top:6px;font-style:italic;font-weight:500;font-size:60px;letter-spacing:-.02em;padding-bottom:6px;background:linear-gradient(100deg,#141414 0%,#141414 32%,#a39c8f 46%,#f4efe6 50%,#a39c8f 54%,#141414 68%,#141414 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ppWordUp 1s .12s cubic-bezier(.2,.8,.2,1) both,ppSilverSweep 8s 1.2s ease-in-out infinite}
+.pp-niche__title span{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:#3a3833;animation:ppWordUp .9s cubic-bezier(.2,.8,.2,1) both}
+.pp-niche__title em{display:block;font-family:'Cormorant Garamond',Georgia,serif;margin-top:6px;font-style:italic;font-weight:500;font-size:60px;letter-spacing:-.02em;padding-bottom:6px;background:linear-gradient(100deg,#141414 0%,#141414 32%,#a39c8f 46%,#f4efe6 50%,#a39c8f 54%,#141414 68%,#141414 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ppWordUp 1s .12s cubic-bezier(.2,.8,.2,1) both,ppSilverSweep 8s 1.2s ease-in-out infinite}
 .pp-niche__rule{display:block;width:36px;height:.5px;background:#141414;margin:16px auto 12px;opacity:.5}
 .pp-niche__sub{margin:0;font-size:12.5px;letter-spacing:.04em;color:#7a746a}
 .pp-niche .pp-sotw__rail{justify-content:flex-start}
