@@ -27,6 +27,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
   });
 
   // Campaign Banners Form (For Him / For Her)
+  const [testerForm, setTesterForm] = useState<{ image: string; title: string; subtitle: string }>({ image: '', title: '', subtitle: '' });
   const [campaignForm, setCampaignForm] = useState({
     section_title: 'FOR HIM | HER',
     for_him_title: 'For Him',
@@ -149,6 +150,12 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         const heroSec = payload.sections?.hero;
         if (heroSec && heroSec.content) {
           setHeroForm((prev) => ({ ...prev, ...heroSec.content }));
+        }
+
+        // 1.5ml tester card
+        const testerSec = payload.sections?.tester_banner;
+        if (testerSec && testerSec.content) {
+          setTesterForm((prev) => ({ ...prev, ...testerSec.content }));
         }
 
         // Campaign Banners (For Him | Her)
@@ -405,6 +412,27 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       }
     } catch (e) {
       alert('Error saving Campaign Banners');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveTester = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/homepage.php', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+        body: JSON.stringify({
+          type: 'section', section_key: 'tester_banner', title: '1.5ml testers', subtitle: '',
+          content: testerForm, is_enabled: true, display_order: 1.5,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) { alert('1.5ml tester card saved'); fetchCMSData(); }
+      else alert(getErrorMessage(data?.error || data, 'Couldn’t save the tester card'));
+    } catch (e) {
+      alert('Couldn’t save the tester card');
     } finally {
       setSaving(false);
     }
@@ -842,6 +870,31 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       )}
 
       {/* Tab: Campaign Banners (For Him / For Her) */}
+      {activeTab === 'campaigns' && (
+        <div className="bg-white border border-[#EAEAEA] p-6 space-y-4 text-xs text-[#111111] mb-6">
+          <div className="flex items-center gap-2 pb-3 border-b border-[#EAEAEA]">
+            <Sparkles className="w-4 h-4" />
+            <h3 className="font-serif text-base text-[#111111]">1.5ml Tester Card (under the logo)</h3>
+          </div>
+          <p className="text-[11px] text-[#737373]">Add a photo of a 1.5ml vial. Leave title / line empty to use the default text.</p>
+          <ImageUploader label="Tester photo" value={testerForm.image} onChange={(url) => setTesterForm({ ...testerForm, image: url })} csrfToken={csrfToken} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Title</label>
+              <input type="text" value={testerForm.title} placeholder="Wear it before you own it." onChange={(e) => setTesterForm({ ...testerForm, title: e.target.value })}
+                className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]" />
+            </div>
+            <div>
+              <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Line under title</label>
+              <input type="text" value={testerForm.subtitle} placeholder="(auto) 40 designer & niche scents · from ৳190" onChange={(e) => setTesterForm({ ...testerForm, subtitle: e.target.value })}
+                className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111]" />
+            </div>
+          </div>
+          <button type="button" onClick={handleSaveTester} disabled={saving} className="px-5 py-2 bg-[#111111] text-white text-[10px] tracking-widest uppercase disabled:opacity-50">
+            Save tester card
+          </button>
+        </div>
+      )}
       {activeTab === 'campaigns' && (
         <form onSubmit={handleSaveCampaignBanners} className="bg-white border border-[#EAEAEA] p-6 space-y-6 text-xs text-[#111111]">
           <div className="flex items-center gap-2 pb-3 border-b border-[#EAEAEA] text-[#111111]">

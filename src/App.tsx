@@ -447,6 +447,7 @@ function StorefrontApp() {
               heroData={homepageData?.sections?.hero?.content}
               seasonsData={homepageData?.sections?.seasons_gallery?.content}
               onOpenTesters={openTesters}
+              testerData={homepageData?.sections?.tester_banner?.content}
             />
 
             {/* C. Oversized category marquee */}

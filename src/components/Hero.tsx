@@ -3,6 +3,22 @@ import { FragranceProduct, SeasonsGalleryData } from '../types';
 import { SeasonsGallery } from './SeasonsGallery';
 import { LeafSprig, AtomizerFlourish } from './BrandOrnaments';
 
+/** Placeholder 1.5ml glass vial until a photo is added in the admin */
+const TesterVial: React.FC = () => (
+  <svg viewBox="0 0 60 120" aria-hidden="true" className="pp-tester__vial">
+    <defs>
+      <linearGradient id="ppVialGlass" x1="0" x2="1"><stop offset="0" stopColor="#eef0f3" /><stop offset=".45" stopColor="#ffffff" /><stop offset="1" stopColor="#dfe2e7" /></linearGradient>
+      <linearGradient id="ppVialJuice" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#f3e2c4" /><stop offset="1" stopColor="#d9b98a" /></linearGradient>
+      <linearGradient id="ppVialCap" x1="0" x2="1"><stop offset="0" stopColor="#8d929c" /><stop offset=".5" stopColor="#eef0f3" /><stop offset="1" stopColor="#7b808a" /></linearGradient>
+    </defs>
+    <rect x="22" y="6" width="16" height="22" rx="3" fill="url(#ppVialCap)" />
+    <rect x="20" y="28" width="20" height="84" rx="7" fill="url(#ppVialGlass)" stroke="#cfd3d9" strokeWidth=".8" />
+    <rect x="22.5" y="52" width="15" height="57" rx="5" fill="url(#ppVialJuice)" opacity=".9" />
+    <rect x="24" y="32" width="2.4" height="74" rx="1.2" fill="#fff" opacity=".85" />
+    <text x="30" y="84" textAnchor="middle" fontSize="5.5" fontFamily="Urbanist, sans-serif" fill="#6b5a40" letterSpacing=".6">1.5ML</text>
+  </svg>
+);
+
 interface HeroProps {
   products?: FragranceProduct[];
   onSelectProduct?: (product: FragranceProduct) => void;
@@ -11,6 +27,7 @@ interface HeroProps {
   onNavigateToCollection?: (slug: string) => void;
   heroData?: any;
   seasonsData?: SeasonsGalleryData;
+  testerData?: { image?: string; title?: string; subtitle?: string };
   onOpenTesters?: () => void;
 }
 
@@ -20,12 +37,13 @@ export const Hero: React.FC<HeroProps> = ({
   onNavigateToCollection,
   seasonsData,
   onOpenTesters,
+  testerData,
 }) => {
   // 1.5ml tester announcement: how many perfumes come as testers, and the lowest tester price
   const testerPrices: number[] = [];
   for (const p of products) {
     const t = (p.sizes || []).find((s) => /^1\.5\s*ml/i.test(String(s.size).trim()));
-    if (t) testerPrices.push(Number(t.price) || 0);
+    if (t && !(t as any).soldOut) testerPrices.push(Number(t.price) || 0);
   }
   const testerCount = testerPrices.length;
 
@@ -64,19 +82,6 @@ export const Hero: React.FC<HeroProps> = ({
       }}
     >
       <div className="w-full px-5 sm:px-8 md:px-12">
-        {/* Announcement: 1.5ml testers */}
-        {onOpenTesters && (
-          <div className="flex justify-center pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button type="button" onClick={onOpenTesters} className="pp-announce" aria-label="See all 1.5ml testers">
-              <span className="pp-announce__tag">New</span>
-              <span className="pp-announce__text">
-                Wear it before you own it <span className="pp-announce__dot">·</span> <strong>1.5ml testers</strong>
-              </span>
-              <span className="pp-announce__arrow" aria-hidden="true">→</span>
-            </button>
-          </div>
-        )}
-
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
         <div className="w-full overflow-x-clip select-none py-2 sm:py-4">
           <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-2 sm:py-4" aria-label="Pure Portions by Arrina">
@@ -113,10 +118,24 @@ export const Hero: React.FC<HeroProps> = ({
           style={{ backgroundImage: 'linear-gradient(90deg, transparent, #b8bbc3 20%, #e4e6ea 50%, #b8bbc3 80%, transparent)' }}
         />
 
-        {/* One calm line instead of the old editorial block */}
-        <p className="text-center text-[13px] sm:text-sm font-light leading-relaxed tracking-wide mx-auto max-w-md mb-8 sm:mb-12 opacity-70" style={{ color: 'var(--theme-text-secondary)' }}>
-          Authentic designer &amp; niche fragrances, decanted fresh from the original bottle.
-        </p>
+        {/* 1.5ml tester feature — image is set in Admin → Homepage → Campaigns */}
+        {onOpenTesters && (
+          <div className="flex justify-center mb-9 sm:mb-14">
+            <button type="button" onClick={onOpenTesters} className="pp-tester" aria-label="Explore 1.5ml testers">
+              <span className="pp-tester__media">
+                {testerData?.image ? <img src={testerData.image} alt="" loading="lazy" /> : <TesterVial />}
+              </span>
+              <span className="pp-tester__body">
+                <span className="pp-tester__eyebrow"><i>New</i>1.5 ml testers</span>
+                <span className="pp-tester__title">{testerData?.title || 'Wear it before you own it.'}</span>
+                <span className="pp-tester__sub">
+                  {testerData?.subtitle || `${testerCount ? `${testerCount} designer & niche scents` : 'Designer & niche scents'}${testerFrom ? ` · from ৳${testerFrom}` : ''}`}
+                </span>
+                <span className="pp-tester__cta">Explore testers <span aria-hidden="true">→</span></span>
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* Seasonal Boxes Grid - Reusing Seasons Component without Header */}
         <div className="w-full pt-1">
