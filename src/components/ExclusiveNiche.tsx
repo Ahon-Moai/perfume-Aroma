@@ -20,17 +20,13 @@ const ExclusiveNiche: React.FC<Props> = ({ products, onSelectProduct, onAddToCar
 
   return (
     <section className="pp-niche" aria-label="Exclusive perfumes">
-      <div className="pp-sotw__head">
-        <div className="pp-sotw__meta">
-          <span className="pp-niche__tag"><i aria-hidden="true" />The niche edit</span>
-          <span className="pp-niche__line" aria-hidden="true" />
-          <span className="pp-niche__count">{niche.length} scents · {houses} houses</span>
-        </div>
-        <h2 className="pp-sotw__title">
-          <span className="pp-niche__w1">Exclusive</span>
-          <em className="pp-niche__w2">perfumes</em>
+      <div className="pp-niche__head">
+        <span className="pp-niche__eyebrow">The niche edit</span>
+        <h2 className="pp-niche__title">
+          <span>Exclusive</span> <em>perfumes</em>
         </h2>
-        <p className="pp-niche__sub">Rare houses you won’t find in malls. Try them in small sizes first.</p>
+        <span className="pp-niche__rule" aria-hidden="true" />
+        <p className="pp-niche__sub">{niche.length} rare scents from {houses} niche houses</p>
       </div>
       <GlassRail
         products={niche}
