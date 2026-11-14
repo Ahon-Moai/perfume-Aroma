@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Plus, Check, X } from 'lucide-react';
 import { FragranceProduct } from '../types';
 import { categoryOf } from '../lib/brandCategory';
@@ -9,34 +9,82 @@ interface Props {
   products: FragranceProduct[];
   badge?: (p: FragranceProduct, i: number) => string;
   highlightFirst?: boolean;
+  /** Slowly glide the rail on its own (loops seamlessly, pauses on touch). */
+  autoScroll?: boolean;
   onSelectProduct: (p: FragranceProduct) => void;
   onAddToCart: (p: FragranceProduct, size: string, price: number) => void;
 }
 
 /** Liquid-glass product cards: bottle-coloured aura, size picker, add to bag. */
-const GlassRail: React.FC<Props> = ({ products, badge, highlightFirst = true, onSelectProduct, onAddToCart }) => {
+const GlassRail: React.FC<Props> = ({ products, badge, highlightFirst = true, autoScroll = false, onSelectProduct, onAddToCart }) => {
   const [added, setAdded] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const [sizeSel, setSizeSel] = useState<Record<string, number>>({});
+  const railRef = useRef<HTMLDivElement>(null);
+  const pausedUntil = useRef(0);
+  const openRef = useRef<string | null>(null);
+  openRef.current = openId;
+
+  const loop = autoScroll && products.length > 2;
+  const items = loop ? [...products, ...products] : products;
+
+  useEffect(() => {
+    if (!loop) return;
+    const el = railRef.current;
+    if (!el) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    let last = performance.now();
+    let pos = el.scrollLeft;
+    const speed = 22; // px per second
+    const tick = (now: number) => {
+      const dt = Math.min(64, now - last);
+      last = now;
+      const visible = el.getBoundingClientRect().top < window.innerHeight && el.getBoundingClientRect().bottom > 0;
+      if (visible && !openRef.current && now > pausedUntil.current) {
+        if (Math.abs(el.scrollLeft - pos) > 2) pos = el.scrollLeft; // user moved it
+        pos += (speed * dt) / 1000;
+        const half = el.scrollWidth / 2;
+        if (pos >= half) pos -= half;
+        el.scrollLeft = pos;
+      } else {
+        pos = el.scrollLeft;
+        const half = el.scrollWidth / 2;
+        if (pos >= half) { pos -= half; el.scrollLeft = pos; }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    const pause = () => { pausedUntil.current = performance.now() + 3000; };
+    el.addEventListener('pointerdown', pause);
+    el.addEventListener('touchstart', pause, { passive: true });
+    el.addEventListener('wheel', pause, { passive: true });
+    el.addEventListener('mouseenter', () => { pausedUntil.current = Infinity; });
+    el.addEventListener('mouseleave', pause);
+    return () => { cancelAnimationFrame(raf); };
+  }, [loop]);
+
   return (
-      <div className="pp-sotw__rail no-scrollbar">
-        {products.map((p, i) => {
+      <div ref={railRef} className={`pp-sotw__rail no-scrollbar ${loop ? 'is-auto' : ''}`}>
+        {items.map((p, i) => {
           const sizes = p.sizes || [];
           const firstOpen = Math.max(0, sizes.findIndex((s) => !s.soldOut));
-          const id = String(p.id);
+          const copy = i >= products.length ? 1 : 0;
+          const id = `${p.id}#${copy}`;
           const sel = sizeSel[id] ?? firstOpen;
           const chosen = sizes[sel];
           const isOpen = openId === id;
           const g = GENDER_LABEL[p.gender || 'Unisex'] || 'Unisex';
           return (
             <article
-              key={p.id}
+              key={id}
+              aria-hidden={copy === 1 ? true : undefined}
               className={`pp-sotw__card ${i === 0 && highlightFirst ? 'is-first' : ''} ${isOpen ? 'is-open' : ''}`}
-              style={{ '--img': `url("${p.image}")`, animationDelay: `${i * 0.08}s` } as React.CSSProperties}
+              style={{ '--img': `url("${p.image}")`, animationDelay: `${(i % products.length) * 0.08}s` } as React.CSSProperties}
               onClick={() => (isOpen ? setOpenId(null) : onSelectProduct(p))}
             >
               <span className="pp-sotw__aura" aria-hidden="true" />
-              {badge && <span className="pp-sotw__rank">{badge(p, i)}</span>}
+              {badge && <span className="pp-sotw__rank">{badge(p, i % products.length)}</span>}
               <img className="pp-sotw__img" src={p.image} alt={p.name} loading="lazy" referrerPolicy="no-referrer" />
               <div className="pp-sotw__glass" onClick={(e) => isOpen && e.stopPropagation()}>
                 <p className="pp-sotw__brand">{p.brand} · {categoryOf(p.brand, (p as any).category)}</p>

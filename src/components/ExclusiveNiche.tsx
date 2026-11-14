@@ -30,6 +30,7 @@ const ExclusiveNiche: React.FC<Props> = ({ products, onSelectProduct, onAddToCar
         products={niche}
         badge={() => 'Niche'}
         highlightFirst={false}
+        autoScroll
         onSelectProduct={onSelectProduct}
         onAddToCart={onAddToCart}
       />
