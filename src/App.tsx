@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { CategoryMarquee } from './components/CategoryMarquee';
+import ExclusiveNiche from './components/ExclusiveNiche';
 import ScentOfTheWeek from './components/ScentOfTheWeek';
 import { NewArrivals } from './components/NewArrivals';
 import { CampaignBanners } from './components/CampaignBanners';
@@ -451,10 +451,11 @@ function StorefrontApp() {
               testerData={homepageData?.sections?.tester_banner?.content}
             />
 
-            {/* C. Oversized category marquee */}
-            <CategoryMarquee
-              items={homepageData?.sections?.category_marquee?.content?.items}
-              onNavigateToCollection={navigateToCollection}
+            {/* C. Exclusive niche perfumes */}
+            <ExclusiveNiche
+              products={products}
+              onSelectProduct={(p) => navigateToProduct(p)}
+              onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
             />
 
             {/* Scent of the week: rotating best sellers */}
