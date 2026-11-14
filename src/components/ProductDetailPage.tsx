@@ -27,17 +27,18 @@ const shortConc = (c?: string) => {
   if (t === 'parfum') return 'Parfum';
   return 'EDP';
 };
-const FAMILY_SIMPLE: [string, string, string][] = [
-  ['fresh', 'Fresh', '#2fa8e0'], ['citrus', 'Fresh', '#2fa8e0'], ['aquatic', 'Fresh', '#2fa8e0'],
-  ['gourmand', 'Sweet', '#ff6fa0'], ['sweet', 'Sweet', '#ff6fa0'], ['vanilla', 'Sweet', '#ff6fa0'],
-  ['floral', 'Floral', '#e76fb6'], ['fruity', 'Fruity', '#ff8a3d'], ['wood', 'Woody', '#8a6a4f'],
-  ['amber', 'Warm', '#c7782a'], ['oriental', 'Warm', '#c7782a'], ['spic', 'Warm', '#c7782a'], ['oud', 'Warm', '#c7782a'],
-  ['musk', 'Musky', '#a78bdb'], ['powder', 'Musky', '#a78bdb'], ['aromatic', 'Aromatic', '#4f9a6a'], ['herbal', 'Aromatic', '#4f9a6a'],
-  ['leather', 'Leather', '#7a4b2a'],
+// [match, label, light, deep] — soft glow gradient per scent family
+const FAMILY_SIMPLE: [string, string, string, string][] = [
+  ['fresh', 'Fresh', '#e2f4ff', '#93d0f5'], ['citrus', 'Fresh', '#e2f4ff', '#93d0f5'], ['aquatic', 'Fresh', '#e2f4ff', '#93d0f5'],
+  ['gourmand', 'Sweet', '#ffe6ee', '#ffaac4'], ['sweet', 'Sweet', '#ffe6ee', '#ffaac4'], ['vanilla', 'Sweet', '#ffe6ee', '#ffaac4'],
+  ['floral', 'Floral', '#ffe1ef', '#f6a8cc'], ['fruity', 'Fruity', '#ffeadb', '#ffb58a'], ['wood', 'Woody', '#f3e8dc', '#cfae8c'],
+  ['amber', 'Warm', '#fbe9d2', '#e9b27a'], ['oriental', 'Warm', '#fbe9d2', '#e9b27a'], ['spic', 'Warm', '#fbe9d2', '#e9b27a'], ['oud', 'Warm', '#fbe9d2', '#e9b27a'],
+  ['musk', 'Musky', '#efe9fb', '#c6b4ef'], ['powder', 'Musky', '#efe9fb', '#c6b4ef'], ['aromatic', 'Aromatic', '#e5f4ea', '#9fd1b0'], ['herbal', 'Aromatic', '#e5f4ea', '#9fd1b0'],
+  ['leather', 'Leather', '#efe4dc', '#b98d6c'],
 ];
 const famMatch = (f: string) => FAMILY_SIMPLE.find(([k]) => f.toLowerCase().includes(k));
 const familyLabel = (f: string) => famMatch(f)?.[1] || f.replace(/\b\w/g, (c) => c.toUpperCase());
-const familyColor = (f: string) => famMatch(f)?.[2] || '#8e8e93';
+const familyGlow = (f: string) => { const m = famMatch(f); return { '--c1': m?.[2] || '#f1f1f2', '--c2': m?.[3] || '#cfcfd4' } as React.CSSProperties; };
 
 interface ProductDetailPageProps {
   product: FragranceProduct | null;
@@ -338,12 +339,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               )}
 
               {families.length > 0 && (
-                <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-sans" style={{ color: 'var(--theme-text-secondary)' }}>
+                <div className="pp-scent-row">
                   {families.map((f) => (
-                    <span key={f} className="inline-flex items-center gap-1.5">
-                      <i className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: familyColor(f) }} />
-                      {familyLabel(f)}
-                    </span>
+                    <span key={f} className="pp-scent-chip" style={familyGlow(f)}>{familyLabel(f)}</span>
                   ))}
                 </div>
               )}
@@ -351,7 +349,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               {facts.length > 0 && (
                 <div className="pp-pd-facts">
                   {facts.map(([k, v]) => (
-                    <div key={k}><span>{k}</span><b>{v}</b></div>
+                    <div key={k}>
+                      <span>{k}</span>
+                      {k === 'Notes' ? (
+                        <b className="pp-notes">
+                          {v.split(', ').map((n, i) => (
+                            <React.Fragment key={n}>{i > 0 && <em aria-hidden="true">✦</em>}{n}</React.Fragment>
+                          ))}
+                        </b>
+                      ) : <b>{v}</b>}
+                    </div>
                   ))}
                 </div>
               )}
