@@ -6,25 +6,23 @@ import React from 'react';
  * Pure SVG (no images), silver-blue and soft taupe tones, very light so it stays premium.
  */
 
-const LEAVES: Array<[number, number, number, number, 'b' | 't']> = [
-  // x, y, rotation, scale, tone (b = blue-silver, t = taupe) — main stem
-  [34, 150, -62, 1.0, 'b'],
-  [44, 128, -20, 0.95, 't'],
-  [30, 112, -70, 0.95, 'b'],
-  [46, 92, -18, 0.9, 'b'],
-  [34, 76, -72, 0.85, 't'],
-  [50, 58, -24, 0.8, 'b'],
-  [42, 42, -70, 0.72, 'b'],
-  [56, 26, -30, 0.62, 't'],
-  [60, 12, -55, 0.5, 'b'],
-  // side branch
-  [24, 166, -110, 0.7, 't'],
-  [12, 150, -140, 0.62, 'b'],
-  [20, 134, -100, 0.55, 'b'],
-  [68, 104, 8, 0.6, 't'],
-  [74, 86, -10, 0.5, 'b'],
-];
-const BERRIES: Array<[number, number, number]> = [[70, 96, 2.2], [76, 80, 1.6], [16, 128, 1.8], [8, 144, 1.3], [64, 6, 1.4]];
+// Eucalyptus-style sprig like the logo: slender pointed leaves in pairs along a curved stem,
+// watercolor blue-grey and soft gold, with a few gold flecks.
+const bez = (t: number, p0: number[], p1: number[], p2: number[], p3: number[]) => {
+  const u = 1 - t;
+  const pt = [0, 1].map((k) => u * u * u * p0[k] + 3 * u * u * t * p1[k] + 3 * u * t * t * p2[k] + t * t * t * p3[k]);
+  const d = [0, 1].map((k) => 3 * u * u * (p1[k] - p0[k]) + 6 * u * t * (p2[k] - p1[k]) + 3 * t * t * (p3[k] - p2[k]));
+  return { x: pt[0], y: pt[1], a: (Math.atan2(d[1], d[0]) * 180) / Math.PI };
+};
+const STEM: number[][] = [[46, 188], [30, 140], [40, 70], [60, 6]];
+const TONES = ['b', 'b', 'g', 'b', 'b2', 'g', 'b', 'b2', 'g', 'b', 'b', 'g'];
+const LEAVES = Array.from({ length: 12 }, (_, i) => {
+  const t = 0.08 + i * 0.075;
+  const p = bez(t, STEM[0], STEM[1], STEM[2], STEM[3]);
+  const side = i % 2 === 0 ? 1 : -1;
+  return { x: p.x, y: p.y, r: p.a + side * 48, s: 1.12 - i * 0.055, tone: TONES[i] };
+});
+const FLECKS: Array<[number, number, number]> = [[74, 34, 1.4], [80, 62, 0.9], [14, 92, 1.1], [70, 118, 0.8], [22, 40, 0.7], [84, 96, 0.6]];
 
 export const LeafSprig: React.FC<{ className?: string; flip?: boolean; idSuffix: string }> = ({ className, flip, idSuffix }) => (
   <svg
@@ -34,42 +32,38 @@ export const LeafSprig: React.FC<{ className?: string; flip?: boolean; idSuffix:
     style={flip ? { transform: 'scaleX(-1)' } : undefined}
   >
     <defs>
-      <linearGradient id={`ppLeafB-${idSuffix}`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#c9d3df" />
-        <stop offset="55%" stopColor="#8e9bab" />
-        <stop offset="100%" stopColor="#5d6b7c" />
+      <linearGradient id={`ppLeafB-${idSuffix}`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#5f7889" />
+        <stop offset="60%" stopColor="#8fa6b6" />
+        <stop offset="100%" stopColor="#c8d6e0" />
       </linearGradient>
-      <linearGradient id={`ppLeafT-${idSuffix}`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#ece4d8" />
-        <stop offset="100%" stopColor="#b9aa96" />
+      <linearGradient id={`ppLeafB2-${idSuffix}`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#7d8f9c" />
+        <stop offset="100%" stopColor="#d6dee5" />
+      </linearGradient>
+      <linearGradient id={`ppLeafG-${idSuffix}`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#b8995f" />
+        <stop offset="55%" stopColor="#d9c39b" />
+        <stop offset="100%" stopColor="#f1e6cf" />
       </linearGradient>
     </defs>
     <g className="pp-sprig-sway">
-      {/* stems draw in, then leaves unfurl one by one */}
-      <path className="pp-stem" d="M44 186 C 40 150, 38 110, 46 72 S 58 22, 62 8" fill="none" stroke="#9aa3ae" strokeWidth="1.1" strokeLinecap="round" />
-      <path className="pp-stem pp-stem--b" d="M40 176 C 30 168, 18 156, 10 142" fill="none" stroke="#9aa3ae" strokeWidth="0.8" strokeLinecap="round" />
-      <path className="pp-stem pp-stem--c" d="M46 120 C 58 112, 68 100, 76 80" fill="none" stroke="#9aa3ae" strokeWidth="0.8" strokeLinecap="round" />
-      {LEAVES.map(([x, y, r, s, tone], i) => (
-        <g key={i} transform={`translate(${x} ${y}) rotate(${r}) scale(${s})`}>
-          <g className="pp-leaf" style={{ animationDelay: `${0.5 + i * 0.09}s` }}>
+      <path className="pp-stem" d={`M${STEM[0]} C ${STEM[1]}, ${STEM[2]}, ${STEM[3]}`} fill="none" stroke="#8d98a4" strokeWidth="1" strokeLinecap="round" />
+      {LEAVES.map((l, i) => (
+        <g key={i} transform={`translate(${l.x.toFixed(1)} ${l.y.toFixed(1)}) rotate(${l.r.toFixed(1)}) scale(${l.s.toFixed(2)})`}>
+          <g className="pp-leaf" style={{ animationDelay: `${0.45 + i * 0.1}s` }}>
             <path
-              d="M0 0 C 7 -9, 22 -10, 30 0 C 22 9, 7 9, 0 0 Z"
-              fill={`url(#${tone === 'b' ? 'ppLeafB' : 'ppLeafT'}-${idSuffix})`}
-              opacity={tone === 'b' ? 0.82 : 0.74}
+              d="M0 0 C 7 -6.5, 22 -8, 34 0 C 22 6, 7 5.5, 0 0 Z"
+              fill={`url(#ppLeaf${l.tone === 'g' ? 'G' : l.tone === 'b2' ? 'B2' : 'B'}-${idSuffix})`}
+              opacity={l.tone === 'g' ? 0.82 : 0.86}
             />
-            <path d="M1 0 L 27 0" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="0.6" />
+            <path d="M1.5 0 Q 16 -1.2, 31 0" fill="none" stroke="#ffffff" strokeOpacity="0.5" strokeWidth="0.55" />
           </g>
         </g>
       ))}
-      {BERRIES.map(([x, y, r], i) => (
-        <circle key={`b${i}`} className="pp-leaf" style={{ animationDelay: `${1.6 + i * 0.12}s` }} cx={x} cy={y} r={r}
-          fill={`url(#ppLeafT-${idSuffix})`} stroke="#b9aa96" strokeWidth="0.4" />
+      {FLECKS.map(([x, y, r], i) => (
+        <circle key={`f${i}`} className="pp-fleck" style={{ animationDelay: `${1.8 + i * 0.7}s` }} cx={x} cy={y} r={r} fill="#c9a96a" />
       ))}
-      {/* a few tiny silver flecks, like the gold splashes in the logo */}
-      <circle cx="70" cy="40" r="1.3" fill="#a9b1bc" opacity="0.7" />
-      <circle cx="76" cy="58" r="0.8" fill="#a9b1bc" opacity="0.6" />
-      <circle cx="18" cy="96" r="1" fill="#a9b1bc" opacity="0.55" />
-      <circle cx="64" cy="120" r="0.7" fill="#a9b1bc" opacity="0.5" />
     </g>
   </svg>
 );

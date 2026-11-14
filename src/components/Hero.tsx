@@ -80,7 +80,6 @@ export const Hero: React.FC<HeroProps> = ({
         {/* Massive Centered Pure Portions By Arrina Branding Header */}
         <div className="w-full overflow-x-clip select-none py-2 sm:py-4">
           <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-2 sm:py-4" aria-label="Pure Portions by Arrina">
-            <span className="pp-eyebrow" aria-hidden="true">Decant Atelier</span>
             <span className="relative inline-block px-[7vw] sm:px-[6vw]">
               <LeafSprig idSuffix="l" className="pp-sprig absolute left-0 top-1/2 -translate-y-[46%] h-[26vw] sm:h-[20vw] md:h-[16vw] lg:h-[13.5vw] w-auto -z-0" />
               <LeafSprig idSuffix="r" flip className="pp-sprig absolute right-0 top-1/2 -translate-y-[46%] h-[26vw] sm:h-[20vw] md:h-[16vw] lg:h-[13.5vw] w-auto -z-0" />

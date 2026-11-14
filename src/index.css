@@ -503,3 +503,7 @@ circle.pp-leaf{transform-origin:center}
 @keyframes pp-unfurl{to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){.pp-eyebrow,.pp-after-write{opacity:1;animation:none}.pp-write{clip-path:none;animation:none}.pp-stem{stroke-dashoffset:0;animation:none}.pp-leaf{opacity:1;transform:none;animation:none}}
 .pp-wordmark.pp-write.is-touching,.pp-wordmark.pp-write.is-releasing{clip-path:none}
+
+.pp-fleck{opacity:0;animation:pp-fleck 4.2s ease-in-out infinite}
+@keyframes pp-fleck{0%,100%{opacity:.25}45%{opacity:.95}}
+@media (prefers-reduced-motion: reduce){.pp-fleck{animation:none;opacity:.6}}
