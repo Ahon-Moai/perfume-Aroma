@@ -16,7 +16,7 @@ $pairs = $stmt->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
 // Filter out private keys if any exist
 $publicKeys = [
     'store_name', 'tagline', 'contact_phone', 'contact_email', 'address',
-    'currency', 'currency_symbol', 'shipping_fee_dhaka', 'shipping_fee_outside_dhaka',
+    'currency', 'currency_symbol', 'shipping_fee_dhaka', 'shipping_fee_outside_dhaka', 'shipping_fee_narsingdi',
     'free_shipping_threshold', 'enable_cod', 'enable_bkash', 'enable_nagad',
     'enable_card', 'announcement_bar'
 ];

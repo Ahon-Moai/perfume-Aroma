@@ -15,7 +15,8 @@ export const SettingsCMS: React.FC<SettingsCMSProps> = ({ csrfToken }) => {
     address: 'Banani High Street, Block 11, Dhaka 1213, Bangladesh',
     currency: 'BDT',
     currency_symbol: '৳',
-    shipping_fee_dhaka: '70',
+    shipping_fee_narsingdi: '80',
+    shipping_fee_dhaka: '100',
     shipping_fee_outside_dhaka: '130',
     free_shipping_threshold: '3000',
     announcement_bar: 'AUTHENTIC LUXURY DECANTS · FREE NATIONWIDE SHIPPING OVER ৳ 3,000'
@@ -141,9 +142,18 @@ export const SettingsCMS: React.FC<SettingsCMSProps> = ({ csrfToken }) => {
         </div>
 
         <h3 className="font-serif text-base text-[#111111] border-b border-[#EAEAEA] pb-3 pt-4">Delivery & Checkout Rules</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div>
-            <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Delivery Charge: Inside Dhaka (৳)</label>
+            <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Delivery Charge: Narsingdi (৳)</label>
+            <input
+              type="number"
+              value={(settings as any).shipping_fee_narsingdi ?? '80'}
+              onChange={e => setSettings({ ...settings, shipping_fee_narsingdi: e.target.value } as any)}
+              className="w-full bg-[#F8F8F8] border border-[#EAEAEA] px-3 py-2 text-xs text-[#111111] focus:border-[#111111] font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Delivery Charge: Dhaka (৳)</label>
             <input
               type="number"
               value={settings.shipping_fee_dhaka}
@@ -152,7 +162,7 @@ export const SettingsCMS: React.FC<SettingsCMSProps> = ({ csrfToken }) => {
             />
           </div>
           <div>
-            <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Delivery Charge: Outside Dhaka (৳)</label>
+            <label className="block text-[10px] tracking-widest text-[#737373] uppercase mb-1">Delivery Charge: Other Districts (৳)</label>
             <input
               type="number"
               value={settings.shipping_fee_outside_dhaka}

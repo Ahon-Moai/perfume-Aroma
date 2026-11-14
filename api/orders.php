@@ -42,7 +42,7 @@ if ($method === 'GET') {
     $customerPhone = sanitizeString($input['customer_phone'] ?? '');
     $customerEmail = sanitizeString($input['customer_email'] ?? '');
     $shippingAddress = sanitizeString($input['shipping_address'] ?? '');
-    $cityZone = sanitizeString($input['city_zone'] ?? 'inside_dhaka'); // inside_dhaka | outside_dhaka
+    $cityZone = sanitizeString($input['city_zone'] ?? 'inside_dhaka'); // narsingdi | inside_dhaka | outside_dhaka
     $paymentMethod = sanitizeString($input['payment_method'] ?? 'cod');
     $couponCode = sanitizeString($input['coupon_code'] ?? null);
     $itemsInput = $input['items'] ?? [];
@@ -61,6 +61,7 @@ if ($method === 'GET') {
 
     $feeDhaka = (float)($settings['shipping_fee_dhaka'] ?? 70);
     $feeOutside = (float)($settings['shipping_fee_outside_dhaka'] ?? 130);
+    $feeNarsingdi = (float)($settings['shipping_fee_narsingdi'] ?? 80);
     $freeThreshold = (float)($settings['free_shipping_threshold'] ?? 3000);
 
     // SERVER-SIDE PRICE & ITEM VALIDATION
@@ -110,7 +111,7 @@ if ($method === 'GET') {
     }
 
     // Calculate delivery fee
-    $deliveryFee = ($cityZone === 'outside_dhaka') ? $feeOutside : $feeDhaka;
+    $deliveryFee = ($cityZone === 'narsingdi') ? $feeNarsingdi : (($cityZone === 'outside_dhaka') ? $feeOutside : $feeDhaka);
     if ($subtotal >= $freeThreshold) {
         $deliveryFee = 0.00;
     }

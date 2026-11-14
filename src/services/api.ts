@@ -144,7 +144,7 @@ export async function submitOrder(orderPayload: {
   customer_phone: string;
   customer_email?: string;
   shipping_address: string;
-  city_zone: 'inside_dhaka' | 'outside_dhaka';
+  city_zone: 'narsingdi' | 'inside_dhaka' | 'outside_dhaka';
   payment_method: string;
   coupon_code?: string;
   items: Array<{

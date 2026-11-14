@@ -497,7 +497,16 @@ export const OfflineOrder: React.FC<{
         </div>
 
         <div className="grid grid-cols-2 gap-4 mt-5 items-end">
-          <label><span className={lbl}>Delivery fee</span><input className={field} value={fee} onChange={(e) => setFee(e.target.value.replace(/\D/g, ''))} placeholder="0" inputMode="numeric" /></label>
+          <div>
+            <label><span className={lbl}>Delivery fee</span><input className={field} value={fee} onChange={(e) => setFee(e.target.value.replace(/\D/g, ''))} placeholder="0" inputMode="numeric" /></label>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {[['Narsingdi', '80'], ['Dhaka', '100'], ['Other districts', '130'], ['Free', '0']].map(([l, v]) => (
+                <button key={l} type="button" onClick={() => setFee(v)} className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border ${fee === v ? 'bg-neutral-900 text-white border-neutral-900' : 'border-neutral-300 text-neutral-700'}`}>
+                  {l}{v !== '0' ? ` ৳${v}` : ''}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="inline-flex rounded-full border border-neutral-300 p-0.5 justify-self-start">
             {[false, true].map((v) => (
               <button key={String(v)} onClick={() => setPaid(v)} className={`px-3 py-1 rounded-full text-xs font-semibold ${paid === v ? 'bg-neutral-900 text-white' : 'text-neutral-700'}`}>

@@ -27,7 +27,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [shippingAddress, setShippingAddress] = useState('');
-  const [cityZone, setCityZone] = useState<'inside_dhaka' | 'outside_dhaka'>('inside_dhaka');
+  const [cityZone, setCityZone] = useState<'narsingdi' | 'inside_dhaka' | 'outside_dhaka'>('inside_dhaka');
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [submitting, setSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState<any>(null);
@@ -37,12 +37,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const num = (v: any, d: number) => (v !== undefined && v !== null && v !== '' && !isNaN(Number(v)) ? Number(v) : d);
-  const feeDhaka = num(storeSettings?.shipping_fee_dhaka, 70);
+  const feeDhaka = num(storeSettings?.shipping_fee_dhaka, 100);
   const feeOutside = num(storeSettings?.shipping_fee_outside_dhaka, 130);
+  const feeNarsingdi = num(storeSettings?.shipping_fee_narsingdi, 80);
   const freeShippingThreshold = num(storeSettings?.free_shipping_threshold, 3000);
   const progressPercent = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
 
-  const shippingFee = subtotal >= freeShippingThreshold ? 0 : (cityZone === 'outside_dhaka' ? feeOutside : feeDhaka);
+  const shippingFee = subtotal >= freeShippingThreshold ? 0 : (cityZone === 'narsingdi' ? feeNarsingdi : cityZone === 'outside_dhaka' ? feeOutside : feeDhaka);
   const estimatedTotal = subtotal + shippingFee;
 
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
@@ -312,8 +313,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       color: 'var(--theme-text-primary)',
                     }}
                   >
-                    <option value="inside_dhaka">Inside Dhaka (৳ {feeDhaka})</option>
-                    <option value="outside_dhaka">Outside Dhaka (৳ {feeOutside})</option>
+                    <option value="narsingdi">Narsingdi (৳ {feeNarsingdi})</option>
+                    <option value="inside_dhaka">Dhaka (৳ {feeDhaka})</option>
+                    <option value="outside_dhaka">Other districts (৳ {feeOutside})</option>
                   </select>
                 </div>
 

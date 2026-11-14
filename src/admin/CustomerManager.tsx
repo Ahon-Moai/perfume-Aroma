@@ -125,7 +125,7 @@ export const CustomerManager: React.FC<CustomerManagerProps> = ({ csrfToken }) =
                 <tr key={c.id} className="hover:bg-[#F8F8F8] transition-colors">
                   <td className="py-3.5 px-4 font-serif font-medium text-[#111111]">{c.name}</td>
                   <td className="py-3.5 px-4 font-mono text-[#111111]">{c.phone}</td>
-                  <td className="py-3.5 px-4 capitalize text-[#737373]">{(c.city_zone || 'inside_dhaka').replace('_', ' ')}</td>
+                  <td className="py-3.5 px-4 capitalize text-[#737373]">{({ narsingdi: 'Narsingdi', inside_dhaka: 'Dhaka', outside_dhaka: 'Other districts' } as Record<string, string>)[c.city_zone || 'inside_dhaka'] || c.city_zone}</td>
                   <td className="py-3.5 px-4 font-mono font-semibold text-[#111111]">{c.order_count || 0}</td>
                   <td className="py-3.5 px-4 font-serif font-semibold text-[#111111]">৳ {c.total_spent || 0}</td>
                   <td className="py-3.5 px-4 text-right">
