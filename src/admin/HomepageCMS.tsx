@@ -766,7 +766,6 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
           { id: 'sections', label: 'Custom Product Sections' },
           { id: 'marquee', label: 'Marquee Ticker' },
           { id: 'reviews', label: 'Customer Reviews' },
-          { id: 'faqs', label: 'FAQs' },
           { id: 'articles', label: 'Journal Articles' }
         ].map((tab) => (
           <button

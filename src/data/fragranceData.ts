@@ -150,30 +150,3 @@ export const JOURNAL_ARTICLES: JournalArticle[] = [
   }
 ];
 
-export const FAQ_ITEMS = [
-  {
-    id: 'faq-1',
-    question: 'What is a decant?',
-    answer: 'A decant is a smaller atomizer that contains a portion of perfume from the original bottle. Decanting means transferring perfume from the main bottle into a smaller bottle. It allows you to test luxury scents on skin for several weeks without committing to full retail prices.'
-  },
-  {
-    id: 'faq-2',
-    question: 'But I can just test at a perfume shop by sniffing?',
-    answer: 'Sniffing perfume on a paper strip in a boutique only reveals the volatile top notes (first 5-10 minutes). A decant lets you experience the true dry-down, skin chemistry, projection, and sillage over an entire day in your natural climate and routines.'
-  },
-  {
-    id: 'faq-3',
-    question: 'Are the fragrances 100% Genuine?',
-    answer: 'Every milliliter is extracted directly from original brand flacons sourced from authorized European and Arabian distributors. We never dilute, alter, or mix scents with carrier oils.'
-  },
-  {
-    id: 'faq-4',
-    question: 'What is the shipping cost?',
-    answer: 'Standard door-to-door delivery inside Dhaka is BDT 70, and outside Dhaka nationwide is BDT 130. We offer free shipping on orders above BDT 3,000.'
-  },
-  {
-    id: 'faq-5',
-    question: 'How long does shipping take?',
-    answer: 'Orders are freshly decanted within 24 hours of confirmation. Delivery within Dhaka takes 1-2 business days, and all other districts take 2-4 business days via verified express couriers.'
-  }
-];

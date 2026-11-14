@@ -599,24 +599,3 @@ circle.pp-leaf{transform-origin:center}
 @keyframes ppSilverSweep{0%,55%{background-position:100% 0}100%{background-position:0% 0}}
 @media (min-width:768px){.pp-sotw__w1{font-size:32px}.pp-sotw__w2{font-size:84px}}
 
-/* FAQ — minimal */
-.pp-faq{padding:64px 0 56px;background:var(--theme-surface)}
-.pp-faq__wrap{max-width:720px;margin:0 auto;padding:0 22px}
-.pp-faq__eyebrow{font-size:10px;letter-spacing:.26em;font-weight:600;color:#8a8a86;margin:0}
-.pp-faq__title{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:40px;line-height:1;margin:10px 0 26px;color:#141414;letter-spacing:-.01em}
-.pp-faq__title em{font-style:italic}
-.pp-faq__list{border-top:.5px solid rgba(0,0,0,.14)}
-.pp-faq__item{border-bottom:.5px solid rgba(0,0,0,.14)}
-.pp-faq__q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;background:none;border:0;text-align:left;cursor:pointer;font-size:15px;font-weight:600;color:#1d1d1b}
-.pp-faq__icon{position:relative;width:12px;height:12px;flex:0 0 12px}
-.pp-faq__icon::before,.pp-faq__icon::after{content:"";position:absolute;left:0;top:5.25px;width:12px;height:1.5px;border-radius:2px;background:#1d1d1b;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
-.pp-faq__icon::after{transform:rotate(90deg)}
-.pp-faq__item.is-open .pp-faq__icon::after{transform:rotate(0)}
-.pp-faq__a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,.8,.2,1)}
-.pp-faq__item.is-open .pp-faq__a{grid-template-rows:1fr}
-.pp-faq__a>div{overflow:hidden}
-.pp-faq__a p{margin:0;padding:0 28px 18px 0;font-size:14px;line-height:1.6;color:#5f5e5a}
-.pp-faq__help{margin-top:22px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-radius:18px;background:rgba(0,0,0,.035);text-decoration:none;color:#1d1d1b}
-.pp-faq__help span{font-size:13px;color:#6b6a66}
-.pp-faq__help b{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600}
-@media (min-width:768px){.pp-faq__title{font-size:52px}}
