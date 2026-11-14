@@ -532,3 +532,17 @@ circle.pp-leaf{transform-origin:center}
 .pp-sprays{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;margin-top:10px;font-size:12px;color:var(--theme-text-secondary,#777);animation:pp-rise .45s cubic-bezier(.2,.8,.2,1)}
 .pp-sprays b{font-weight:600;color:var(--theme-primary,#111)}
 .pp-sprays__mist{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#c3c7cf 60%,rgba(195,199,207,0));box-shadow:0 0 8px rgba(195,199,207,.9);flex:0 0 auto}
+
+/* Scent strip pop-up on product image */
+.pp-strip{position:absolute;left:12px;right:12px;bottom:12px;z-index:5;display:block;text-align:left;padding:11px 14px 12px;border-radius:16px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border:.5px solid rgba(255,255,255,.95);box-shadow:0 8px 28px rgba(0,0,0,.08);cursor:pointer;max-width:420px;margin:0 auto}
+.pp-strip.is-in{animation:ppStripIn .7s cubic-bezier(.2,.9,.25,1.15) both}
+.pp-strip.is-out{animation:ppStripOut .6s ease forwards;pointer-events:none}
+.pp-strip__label{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#6b6a66;margin-bottom:8px;font-weight:600}
+.pp-strip__bar{display:flex;gap:2px;height:7px;border-radius:7px;overflow:hidden}
+.pp-strip__seg{height:100%;width:0;flex:0 0 auto;animation:ppStripGrow .9s cubic-bezier(.2,.8,.2,1) forwards}
+.pp-strip__names{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;font-weight:600;color:#1d1d1b}
+.pp-strip__names span{opacity:0;animation:ppFadeUp .4s ease forwards}
+@keyframes ppStripIn{from{opacity:0;transform:translateY(120%) scale(.96)}to{opacity:1;transform:none}}
+@keyframes ppStripOut{to{opacity:0;transform:translateY(16px) scale(.98)}}
+@keyframes ppStripGrow{to{width:var(--w)}}
+@keyframes ppFadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}

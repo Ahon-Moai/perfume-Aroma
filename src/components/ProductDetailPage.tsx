@@ -147,6 +147,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const families = Array.from(
     new Map(((spx.fragranceFamilies || []) as string[]).map((f) => [familyLabel(f), f])).values()
   ).slice(0, 4);
+  // Scent strip pop-up: first family is strongest, fades away after a few seconds
+  const STRIP_W = [[100], [60, 40], [46, 32, 22], [38, 28, 20, 14]];
+  const [stripState, setStripState] = useState<'hidden' | 'in' | 'out'>('hidden');
+  useEffect(() => {
+    if (families.length === 0) return;
+    setStripState('hidden');
+    const t1 = setTimeout(() => setStripState('in'), 500);
+    const t2 = setTimeout(() => setStripState('out'), 5500);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [product.id, families.length]);
   const noteList: string[] = (product.notes && product.notes.length
     ? product.notes
     : [...(product.topNotes || spx.topNotes || []), ...(product.heartNotes || spx.heartNotes || []), ...(product.baseNotes || spx.baseNotes || [])]
@@ -273,6 +283,27 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 referrerPolicy="no-referrer"
               />
 
+
+              {families.length > 0 && stripState !== 'hidden' && (
+                <button
+                  type="button"
+                  className={`pp-strip ${stripState === 'in' ? 'is-in' : 'is-out'}`}
+                  onClick={() => setStripState('out')}
+                  aria-label="Scent profile"
+                >
+                  <span className="pp-strip__label">Smells like</span>
+                  <span className="pp-strip__bar">
+                    {families.map((f, i) => (
+                      <span key={f} className="pp-strip__seg" style={{ '--w': `${STRIP_W[families.length - 1][i]}%`, background: famMatch(f)?.[3] || '#cfcfd4', animationDelay: `${0.25 + i * 0.12}s` } as React.CSSProperties} />
+                    ))}
+                  </span>
+                  <span className="pp-strip__names">
+                    {families.map((f, i) => (
+                      <span key={f} style={{ animationDelay: `${0.7 + i * 0.08}s` }}>{familyLabel(f)}</span>
+                    ))}
+                  </span>
+                </button>
+              )}
 
               {/* Share Floating Action */}
               <button
