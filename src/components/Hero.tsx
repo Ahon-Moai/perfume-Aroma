@@ -81,8 +81,8 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="w-full overflow-x-clip select-none py-2 sm:py-4">
           <h1 className="w-full text-center select-none flex flex-col items-center justify-center py-2 sm:py-4" aria-label="Pure Portions by Arrina">
             <span className="relative inline-block px-[7vw] sm:px-[6vw]">
-              <LeafSprig idSuffix="l" className="pp-sprig absolute left-0 top-1/2 -translate-y-[46%] h-[26vw] sm:h-[20vw] md:h-[16vw] lg:h-[13.5vw] w-auto -z-0" />
-              <LeafSprig idSuffix="r" flip className="pp-sprig absolute right-0 top-1/2 -translate-y-[46%] h-[26vw] sm:h-[20vw] md:h-[16vw] lg:h-[13.5vw] w-auto -z-0" />
+              <LeafSprig idSuffix="l" className="pp-sprig absolute left-0 top-1/2 -translate-y-[46%] h-[31vw] sm:h-[23vw] md:h-[18vw] lg:h-[15vw] w-auto -z-0" />
+              <LeafSprig idSuffix="r" flip className="pp-sprig absolute right-0 top-1/2 -translate-y-[46%] h-[31vw] sm:h-[23vw] md:h-[18vw] lg:h-[15vw] w-auto -z-0" />
               <span
                 ref={markRef}
                 className="pp-wordmark pp-write pp-silver-text whitespace-nowrap text-[16.5vw] sm:text-[13vw] md:text-[11vw] lg:text-[9.5vw]"
