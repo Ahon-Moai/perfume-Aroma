@@ -53,11 +53,14 @@ const ScentOfTheWeek: React.FC<Props> = ({ products, onSelectProduct, onAddToCar
     <section className="pp-sotw" aria-label="Scent of the week">
       <div className="pp-sotw__head">
         <div className="pp-sotw__meta">
-          <span className="pp-sotw__eyebrow">Scent of the week</span>
+          <span className="pp-sotw__live"><i aria-hidden="true" />Scent of the week</span>
           <span className="pp-sotw__line" aria-hidden="true" />
           <span className="pp-sotw__wk">Nº {week}</span>
         </div>
-        <h2 className="pp-sotw__title">This week's favourites</h2>
+        <h2 className="pp-sotw__title">
+          <span className="pp-sotw__w1">This week's</span>
+          <em className="pp-sotw__w2">favourites</em>
+        </h2>
       </div>
 
       <div className="pp-sotw__rail no-scrollbar">
