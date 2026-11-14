@@ -527,3 +527,8 @@ circle.pp-leaf{transform-origin:center}
 .pp-tester__cta span{display:inline-block;transition:transform .3s}
 @media (hover:hover){.pp-tester:hover .pp-tester__cta span{transform:translateX(4px)}}
 @media (prefers-reduced-motion: reduce){.pp-tester::after,.pp-tester__vial{animation:none}}
+
+/* Spray estimate under the size pills */
+.pp-sprays{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;margin-top:10px;font-size:12px;color:var(--theme-text-secondary,#777);animation:pp-rise .45s cubic-bezier(.2,.8,.2,1)}
+.pp-sprays b{font-weight:600;color:var(--theme-primary,#111)}
+.pp-sprays__mist{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#c3c7cf 60%,rgba(195,199,207,0));box-shadow:0 0 8px rgba(195,199,207,.9);flex:0 0 auto}

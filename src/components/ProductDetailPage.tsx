@@ -133,6 +133,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const totalPrice = currentSize.price * quantity;
   const isSoldOut = !!currentSize.soldOut;
 
+  // A decant atomizer gives roughly 15 sprays per ml
+  const sprayInfo = (() => {
+    const ml = parseFloat(String(currentSize.size).replace(/[^\d.]/g, ''));
+    if (!ml) return null;
+    const sprays = ml < 5 ? Math.round(ml * 15) : Math.round((ml * 15) / 5) * 5;
+    const d = Math.round(sprays / 3);
+    const days = d >= 60 ? `${Math.round(d / 30)} months` : d >= 14 ? `${Math.round(d / 7)} weeks` : `${d} days`;
+    return { sprays, days };
+  })();
+
   // Simple facts for the minimal layout
   const spx: any = product.scentProfile || product.scent_profile || {};
   const description = (product.shortDescription || spx.scentDescription || product.description || '').trim();
@@ -394,6 +404,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     );
                   })}
                 </div>
+                {sprayInfo && (
+                  <p className="pp-sprays" key={currentSize.size}>
+                    <span className="pp-sprays__mist" aria-hidden="true" />
+                    <b>≈ {sprayInfo.sprays} sprays</b>
+                    <span>· about {sprayInfo.days} at 3 sprays a day</span>
+                  </p>
+                )}
               </div>
 
               {/* Quantity Selector & Action CTAs */}
