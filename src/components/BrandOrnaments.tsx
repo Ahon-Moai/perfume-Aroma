@@ -7,7 +7,7 @@ import React from 'react';
  */
 
 const LEAVES: Array<[number, number, number, number, 'b' | 't']> = [
-  // x, y, rotation, scale, tone (b = blue-silver, t = taupe)
+  // x, y, rotation, scale, tone (b = blue-silver, t = taupe) — main stem
   [34, 150, -62, 1.0, 'b'],
   [44, 128, -20, 0.95, 't'],
   [30, 112, -70, 0.95, 'b'],
@@ -16,7 +16,15 @@ const LEAVES: Array<[number, number, number, number, 'b' | 't']> = [
   [50, 58, -24, 0.8, 'b'],
   [42, 42, -70, 0.72, 'b'],
   [56, 26, -30, 0.62, 't'],
+  [60, 12, -55, 0.5, 'b'],
+  // side branch
+  [24, 166, -110, 0.7, 't'],
+  [12, 150, -140, 0.62, 'b'],
+  [20, 134, -100, 0.55, 'b'],
+  [68, 104, 8, 0.6, 't'],
+  [74, 86, -10, 0.5, 'b'],
 ];
+const BERRIES: Array<[number, number, number]> = [[70, 96, 2.2], [76, 80, 1.6], [16, 128, 1.8], [8, 144, 1.3], [64, 6, 1.4]];
 
 export const LeafSprig: React.FC<{ className?: string; flip?: boolean; idSuffix: string }> = ({ className, flip, idSuffix }) => (
   <svg
@@ -37,17 +45,25 @@ export const LeafSprig: React.FC<{ className?: string; flip?: boolean; idSuffix:
       </linearGradient>
     </defs>
     <g className="pp-sprig-sway">
-      {/* stem */}
-      <path d="M44 186 C 40 150, 38 110, 46 72 S 58 22, 62 8" fill="none" stroke="#9aa3ae" strokeWidth="1.1" strokeLinecap="round" />
+      {/* stems draw in, then leaves unfurl one by one */}
+      <path className="pp-stem" d="M44 186 C 40 150, 38 110, 46 72 S 58 22, 62 8" fill="none" stroke="#9aa3ae" strokeWidth="1.1" strokeLinecap="round" />
+      <path className="pp-stem pp-stem--b" d="M40 176 C 30 168, 18 156, 10 142" fill="none" stroke="#9aa3ae" strokeWidth="0.8" strokeLinecap="round" />
+      <path className="pp-stem pp-stem--c" d="M46 120 C 58 112, 68 100, 76 80" fill="none" stroke="#9aa3ae" strokeWidth="0.8" strokeLinecap="round" />
       {LEAVES.map(([x, y, r, s, tone], i) => (
         <g key={i} transform={`translate(${x} ${y}) rotate(${r}) scale(${s})`}>
-          <path
-            d="M0 0 C 7 -9, 22 -10, 30 0 C 22 9, 7 9, 0 0 Z"
-            fill={`url(#${tone === 'b' ? 'ppLeafB' : 'ppLeafT'}-${idSuffix})`}
-            opacity={tone === 'b' ? 0.78 : 0.7}
-          />
-          <path d="M1 0 L 27 0" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="0.6" />
+          <g className="pp-leaf" style={{ animationDelay: `${0.5 + i * 0.09}s` }}>
+            <path
+              d="M0 0 C 7 -9, 22 -10, 30 0 C 22 9, 7 9, 0 0 Z"
+              fill={`url(#${tone === 'b' ? 'ppLeafB' : 'ppLeafT'}-${idSuffix})`}
+              opacity={tone === 'b' ? 0.82 : 0.74}
+            />
+            <path d="M1 0 L 27 0" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="0.6" />
+          </g>
         </g>
+      ))}
+      {BERRIES.map(([x, y, r], i) => (
+        <circle key={`b${i}`} className="pp-leaf" style={{ animationDelay: `${1.6 + i * 0.12}s` }} cx={x} cy={y} r={r}
+          fill={`url(#ppLeafT-${idSuffix})`} stroke="#b9aa96" strokeWidth="0.4" />
       ))}
       {/* a few tiny silver flecks, like the gold splashes in the logo */}
       <circle cx="70" cy="40" r="1.3" fill="#a9b1bc" opacity="0.7" />
