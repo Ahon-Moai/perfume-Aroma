@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { FragranceProduct, Collection, FilterState, DecantSize } from '../types';
 import { fetchCollectionBySlug, fetchPublicProducts } from '../services/api';
+import { thumb } from '../lib/img';
 import { trackSearchSubmission, trackSearchWhenIdle } from '../services/searchTracker';
 
 const getSprayEstimate = (sizeStr: string): string => {
@@ -57,7 +58,7 @@ const CollectionProductCard: React.FC<{
           }}
         >
           <img
-            src={product.image}
+            src={thumb(product.image, 480)}
             alt={product.name}
             className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
             loading="lazy"

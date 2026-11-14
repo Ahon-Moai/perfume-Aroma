@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import { FragranceProduct } from '../types';
+import { thumb } from '../lib/img';
 import { trackSearchSubmission, trackSearchWhenIdle } from '../services/searchTracker';
 
 interface SearchModalProps {
@@ -226,7 +227,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       }}
                     >
                       <img
-                        src={item.image}
+                        src={thumb(item.image, 160)}
                         alt={item.name}
                         className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
                       />
@@ -297,7 +298,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         }}
                       >
                         <img
-                          src={item.image}
+                          src={thumb(item.image, 160)}
                           alt={item.name}
                           className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-200"
                         />

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { FragranceProduct } from '../types';
+import { thumb } from '../lib/img';
 import { categoryOf } from '../lib/brandCategory';
 
 /**
@@ -196,7 +197,7 @@ export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, o
                       <div className="rounded-2xl p-2.5 pr-3 bg-neutral-50">
                         <button onClick={() => { onClose(); onNavigateToProduct(p); }} className="w-full flex items-center gap-3 text-left">
                           {p.image ? (
-                            <img src={p.image} alt="" loading="lazy" className="w-14 h-14 rounded-xl object-cover bg-white shrink-0" />
+                            <img src={thumb(p.image, 160)} alt="" loading="lazy" className="w-14 h-14 rounded-xl object-cover bg-white shrink-0" />
                           ) : (
                             <span className="w-14 h-14 rounded-xl bg-neutral-200 shrink-0" />
                           )}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, ChevronDown, ArrowRight } from 'lucide-react';
+import { thumb } from '../lib/img';
 import { FragranceProduct, DecantSize } from '../types';
 
 interface NewArrivalsProps {
@@ -47,7 +48,7 @@ const NewArrivalProductCard: React.FC<{
           }}
         >
           <img
-            src={product.image}
+            src={thumb(product.image, 480)}
             alt={product.name}
             className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
             referrerPolicy="no-referrer"

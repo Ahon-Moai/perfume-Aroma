@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FragranceProduct, DecantSize } from '../types';
+import { thumb } from '../lib/img';
 import { ShoppingBag, Eye, ChevronDown, ArrowRight } from 'lucide-react';
 
 interface CustomProductSectionsProps {
@@ -48,7 +49,7 @@ const CustomProductCard: React.FC<{
           }}
         >
           <img
-            src={product.image}
+            src={thumb(product.image, 480)}
             alt={product.name}
             className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
             loading="lazy"

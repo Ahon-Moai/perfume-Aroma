@@ -678,3 +678,24 @@ circle.pp-leaf{transform-origin:center}
 .pp-niche .pp-sotw__buy{background:linear-gradient(160deg,#2a241a,#13110d);color:#f3e2b8;box-shadow:inset 0 0 0 .5px rgba(214,180,110,.5)}
 .pp-niche .pp-sotw__card.is-open .pp-sotw__img{animation:ppBottleLift .7s cubic-bezier(.3,1.4,.5,1)}
 @keyframes ppBottleLift{0%{transform:translateX(-50%) translateY(0) scale(1)}60%{transform:translateX(-50%) translateY(-42px) scale(.5) rotate(-3deg)}100%{transform:translateX(-50%) translateY(-36px) scale(.54)}}
+
+/* ── Performance: pause endless animations off screen ── */
+.pp-offscreen,.pp-offscreen *,.pp-offscreen::before,.pp-offscreen::after,.pp-offscreen *::before,.pp-offscreen *::after{animation-play-state:paused!important}
+
+/* ── Respect "reduce motion" on the phone ── */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+/* ── Lite mode for weaker phones: same look, far less work ── */
+.pp-lite .pp-header,.pp-lite .pp-sotw__glass,.pp-lite .pp-sotw__rank,.pp-lite .pp-sotw__live,.pp-lite .pp-niche__tag,.pp-lite .pp-glass-pill,.pp-lite .pp-glass-group,.pp-lite .pp-tester,.pp-lite .pp-sotw__chip,.pp-lite .pp-sotw__b{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.pp-lite .pp-sotw__glass{background:rgba(255,255,255,.9)!important}
+.pp-lite .pp-sotw__rank,.pp-lite .pp-sotw__live{background:rgba(255,255,255,.92)}
+.pp-lite .pp-sotw__aura{filter:blur(22px) saturate(1.4)!important;inset:-12%!important}
+.pp-lite .pp-niche::before{animation:none!important;filter:blur(20px)!important}
+.pp-lite .pp-niche::after,.pp-lite .pp-sotw__live i::after{animation:none!important;display:none}
+.pp-lite .pp-sotw__w2,.pp-lite .pp-niche__title em{animation:ppWordUp 1s .12s cubic-bezier(.2,.8,.2,1) both!important;background-position:100% 0!important}
+.pp-lite .pp-sotw__card{box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 10px 24px -16px rgba(0,0,0,.3)!important}
+.pp-lite .pp-dock__glass,.pp-lite .pp-announce,.pp-lite .pp-header.is-glass,.pp-lite [class*="backdrop-blur"]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.pp-lite .pp-dock__glass{background:rgba(250,250,250,.96)!important}
+.pp-lite .pp-header.is-glass{background:rgba(255,255,255,.96)!important}

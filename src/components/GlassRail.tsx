@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Plus, Check, X } from 'lucide-react';
 import { FragranceProduct } from '../types';
+import { thumb } from '../lib/img';
 import { categoryOf } from '../lib/brandCategory';
 
 const GENDER_LABEL: Record<string, string> = { Him: 'For him', Her: 'For her', Unisex: 'Unisex' };
@@ -80,12 +81,12 @@ const GlassRail: React.FC<Props> = ({ products, badge, highlightFirst = true, au
               key={id}
               aria-hidden={copy === 1 ? true : undefined}
               className={`pp-sotw__card ${i === 0 && highlightFirst ? 'is-first' : ''} ${isOpen ? 'is-open' : ''}`}
-              style={{ '--img': `url("${p.image}")`, animationDelay: `${(i % products.length) * 0.08}s` } as React.CSSProperties}
+              style={{ '--img': `url("${thumb(p.image, 160)}")`, animationDelay: `${(i % products.length) * 0.08}s` } as React.CSSProperties}
               onClick={() => (isOpen ? setOpenId(null) : onSelectProduct(p))}
             >
               <span className="pp-sotw__aura" aria-hidden="true" />
               {badge && <span className="pp-sotw__rank">{badge(p, i % products.length)}</span>}
-              <img className="pp-sotw__img" src={p.image} alt={p.name} loading="lazy" referrerPolicy="no-referrer" />
+              <img className="pp-sotw__img" src={thumb(p.image, 480)} alt={p.name} loading="lazy" referrerPolicy="no-referrer" />
               <div className="pp-sotw__glass" onClick={(e) => isOpen && e.stopPropagation()}>
                 <p className="pp-sotw__brand">{p.brand} · {categoryOf(p.brand, (p as any).category)}</p>
                 <p className="pp-sotw__name">{p.name}</p>
