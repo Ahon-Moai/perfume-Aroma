@@ -23,7 +23,7 @@ const COLOR = { ok: '#1D9E75', low: '#EF9F27', out: '#E24B4A' };
 const api = '/api/admin/perfume_stock.php';
 const HOUSES = [
   { id: 'all', label: 'All' },
-  { id: 'Arabian', label: 'Middle Eastern' },
+  { id: 'Arabian', label: 'Arabian' },
   { id: 'Designer', label: 'Designer' },
   { id: 'Niche', label: 'Niche' },
 ] as const;

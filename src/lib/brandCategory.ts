@@ -1,4 +1,4 @@
-// Which house a brand belongs to. Brands not listed count as Middle Eastern (most of the catalogue).
+// Which house a brand belongs to. Brands not listed count as Arabian (most of the catalogue).
 // Edit these lists to re-categorise a house — the homepage and the admin both use them.
 export type BrandCategory = 'Designer' | 'Niche' | 'Arabian';
 

@@ -18,7 +18,7 @@ import {
 import { FragranceProduct, DecantSize, MainAccord } from '../types';
 import { categoryOf } from '../lib/brandCategory';
 
-const HOUSE_LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
+const HOUSE_LABEL: Record<string, string> = { Arabian: 'Arabian', Designer: 'Designer', Niche: 'Niche' };
 const shortConc = (c?: string) => {
   const t = (c || '').toLowerCase();
   if (t.includes('extrait')) return 'Extrait';

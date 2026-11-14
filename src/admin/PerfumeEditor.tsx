@@ -8,7 +8,7 @@ import { categoryOf } from '../lib/brandCategory';
  * Fields this editor doesn't show (gallery, attributes, pyramid notes, …) are kept as they are.
  */
 
-const HOUSES = [['Arabian', 'Middle Eastern'], ['Designer', 'Designer'], ['Niche', 'Niche']] as const;
+const HOUSES = [['Arabian', 'Arabian'], ['Designer', 'Designer'], ['Niche', 'Niche']] as const;
 const GENDERS = ['Him', 'Her', 'Unisex'] as const;
 const TYPES: [string, string][] = [['EDP', 'Eau de Parfum'], ['EDT', 'Eau de Toilette'], ['Extrait', 'Extrait de Parfum'], ['Parfum', 'Parfum']];
 // Simple scent words → the family names the shop already uses

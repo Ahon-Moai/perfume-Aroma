@@ -87,7 +87,7 @@ if ($slug || $id) {
                 'id' => 'col-newarrivals',
                 'title' => 'New Arrivals',
                 'slug' => 'new-arrivals',
-                'description' => 'Freshly decanted atelier releases and latest Middle Eastern & European arrivals.',
+                'description' => 'Freshly decanted atelier releases and latest Arabian & European arrivals.',
                 'image' => '/src/assets/images/perfume_rose01_1791908158391.jpg',
                 'rule_type' => 'new_arrival',
                 'rule_value' => ''

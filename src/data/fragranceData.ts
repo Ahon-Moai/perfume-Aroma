@@ -164,7 +164,7 @@ export const FAQ_ITEMS = [
   {
     id: 'faq-3',
     question: 'Are the fragrances 100% Genuine?',
-    answer: 'Every milliliter is extracted directly from original brand flacons sourced from authorized European and Middle Eastern distributors. We never dilute, alter, or mix scents with carrier oils.'
+    answer: 'Every milliliter is extracted directly from original brand flacons sourced from authorized European and Arabian distributors. We never dilute, alter, or mix scents with carrier oils.'
   },
   {
     id: 'faq-4',

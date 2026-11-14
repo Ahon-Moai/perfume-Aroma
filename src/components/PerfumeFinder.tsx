@@ -4,7 +4,7 @@ import { FragranceProduct } from '../types';
 import { categoryOf } from '../lib/brandCategory';
 
 /**
- * "Help me choose" — 5 quick taps, then the best matches: 4 Middle Eastern, 3 Designer, 2 Niche.
+ * "Help me choose" — 5 quick taps, then the best matches: 4 Arabian, 3 Designer, 2 Niche.
  */
 
 interface PerfumeFinderProps {
@@ -77,10 +77,10 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
     if (A.bud === 'b3' && categoryOf(p.brand, p.category) === 'Designer') sc += 0.2;
     scored.push([p, sc]);
   }
-  // Every matching perfume, best match first, grouped Middle Eastern → Designer → Niche
+  // Every matching perfume, best match first, grouped Arabian → Designer → Niche
   scored.sort((a, b) => b[1] - a[1]);
   const ord = g ? scored.filter((o) => o[0].gender === g).concat(scored.filter((o) => o[0].gender !== g)) : scored;
-  // Best matches per house: 4 Middle Eastern, 3 Designer, 2 Niche (max 2 from one brand)
+  // Best matches per house: 4 Arabian, 3 Designer, 2 Niche (max 2 from one brand)
   const CAP: Record<string, number> = { Arabian: 4, Designer: 3, Niche: 2 };
   const G: Record<string, FragranceProduct[]> = { Arabian: [], Designer: [], Niche: [] };
   const brands: Record<string, number> = {};
@@ -94,7 +94,7 @@ function pick(products: FragranceProduct[], A: Record<string, string>): Fragranc
   return G.Arabian.concat(G.Designer, G.Niche);
 }
 
-const LABEL: Record<string, string> = { Arabian: 'Middle Eastern', Designer: 'Designer', Niche: 'Niche' };
+const LABEL: Record<string, string> = { Arabian: 'Arabian', Designer: 'Designer', Niche: 'Niche' };
 
 export const PerfumeFinder: React.FC<PerfumeFinderProps> = ({ isOpen, onClose, onNavigateToProduct, onAddToCart, products = [], onOpenCart }) => {
   const [step, setStep] = useState(0);

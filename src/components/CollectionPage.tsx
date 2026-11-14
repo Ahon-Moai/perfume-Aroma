@@ -750,7 +750,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
               className="text-xs sm:text-sm font-sans leading-relaxed opacity-85"
               style={{ color: 'var(--theme-text-secondary)' }}
             >
-              {collection?.description || 'Discover hand-decanted luxury fragrances sourced directly from original European & Middle Eastern brand flacons.'}
+              {collection?.description || 'Discover hand-decanted luxury fragrances sourced directly from original European & Arabian brand flacons.'}
             </p>
             <div className="pt-2 flex items-center gap-4 text-xs font-mono opacity-80" style={{ color: 'var(--theme-text-secondary)' }}>
               <span>{filteredProducts.length} Decant Edt. Available</span>
