@@ -77,6 +77,7 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({
             onClick={openSeason}
             className="flex-shrink-0 w-[240px] sm:w-auto relative group overflow-hidden bg-zinc-950 cursor-pointer aspect-[3/4] sm:aspect-[9/13]"
           >
+            {card.image && !/\/season_[a-z_]+_\d+/.test(card.image) && (
             <img
               src={card.image}
               alt={card.alt}
@@ -84,6 +85,7 @@ export const SeasonsGallery: React.FC<SeasonsGalleryProps> = ({
               referrerPolicy="no-referrer"
               loading="lazy"
             />
+            )}
 
             {/* Always visible gradient & info */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 transition-all">
