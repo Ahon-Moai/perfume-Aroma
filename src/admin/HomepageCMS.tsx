@@ -4,13 +4,14 @@ import { getErrorMessage } from '../services/api';
 import { ImageUploader } from './ImageUploader';
 import { VideoUploader } from './VideoUploader';
 import { VideoShowcaseCard } from '../types';
+import ScentWeekAdmin from './ScentWeekAdmin';
 
 interface HomepageCMSProps {
   csrfToken: string;
 }
 
 export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
-  const [activeTab, setActiveTab] = useState<'hero' | 'campaigns' | 'seasons' | 'video' | 'sections' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
+  const [activeTab, setActiveTab] = useState<'hero' | 'scentweek' | 'campaigns' | 'seasons' | 'video' | 'sections' | 'marquee' | 'reviews' | 'faqs' | 'articles'>('hero');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [availableProducts, setAvailableProducts] = useState<Array<{ id: string; name: string; brand: string; image?: string }>>([]);
@@ -27,6 +28,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
   });
 
   // Campaign Banners Form (For Him / For Her)
+  const [scentWeekCfg, setScentWeekCfg] = useState<any>(null);
   const [testerForm, setTesterForm] = useState<{ image: string; title: string; subtitle: string }>({ image: '', title: '', subtitle: '' });
   const [campaignForm, setCampaignForm] = useState({
     section_title: 'FOR HIM | HER',
@@ -157,6 +159,9 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
         if (testerSec && testerSec.content) {
           setTesterForm((prev) => ({ ...prev, ...testerSec.content }));
         }
+
+        // Scent of the week
+        if (payload.sections?.scent_week?.content) setScentWeekCfg(payload.sections.scent_week.content);
 
         // Campaign Banners (For Him | Her)
         const campSec = payload.sections?.campaign_banners;
@@ -754,6 +759,7 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
       <div className="flex border-b border-[#EAEAEA] space-x-2 overflow-x-auto">
         {[
           { id: 'hero', label: 'Hero Banner' },
+          { id: 'scentweek', label: 'Scent of the Week' },
           { id: 'campaigns', label: 'For Him / Her Banners' },
           { id: 'seasons', label: 'Seasons Gallery' },
           { id: 'video', label: 'Video Showcase Cards' },
@@ -776,6 +782,10 @@ export const HomepageCMS: React.FC<HomepageCMSProps> = ({ csrfToken }) => {
           </button>
         ))}
       </div>
+
+      {activeTab === 'scentweek' && (
+        <ScentWeekAdmin products={availableProducts} csrfToken={csrfToken} initial={scentWeekCfg} onSaved={fetchCMSData} />
+      )}
 
       {/* Tab 1: Hero Banner Form */}
       {activeTab === 'hero' && (

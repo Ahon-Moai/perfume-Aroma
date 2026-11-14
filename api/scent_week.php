@@ -67,11 +67,38 @@ try {
         }
     }
 
-    jsonResponse([
-        'week' => $week,
-        'lead' => $lead,
-        'items' => array_map(fn($r) => ['product_id' => $r['product_id'], 'gender' => $r['gender'], 'ml_sold' => round($r['ml'], 1)], $items),
-    ]);
+    $auto = array_map(fn($r) => ['product_id' => $r['product_id'], 'gender' => $r['gender'], 'ml_sold' => round($r['ml'], 1), 'source' => 'auto'], $items);
+
+    // Manual picks from Admin → Homepage → Scent of the week
+    $mode = 'auto';
+    $final = $auto;
+    if (empty($_GET['auto'])) {
+        $cfgRow = $db->prepare("SELECT content_json FROM homepage_sections WHERE section_key = 'scent_week' LIMIT 1");
+        $cfgRow->execute();
+        $cfg = json_decode((string)($cfgRow->fetchColumn() ?: '{}'), true) ?: [];
+        $ids = array_values(array_filter(array_map('strval', (array)($cfg['product_ids'] ?? []))));
+        if (($cfg['mode'] ?? 'auto') === 'manual' && $ids) {
+            $mode = 'manual';
+            $in = implode(',', array_fill(0, count($ids), '?'));
+            $st = $db->prepare("SELECT id, gender FROM products WHERE status = 'published' AND id IN ($in)");
+            $st->execute($ids);
+            $pub = [];
+            foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $r) $pub[(string)$r['id']] = $r['gender'] ?: 'Unisex';
+            $final = [];
+            foreach ($ids as $id) {
+                if (isset($pub[$id])) $final[] = ['product_id' => $id, 'gender' => $pub[$id], 'ml_sold' => $sold[$id]['ml'] ?? 0, 'source' => 'manual'];
+            }
+            if (!empty($cfg['fill_auto'])) {
+                foreach ($auto as $a) {
+                    if (count($final) >= 6) break;
+                    if (!in_array($a['product_id'], array_column($final, 'product_id'), true)) $final[] = $a;
+                }
+            }
+            $final = array_slice($final, 0, 6);
+        }
+    }
+
+    jsonResponse(['week' => $week, 'lead' => $lead, 'mode' => $mode, 'items' => $final]);
 } catch (Throwable $e) {
     jsonResponse(['week' => $week, 'lead' => $lead, 'items' => []]);
 }

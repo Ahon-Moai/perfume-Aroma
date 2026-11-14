@@ -14,7 +14,7 @@ interface Pick { product_id: string; gender: string; ml_sold: number }
 const GENDER_LABEL: Record<string, string> = { Him: 'For him', Her: 'For her', Unisex: 'Unisex' };
 
 const ScentOfTheWeek: React.FC<Props> = ({ products, onSelectProduct, onAddToCart }) => {
-  const [data, setData] = useState<{ week: number; items: Pick[] } | null>(null);
+  const [data, setData] = useState<{ week: number; mode?: string; items: Pick[] } | null>(null);
   const [added, setAdded] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const [sizeSel, setSizeSel] = useState<Record<string, number>>({});
@@ -34,6 +34,7 @@ const ScentOfTheWeek: React.FC<Props> = ({ products, onSelectProduct, onAddToCar
       if (p && !out.includes(p)) out.push(p);
     });
     // Quiet weeks: top up so him / her / unisex stay balanced (2 each)
+    if (data?.mode === 'manual' && out.length > 0) return out.slice(0, 6);
     const gOf = (x: FragranceProduct) => x.gender || 'Unisex';
     for (const g of ['Her', 'Unisex', 'Him', 'Her', 'Unisex', 'Him']) {
       if (out.length >= 6) break;
