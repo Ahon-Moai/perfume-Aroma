@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { CategoryMarquee } from './components/CategoryMarquee';
+import ScentOfTheWeek from './components/ScentOfTheWeek';
 import { NewArrivals } from './components/NewArrivals';
 import { CampaignBanners } from './components/CampaignBanners';
 import { SeasonsGallery } from './components/SeasonsGallery';
@@ -454,6 +455,13 @@ function StorefrontApp() {
             <CategoryMarquee
               items={homepageData?.sections?.category_marquee?.content?.items}
               onNavigateToCollection={navigateToCollection}
+            />
+
+            {/* Scent of the week: rotating best sellers */}
+            <ScentOfTheWeek
+              products={products}
+              onSelectProduct={(p) => navigateToProduct(p)}
+              onAddToCart={(p, size, price) => handleAddToCart(p, size, price, 1)}
             />
 
             {/* D. New Arrivals product carousel */}
